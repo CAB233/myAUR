@@ -11,6 +11,19 @@ cat << EOM >> /etc/pacman.conf
 Server = https://repo.archlinuxcn.org/x86_64
 EOM
 
+cat << EOM >> /etc/makepkg.conf
+CFLAGS="-march=x86-64-v3 -mtune=native -O2 -pipe -fno-plt -fexceptions \
+        -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
+        -fstack-clash-protection -fcf-protection -mpclmul"
+CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"
+MAKEFLAGS="-j$(nproc)"
+BUILDENV=(!distcc !color !ccache check !sign)
+OPTIONS=(strip docs !libtool !staticlibs emptydirs zipman purge !debug !lto)
+PACKAGER="yidaduizuoye <yidaduizuoye@outlook.com>"
+COMPRESSZST=(zstd -z -c -q -T0 -18 -)
+PKGEXT=".pkg.tar.zst"
+EOM
+
 pacman-key --init
 pacman-key --lsign-key "farseerfc@archlinux.org"
 pacman -Sy --noconfirm && pacman -S --noconfirm archlinuxcn-keyring
