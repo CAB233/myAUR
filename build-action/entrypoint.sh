@@ -22,4 +22,4 @@ fi
 
 sudo --set-home -u builder yay -S --noconfirm --builddir=./ "$pkgname"
 cd "./$pkgname" || exit 1
-python3 ../build-aur-action/encode_name.py
+python3 ../build-action/encode_name.py
