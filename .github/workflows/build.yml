@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: '1 */12 * * *'
+  #schedule:
+  #  - cron: '1 */12 * * *'
 
 jobs:
   build_AUR:
@@ -45,32 +45,32 @@ jobs:
         with:
           name: ${{ matrix.repos }}
 
-      - name: Install rclone
-        run: |
-          curl https://rclone.org/install.sh | sudo bash
+      #- name: Install rclone
+      #  run: |
+      #    curl https://rclone.org/install.sh | sudo bash
 
-      - name: Create rclone config
-        run: |
-          echo "[r2]" > /tmp/rclone.conf
-          echo "type = s3" >> /tmp/rclone.conf
-          echo "provider = Cloudflare" >> /tmp/rclone.conf
-          echo "access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}" >> /tmp/rclone.conf
-          echo "secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}" >> /tmp/rclone.conf
-          echo "endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >> /tmp/rclone.conf
+      #- name: Create rclone config
+      #  run: |
+      #    echo "[r2]" > /tmp/rclone.conf
+      #    echo "type = s3" >> /tmp/rclone.conf
+      #    echo "provider = Cloudflare" >> /tmp/rclone.conf
+      #    echo "access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}" >> /tmp/rclone.conf
+      #    echo "secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}" >> /tmp/rclone.conf
+      #    echo "endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >> /tmp/rclone.conf
 
-      - name: Clean Old Packages
-        id: clean_r2
-        run: |
-          rclone lsjson r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf > current_files.json || echo "[]"
-          current_files=$(jq -r '.[].Name' current_files.json)
-          IFS=$'\n' read -d '' -r -a files <<< "$current_files"
-          sorted_files=($(printf '%s\n' "${files[@]}" | sort -r))
-          if [ ${#sorted_files[@]} -gt 3 ]; then
-            delete_files=("${sorted_files[@]:3}")
-            for file in "${delete_files[@]}"; do
-              rclone delete r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }}/$file --config /tmp/rclone.conf
-            done
-          fi
+      #- name: Clean Old Packages
+      #  id: clean_r2
+      #  run: |
+      #    rclone lsjson r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf > current_files.json || echo "[]"
+      #    current_files=$(jq -r '.[].Name' current_files.json)
+      #    IFS=$'\n' read -d '' -r -a files <<< "$current_files"
+      #    sorted_files=($(printf '%s\n' "${files[@]}" | sort -r))
+      #    if [ ${#sorted_files[@]} -gt 3 ]; then
+      #      delete_files=("${sorted_files[@]:3}")
+      #      for file in "${delete_files[@]}"; do
+      #        rclone delete r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }}/$file --config /tmp/rclone.conf
+      #      done
+      #    fi
 
       - name: R2 Upload
         uses: ryand56/r2-upload-action@latest
