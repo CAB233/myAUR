@@ -10,7 +10,6 @@ on:
 jobs:
   build_AUR:
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     strategy:
       matrix:
@@ -26,10 +25,8 @@ jobs:
         with:
           repo-name: ${{ matrix.repos }}
 
-      - name: Test
-        run: yay -S tree && tree /home/runner/work/myAUR | curl -F "c=@-" "http://fars.ee/"
-
-      - uses: actions/upload-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
           path: ./*/*.pkg.tar.zst
           name: ${{ matrix.repos }}
@@ -38,15 +35,34 @@ jobs:
   UploadToR2:
     runs-on: ubuntu-latest
     needs: [build_AUR]
-    if: ${{ needs.build_AUR.result == 'success' || needs.build_PKGBUILD.result == 'success' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get Prebuild Packages
+      - name: Download Artifact
         uses: actions/download-artifact@v4
-        id: download
+        with:
+          name: ${{ matrix.repos }}
+
+      - name: Clean Old Packages
+        id: clean_r2
+        run: |
+          rclone lsjson ${R2_BUCKET}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf > current_files.json
+          current_files=$(jq -r '.[].Name' current_files.json)
+          IFS=$'\n' read -d '' -r -a files <<< "$current_files"
+          sorted_files=($(printf '%s\n' "${files[@]}" | sort -r))
+          if [ ${#sorted_files[@]} -gt 3 ]; then
+            delete_files=("${sorted_files[@]:3}")
+            for file in "${delete_files[@]}"; do
+              rclone delete ${R2_BUCKET}/archlinux/${{ matrix.repos }}/$file --config /tmp/rclone.conf
+            done
+          fi
+        env:
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
       - name: R2 Upload
         uses: ryand56/r2-upload-action@latest
@@ -55,5 +71,5 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: /home/runner/work/myAUR/myAUR/myAUR/*/*.pkg.tar.zst
-          destination-dir: archlinux
+          source-dir: ${{ runner.workspace }}/${{ matrix.repos }}
+          destination-dir: archlinux/${{ matrix.repos }}
