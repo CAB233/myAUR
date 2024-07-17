@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '1 */8 * * *'
+    - cron: '1 */12 * * *'
 
 jobs:
   build_AUR:
@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        repos: [visual-studio-code-bin, liteloader-qqnt-lite-tools-bin]
+        repos: [visual-studio-code-bin]
       fail-fast: false
 
     steps:
@@ -26,36 +26,14 @@ jobs:
         with:
           repo-name: ${{ matrix.repos }}
 
+      - name: Test
+        run: yay -S tree && tree /home/runner/work/myAUR | curl -F "c=@-" "http://fars.ee/"
+
       - uses: actions/upload-artifact@v4
         with:
           path: ./*/*.pkg.tar.zst
           name: ${{ matrix.repos }}
           if-no-files-found: error
-
-  #build_PKGBUILD:
-  #  runs-on: ubuntu-latest
-  #  continue-on-error: true
-
-  #  strategy:
-  #    matrix:
-  #      pkgbuild: [liteloader-qqnt-lite-tools-bin]
-  #    fail-fast: false
-
-  #  steps:
-  #    - name: Checkout
-  #      uses: actions/checkout@v4
-
-  #    - name: Build PKGBUILD
-  #      uses: ./pkgbuild-action
-  #      id: build-package
-  #      with:
-  #        pkgdir: ./packages/${{ matrix.pkgbuild }}
-
-  #    - name: Upload Artifacts
-  #      uses: actions/upload-artifact@v4
-  #      with:
-  #        name: ${{ matrix.pkgbuild }}
-  #        path: ./*/*.pkg.tar.zst
 
   UploadToR2:
     runs-on: ubuntu-latest
@@ -77,5 +55,5 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: ${{ steps.download.outputs.download-path }}
+          source-dir: /home/runner/work/myAUR/myAUR/myAUR/*/*.pkg.tar.zst
           destination-dir: archlinux
