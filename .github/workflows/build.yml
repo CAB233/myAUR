@@ -6,31 +6,45 @@ on:
       - main
 
 jobs:
-  buildAUR:
+  build_AUR:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
         repos: [visual-studio-code-bin]
       fail-fast: false
-      
-    runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - uses: ./build-action
-      with:
-        repo-name: ${{ matrix.repos }}
-        preinstallPkgs: ${{ matrix.preinstall-pkgs }}
-    
-    - uses: actions/upload-artifact@v3
-      with:
-        path: ./*/*.pkg.tar.zst
-        name: ${{ matrix.repos }}
-        if-no-files-found: error
-        
-    - uses: ncipollo/release-action@v1
-      with:
-        allowUpdates: true
-        tag: "packages"
-        artifacts: "./*/*.zst"
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Build AUR Packages
+        uses: ./build-action
+        with:
+          repo-name: ${{ matrix.repos }}
+          preinstallPkgs: ${{ matrix.preinstall-pkgs }}
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./*/*.pkg.tar.zst
+          name: ${{ matrix.repos }}
+          if-no-files-found: error
+
+  build_PKGBUILD:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build PKGBUILD
+        uses: ouuan/pkgbuild-action@1.2.0
+        id: build-package
+        with:
+          path: ./packages
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkgname-${{ github.run_id }}
+          path: ./*/*.pkg.tar.zst
