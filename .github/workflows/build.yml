@@ -61,8 +61,7 @@ jobs:
       - name: Clean Old Packages
         id: clean_r2
         run: |
-          rclone mkdir r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf
-          rclone lsjson r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf > current_files.json
+          rclone lsjson r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf > current_files.json || echo "[]"
           current_files=$(jq -r '.[].Name' current_files.json)
           IFS=$'\n' read -d '' -r -a files <<< "$current_files"
           sorted_files=($(printf '%s\n' "${files[@]}" | sort -r))
@@ -72,11 +71,6 @@ jobs:
               rclone delete r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }}/$file --config /tmp/rclone.conf
             done
           fi
-        env:
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
       - name: R2 Upload
         uses: ryand56/r2-upload-action@latest
