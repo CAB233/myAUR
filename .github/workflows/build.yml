@@ -68,6 +68,15 @@ jobs:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
+      - name: Create rclone config
+        run: |
+          echo "[r2]" > /tmp/rclone.conf
+          echo "type = s3" >> /tmp/rclone.conf
+          echo "provider = Cloudflare" >> /tmp/rclone.conf
+          echo "access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}" >> /tmp/rclone.conf
+          echo "secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}" >> /tmp/rclone.conf
+          echo "endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >> /tmp/rclone.conf
+
       - name: R2 Upload
         uses: ryand56/r2-upload-action@latest
         with:
