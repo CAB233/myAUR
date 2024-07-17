@@ -45,6 +45,10 @@ jobs:
         with:
           name: ${{ matrix.repos }}
 
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
       - name: Clean Old Packages
         id: clean_r2
         run: |
