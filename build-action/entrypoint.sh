@@ -1,6 +1,7 @@
 #!/bin/bash
 
 pkgname=$1
+dirpath=$2
 
 useradd builder -m
 echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -29,10 +30,21 @@ pacman-key --lsign-key "farseerfc@archlinux.org"
 pacman -Sy --noconfirm && pacman -S --noconfirm archlinuxcn-keyring
 pacman -Syu --noconfirm archlinux-keyring
 pacman -Syu --noconfirm yay
+
 if [ ! -z "$INPUT_PREINSTALLPKGS" ]; then
     pacman -Syu --noconfirm "$INPUT_PREINSTALLPKGS"
 fi
 
-sudo --set-home -u builder yay -S --noconfirm --builddir=./ "$pkgname"
+if [ -z "$(ls -A "$dirpath")" ]; then
+    sudo --set-home -u builder yay -S --noconfirm --builddir=./ "$pkgname"
+else
+    if [ -f "$dirpath/PKGBUILD" ]; then
+        cd "$dirpath" || exit 1
+        sudo --set-home -u builder yay -S --noconfirm --builddir=./
+    else
+        sudo --set-home -u builder yay -S --noconfirm --builddir=./ "$pkgname"
+    fi
+fi
+
 cd "./$pkgname" || exit 1
 python3 ../build-action/encode_name.py
