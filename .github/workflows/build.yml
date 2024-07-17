@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        repos: [kwin-effect-rounded-corners-git, visual-studio-code-bin]
+        repos: [kwin-effect-rounded-corners-git, liteloader-qqnt-lite-tools-bin]
       fail-fast: false
 
     steps:
@@ -37,9 +37,6 @@ jobs:
     needs: [build_AUR]
 
     steps:
-      #- name: Checkout
-      #  uses: actions/checkout@v4
-
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
@@ -72,6 +69,12 @@ jobs:
       #      done
       #    fi
 
+      - name: Find the package file
+        id: find_package
+        run: |
+          package_file=$(find . -name "*.pkg.tar.zst" -print -quit)
+          echo "PACKAGE_FILE=$package_file" >> $GITHUB_ENV
+
       - name: R2 Upload
         uses: ryand56/r2-upload-action@latest
         with:
@@ -79,5 +82,5 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: ${{ runner.workspace }}/${{ matrix.repos }}
-          destination-dir: archlinux/${{ matrix.repos }}
+          source-dir: ${{ env.PACKAGE_FILE }}
+          destination-dir: archlinux
