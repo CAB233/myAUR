@@ -6,12 +6,31 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build Packages
+  buildAUR:
+    strategy:
+      matrix:
+        repos: [visual-studio-code-bin]
+      fail-fast: false
+      
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./build-action
-        with:
-          pkgdir: ./packages
+    - uses: actions/checkout@v4
+    
+    - uses: ./build-action
+      with:
+        repo-name: ${{ matrix.repos }}
+        preinstallPkgs: ${{ matrix.preinstall-pkgs }}
+    
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ./*/*.pkg.tar.zst
+        name: ${{ matrix.repos }}
+        if-no-files-found: error
+        
+    - uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        tag: "packages"
+        artifacts: "./*/*.zst"
+        token: ${{ secrets.GITHUB_TOKEN }}
