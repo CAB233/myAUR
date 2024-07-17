@@ -24,7 +24,6 @@ jobs:
         uses: ./build-action
         with:
           repo-name: ${{ matrix.repos }}
-          preinstallPkgs: ${{ matrix.preinstall-pkgs }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -35,6 +34,11 @@ jobs:
   build_PKGBUILD:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        pkgbuild: [liteloader-qqnt-lite-tools-bin]
+      fail-fast: false
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,18 +47,18 @@ jobs:
         uses: ./pkgbuild-action
         id: build-package
         with:
-          path: ./packages
+          path: ./packages/${{ matrix.pkgbuild }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pkgname-${{ github.run_id }}
+          name: ${{ matrix.pkgbuild }}
           path: ./*/*.pkg.tar.zst
 
   UploadToR2:
     runs-on: ubuntu-latest
-    needs: [build_AUR, build_PKGBUILD]
     if: ${{ needs.build_AUR.result == 'success' || needs.build_PKGBUILD.result == 'success' }}
+    needs: [build_AUR, build_PKGBUILD]
 
     steps:
       - name: Checkout
