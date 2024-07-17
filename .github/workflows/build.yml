@@ -10,6 +10,7 @@ on:
 jobs:
   build_AUR:
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     strategy:
       matrix:
@@ -33,6 +34,7 @@ jobs:
 
   build_PKGBUILD:
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     strategy:
       matrix:
@@ -57,8 +59,8 @@ jobs:
 
   UploadToR2:
     runs-on: ubuntu-latest
-    if: ${{ needs.build_AUR.result == 'success' || needs.build_PKGBUILD.result == 'success' }}
     needs: [build_AUR, build_PKGBUILD]
+    if: ${{ needs.build_AUR.result == 'success' || needs.build_PKGBUILD.result == 'success' }}
 
     steps:
       - name: Checkout
