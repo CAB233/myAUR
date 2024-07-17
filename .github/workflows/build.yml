@@ -1,23 +1,17 @@
-name: Build Packages
+name: Packages CI
+
 on:
   push:
     branches:
       - main
+
 jobs:
   build:
     name: Build Packages
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Action
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: PKGBUILD Action
-        uses: ouuan/pkgbuild-action@v1.2.0
+      - uses: ./build-action
         with:
-          path: .
-
-      - name: Upload
-        uses: actions/upload-artifact@v2
-        with:
-          name: pkgname-${{ github.run_id }}
-          path: ${{ steps.build-package.outputs.pkgfile }}
+          pkgdir: ./packages
