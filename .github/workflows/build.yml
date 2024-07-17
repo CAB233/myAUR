@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        repos: [visual-studio-code-bin]
+        repos: [visual-studio-code-bin, liteloader-qqnt-lite-tools-bin]
       fail-fast: false
 
     steps:
@@ -32,34 +32,34 @@ jobs:
           name: ${{ matrix.repos }}
           if-no-files-found: error
 
-  build_PKGBUILD:
-    runs-on: ubuntu-latest
-    continue-on-error: true
+  #build_PKGBUILD:
+  #  runs-on: ubuntu-latest
+  #  continue-on-error: true
 
-    strategy:
-      matrix:
-        pkgbuild: [liteloader-qqnt-lite-tools-bin]
-      fail-fast: false
+  #  strategy:
+  #    matrix:
+  #      pkgbuild: [liteloader-qqnt-lite-tools-bin]
+  #    fail-fast: false
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v4
 
-      - name: Build PKGBUILD
-        uses: ./pkgbuild-action
-        id: build-package
-        with:
-          pkgdir: ./packages/${{ matrix.pkgbuild }}
+  #    - name: Build PKGBUILD
+  #      uses: ./pkgbuild-action
+  #      id: build-package
+  #      with:
+  #        pkgdir: ./packages/${{ matrix.pkgbuild }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.pkgbuild }}
-          path: ./*/*.pkg.tar.zst
+  #    - name: Upload Artifacts
+  #      uses: actions/upload-artifact@v4
+  #      with:
+  #        name: ${{ matrix.pkgbuild }}
+  #        path: ./*/*.pkg.tar.zst
 
   UploadToR2:
     runs-on: ubuntu-latest
-    needs: [build_AUR, build_PKGBUILD]
+    needs: [build_AUR]
     if: ${{ needs.build_AUR.result == 'success' || needs.build_PKGBUILD.result == 'success' }}
 
     steps:
@@ -77,5 +77,5 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: archlinux
-          destination-dir: ${{ steps.download.outputs.download-path }}
+          source-dir: ${{ steps.download.outputs.download-path }}
+          destination-dir: archlinux
