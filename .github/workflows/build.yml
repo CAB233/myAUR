@@ -49,6 +49,7 @@ jobs:
 
       - name: 配置环境
         env:
+          # 导入 secrets 时需进行 base64 编码
           GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
               # 配置 makepkg.conf: 取消生成 debug 包
@@ -68,7 +69,7 @@ jobs:
               echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
               pacman-key --init
               pacman-key --lsign-key "farseerfc@archlinux.org"
-              pacman -S --noconfirm archlinuxcn-keyring 
+              pacman -Sy --noconfirm archlinuxcn-keyring
               pacman -S --noconfirm --needed yay
 
       - name: 构建 ${{ matrix.package }}
