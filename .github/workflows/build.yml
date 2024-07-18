@@ -2,11 +2,6 @@
 name: Packages CI
 
 on:
-  #schedule:
-  #  - cron: '1 */12 * * *'
-  push:
-    branches:
-      - main
   workflow_call:
     inputs:
       parallel-build:

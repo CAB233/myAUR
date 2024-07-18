@@ -1,0 +1,22 @@
+# 参考 https://github.com/zaggash/archlinux-aur/blob/master/.github/workflows/run-build-repo.yaml
+
+name: 触发构建
+
+on:
+  schedule:
+    - cron: "1 */12 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "./github/workflows/run-build.yml"
+
+jobs:
+  build:
+    name: 构建
+    uses: "./github/workflows/build.yml"
+    with:
+      parallel-build: 5
+      artifact-retention: 1
+    secrets:
+      gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
