@@ -30,10 +30,8 @@ jobs:
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
-      - name: 仓库导入
+      - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
       - name: 生成数组
         id: generate-matrix
@@ -62,10 +60,8 @@ jobs:
               # 添加基础依赖包
               pacman -Syyu --noconfirm --needed --ignore filesystem git gnupg
 
-      - name: 仓库导入
+      - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
       - name: 配置环境
         env:
