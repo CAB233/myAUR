@@ -163,5 +163,5 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: ./*
+          source-dir: ${{ env.REPO_FOLDER }}/
           destination-dir: archlinux/x86_64
