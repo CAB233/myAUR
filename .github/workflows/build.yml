@@ -55,7 +55,6 @@ jobs:
 
       - name: 配置环境
         env:
-          # 导入 secrets 时需进行 base64 编码
           GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
           # 配置 makepkg.conf: 取消生成 debug 包
@@ -125,7 +124,6 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          #passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: 创建包仓库数据库
         run: |
