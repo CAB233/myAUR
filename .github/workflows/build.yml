@@ -68,12 +68,12 @@ jobs:
               mkdir -p ${REPO_FOLDER}
               chown -R builder:builder ./
 
-      - name: 导入 GPG 密钥
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          workdir: /home/builder/.gnupg
+      #- name: 导入 GPG 密钥
+      #  uses: crazy-max/ghaction-import-gpg@v6
+      #  with:
+      #    gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+      #    passphrase: ${{ secrets.PASSPHRASE }}
+      #    workdir: /home/builder/.gnupg
 
       - name: 安装 yay
         run: |
@@ -95,7 +95,8 @@ jobs:
               # 验证文件完整性
               sudo -u builder makepkg -g >> ./PKGBUILD
               # 开始构建
-              sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
+              # sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
+              sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f
 
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
@@ -122,11 +123,11 @@ jobs:
           pattern: package-*
           merge-multiple: true
 
-      - name: 导入 GPG 密钥
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+      #- name: 导入 GPG 密钥
+      #  uses: crazy-max/ghaction-import-gpg@v6
+      #  with:
+      #    gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+      #    passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: 创建包仓库数据库
         run: |
@@ -134,12 +135,13 @@ jobs:
           # * https://github.com/tibdex/github-app-token/issues/54
           sed -i 's/^providers = provider_sect/#&/' /etc/ssl/openssl.cnf
           # * Build Repo
-          repo-add --sign $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
+          # repo-add --sign $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
+          repo-add $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
           # * Delete DB files symlink
           find . -type l -delete
           # * Rename compressed DB
           rename -- .tar.gz '' *.tar.gz
-          rename -- .tar.gz.sig '.sig' *.tar.gz.sig
+          # rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
       - name: 上传至 R2 存储桶
         id: upload-r2
