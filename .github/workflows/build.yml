@@ -41,11 +41,12 @@ jobs:
     steps:
       - name: 安装依赖
         run: |
-              # 准备 REPO_FOLDER 变量
-              # * https://github.com/actions/runner/issues/2058
-              echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
-              # 添加基础依赖包
-              pacman -Syyu --noconfirm --needed --ignore filesystem git gnupg
+          # 准备 REPO_FOLDER 变量
+          # * https://github.com/actions/runner/issues/2058
+          echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
+
+          # 添加基础依赖包
+          pacman -Syyu --noconfirm --needed --ignore filesystem git gnupg
 
       - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
@@ -53,50 +54,47 @@ jobs:
           submodules: true
 
       - name: 配置环境
-        #env:
-        #  # 导入 secrets 时需进行 base64 编码
-        #  GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        env:
+          # 导入 secrets 时需进行 base64 编码
+          GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-              # 配置 makepkg.conf: 取消生成 debug 包
-              sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
-              # 配置非 root 用户
-              useradd -m builder
-              echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
-              ## 配置 GPG key 签名仓库
-              #echo -n "$GPG_SIGNING_KEY" | base64 --decode | sudo -u builder gpg --import
-              # 配置仓库文件结构
-              mkdir -p ${REPO_FOLDER}
-              chown -R builder:builder ./
+          # 配置 makepkg.conf: 取消生成 debug 包
+          sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
 
-      #- name: 导入 GPG 密钥
-      #  uses: crazy-max/ghaction-import-gpg@v6
-      #  with:
-      #    gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-      #    passphrase: ${{ secrets.PASSPHRASE }}
-      #    workdir: /home/builder/.gnupg
+          # 配置非 root 用户
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
+
+          # 配置 GPG key 签名仓库
+          echo -n "$GPG_SIGNING_KEY" | sudo -u builder gpg --import
+
+          # 配置仓库文件结构
+          mkdir -p ${REPO_FOLDER}
+          chown -R builder:builder ./
 
       - name: 安装 yay
         run: |
-              echo "[archlinuxcn]" >> /etc/pacman.conf
-              echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
-              pacman-key --init
-              pacman-key --lsign-key "farseerfc@archlinux.org"
-              pacman -Sy --noconfirm archlinuxcn-keyring
-              pacman -S --noconfirm --needed yay
+          echo "[archlinuxcn]" >> /etc/pacman.conf
+          echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
+          pacman-key --init
+          pacman-key --lsign-key "farseerfc@archlinux.org"
+          pacman -Sy --noconfirm archlinuxcn-keyring
+          pacman -S --noconfirm --needed yay
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
         run: |
-              # 安装相关包依赖
-              sudo -u builder yay -Sy --noconfirm \
-                $(pacman --deptest \
-                  $(source ./PKGBUILD &&\
-                  echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
-              # 验证文件完整性
-              sudo -u builder makepkg -g >> ./PKGBUILD
-              # 开始构建
-              # sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
-              sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f
+          # 安装相关包依赖
+          sudo -u builder yay -Sy --noconfirm \
+            $(pacman --deptest \
+              $(source ./PKGBUILD &&\
+              echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
+          
+          # 验证文件完整性
+          sudo -u builder makepkg -g >> ./PKGBUILD
+
+          # 开始构建
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
 
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
@@ -123,31 +121,27 @@ jobs:
           pattern: package-*
           merge-multiple: true
 
-      #- name: 导入 GPG 密钥
-      #  uses: crazy-max/ghaction-import-gpg@v6
-      #  with:
-      #    gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-      #    passphrase: ${{ secrets.PASSPHRASE }}
+      - name: 导入 GPG 密钥
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          #passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: 创建包仓库数据库
         run: |
           # * Fix Openssl 3 issue with node.
           # * https://github.com/tibdex/github-app-token/issues/54
           sed -i 's/^providers = provider_sect/#&/' /etc/ssl/openssl.cnf
+
           # * Build Repo
-          # repo-add --sign $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
-          repo-add $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
+          repo-add --sign $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
+
           # * Delete DB files symlink
           find . -type l -delete
+
           # * Rename compressed DB
           rename -- .tar.gz '' *.tar.gz
-          # rename -- .tar.gz.sig '.sig' *.tar.gz.sig
-
-      - name: debug
-        run: |
-              echo $PWD && ls -l $PWD
-              echo $GITHUB_WORKSPACE && ls -l $GITHUB_WORKSPACE
-              echo "/__w/myAUR/myAUR" && ls -l /__w/myAUR/myAUR
+          rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
       - name: 上传至 R2 存储桶
         id: upload-r2
@@ -158,8 +152,8 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: $GITHUB_WORKSPACE
-          destination-dir: archlinux
+          source-dir: /__w/myAUR/myAUR
+          destination-dir: archlinux/x86_64
 
       - name: 失败后重试上传至 R2 存储桶
         if: steps.upload-r2.outcome == 'failure'
