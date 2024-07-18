@@ -43,13 +43,6 @@ jobs:
               echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
               # 添加基础依赖包
               pacman -Syyu --noconfirm --needed --ignore filesystem git gnupg
-              ＃ 导入 archlinuxcn 仓库，安装二进制 yay
-              echo "[archlinuxcn]" >> /etc/pacman.conf
-              echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
-              pacman-key --init
-              pacman-key --lsign-key "farseerfc@archlinux.org"
-              pacman -Syu --noconfirm archlinuxcn-keyring 
-              pacman -S --noconfirm yay
 
       - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
@@ -68,6 +61,15 @@ jobs:
               # 配置仓库文件结构
               mkdir -p ${REPO_FOLDER}
               chown -R builder:builder ./
+
+      - name: 安装 yay
+        run: |
+              echo "[archlinuxcn]" >> /etc/pacman.conf
+              echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
+              pacman-key --init
+              pacman-key --lsign-key "farseerfc@archlinux.org"
+              pacman -S --noconfirm archlinuxcn-keyring 
+              pacman -S --noconfirm --needed yay
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
