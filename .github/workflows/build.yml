@@ -2,22 +2,11 @@
 name: Packages CI
 
 on:
-  workflow_call:
-    inputs:
-      parallel-build:
-        description: "最大并行构建数"
-        default: 4
-        required: false
-        type: number
-      artifact-retention:
-        description: "Artifact 保留天数"
-        default: 1
-        required: false
-        type: number
-    secrets:
-      gpg_private_key:
-        description: "私钥包签名"
-        required: true
+  #schedule:
+  #  - cron: "1 */12 * * *"
+  push:
+    branches:
+      - main
 
 jobs:
   metadata:
@@ -43,7 +32,7 @@ jobs:
       image: archlinux:base-devel
     continue-on-error: true
     strategy:
-      max-parallel: ${{ inputs.parallel-build }}
+      max-parallel: 5
       matrix: ${{ fromJson(needs.metadata.outputs.matrix) }}
       fail-fast: false
     steps:
@@ -60,7 +49,7 @@ jobs:
 
       - name: 配置环境
         env:
-          GPG_SIGNING_KEY: ${{ secrets.gpg_private_key }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
               # 配置 makepkg.conf: 取消生成 debug 包
               sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
@@ -104,7 +93,7 @@ jobs:
         with:
           name: package-${{ matrix.package }}
           path: ${{ env.REPO_FOLDER }}/
-          retention-days: ${{ inputs.artifacts-retention }}
+          retention-days: 1
 
   build_repo:
     needs: build_packages
@@ -122,7 +111,7 @@ jobs:
       - name: 导入 GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
-          gpg_private_key: ${{ secrets.gpg_private_key }}
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: 创建包仓库数据库
         run: |
@@ -137,42 +126,6 @@ jobs:
           rename -- .tar.gz '' *.tar.gz
           rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
-      - name: 获取当前时间
-        run: |
-          echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
-        id: date
-
-      #- name: 创建 release 并上传至 artifacts
-      #  id: upload-artifacts
-      #  continue-on-error: true
-      #  uses: ncipollo/release-action@v1
-      #  with:
-      #    token: "${{ steps.generate-token.outputs.token }}"
-      #    artifactErrorsFailBuild: true
-      #    removeArtifacts: true
-      #    allowUpdates: true
-      #    generateReleaseNotes: true
-      #    tag: x86_64
-      #    name: ${{ steps.date.outputs.builddate }}
-      #    artifacts: "./*"
-      #    body: |
-      #      Archlinux x86_64 repo packages
-
-      #- name: 失败后尝试重新创建 release 并上传至 artifacts
-      #  if: steps.upload-artifacts.outcome == 'failure'
-      #  uses: ncipollo/release-action@v1
-      #  with:
-      #    token: "${{ steps.generate-token.outputs.token }}"
-      #    artifactErrorsFailBuild: true
-      #    removeArtifacts: true
-      #    allowUpdates: true
-      #    generateReleaseNotes: true
-      #    tag: x86_64
-      #    name: ${{ steps.date.outputs.builddate }}
-      #    artifacts: "./*"
-      #    body: |
-      #      Archlinux x86_64 repo packages
-
       - name: 上传至 R2 存储桶
         id: upload-r2
         continue-on-error: true
@@ -185,7 +138,7 @@ jobs:
           source-dir: ./*
           destination-dir: archlinux
 
-      - name: 上传至 R2 存储桶
+      - name: 失败后重试上传至 R2 存储桶
         if: steps.upload-r2.outcome == 'failure'
         uses: ryand56/r2-upload-action@latest
         with:
