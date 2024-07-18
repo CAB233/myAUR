@@ -1,86 +1,206 @@
+# 参考 https://github.com/zaggash/gh-workflows/blob/main/.github/workflows/action_build-aur-repo.yaml
 name: Packages CI
 
 on:
+  #schedule:
+  #  - cron: '1 */12 * * *'
   push:
     branches:
       - main
-  #schedule:
-  #  - cron: '1 */12 * * *'
+  workflow_call:
+    inputs:
+      parallel-build:
+        description: "最大并行构建数"
+        default: 4
+        required: false
+        type: number
+      artifact-retention:
+        description: "Artifact 保留天数"
+        default: 1
+        required: false
+        type: number
+    secrets:
+      gpg_private_key:
+        description: "私钥包签名"
+        required: true
 
 jobs:
-  build_AUR:
+  metadata:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        repos: [kwin-effect-rounded-corners-git, liteloader-qqnt-lite-tools-bin]
-      fail-fast: false
-
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
-      - name: Checkout
+      - name: 仓库导入
         uses: actions/checkout@v4
-
-      - name: Build AUR Packages
-        uses: ./build-action
         with:
-          repo-name: ${{ matrix.repos }}
+          submodules: true
 
-      - name: Upload Artifact
+      - name: 生成数组
+        id: generate-matrix
+        run: |
+          sudo apt-get install jq
+          MATRIX_JSON=`find * -type f -name "PKGBUILD" -printf "%h\n" | jq -Rnc '."package" |= [inputs]'`
+          echo ${MATRIX_JSON}
+          echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
+
+  build_packages:
+    needs: metadata
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    continue-on-error: true
+    strategy:
+      max-parallel: ${{ inputs.parallel-build }}
+      matrix: ${{ fromJson(needs.metadata.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - name: 安装依赖
+        run: |
+              # 准备 REPO_FOLDER 变量
+              # * https://github.com/actions/runner/issues/2058
+              echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
+              # 添加基础依赖包
+              pacman -Syyu --noconfirm --needed --ignore filesystem git gnupg
+
+      - name: 仓库导入
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: 配置环境
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.gpg_private_key }}
+        run: |
+              # 配置 makepkg.conf: 取消生成 debug 包
+              sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
+              # 配置非 root 用户
+              useradd -m builder
+              echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
+              # 配置 GPG key 签名仓库
+              echo -n "$GPG_SIGNING_KEY" | base64 --decode | sudo -u builder gpg --import
+              # 配置仓库文件结构
+              mkdir -p ${REPO_FOLDER}
+              chown -R builder:builder ./
+              ＃ 导入 archlinuxcn 仓库，安装二进制 yay
+              cat << EOM >> /etc/pacman.conf
+              [archlinuxcn]
+              Server = https://repo.archlinuxcn.org/x86_64
+              EOM
+              pacman-key --init
+              pacman-key --lsign-key "farseerfc@archlinux.org"
+              pacman -Sy --noconfirm && pacman -S --noconfirm archlinuxcn-keyring
+              pacman -Syu --noconfirm archlinux-keyring
+              pacman -Syu --noconfirm --needed yay
+
+      - name: 构建 ${{ matrix.package }}
+        working-directory: ./${{ matrix.package }}
+        run: |
+              # 安装相关包依赖
+              sudo -u builder yay -Sy --noconfirm \
+                $(pacman --deptest \
+                  $(source ./PKGBUILD &&\
+                  echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
+              # 验证文件完整性
+              sudo -u builder makepkg -g >> ./PKGBUILD
+
+      - name: Workaround '{upload/download}-artifact' #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
+        run: |
+          # || [ "$?" = "4" ] // I do not want to exit if nothing was renamed
+          rename ':' '.' ${REPO_FOLDER}/*.pkg.tar.* || [ "$?" == "4" ]
+
+      - name: 将构建产物上传至 artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./*/*.pkg.tar.zst
-          name: ${{ matrix.repos }}
-          if-no-files-found: error
+          name: package-${{ matrix.package }}
+          path: ${{ env.REPO_FOLDER }}/
+          retention-days: ${{ inputs.artifacts-retention }}
 
-  UploadToR2:
+  build_repo:
+    needs: build_packages
     runs-on: ubuntu-latest
-    needs: [build_AUR]
-
+    container:
+      image: archlinux:base-devel
     steps:
-      - name: Download Artifact
+      - name: 下载构建产物
+        id: restore
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.repos }}
+          pattern: package-*
+          merge-multiple: true
 
-      #- name: Install rclone
-      #  run: |
-      #    curl https://rclone.org/install.sh | sudo bash
+      - name: 导入 GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.gpg_private_key }}
 
-      #- name: Create rclone config
-      #  run: |
-      #    echo "[r2]" > /tmp/rclone.conf
-      #    echo "type = s3" >> /tmp/rclone.conf
-      #    echo "provider = Cloudflare" >> /tmp/rclone.conf
-      #    echo "access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}" >> /tmp/rclone.conf
-      #    echo "secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}" >> /tmp/rclone.conf
-      #    echo "endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >> /tmp/rclone.conf
-
-      #- name: Clean Old Packages
-      #  id: clean_r2
-      #  run: |
-      #    rclone lsjson r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }} --config /tmp/rclone.conf > current_files.json || echo "[]"
-      #    current_files=$(jq -r '.[].Name' current_files.json)
-      #    IFS=$'\n' read -d '' -r -a files <<< "$current_files"
-      #    sorted_files=($(printf '%s\n' "${files[@]}" | sort -r))
-      #    if [ ${#sorted_files[@]} -gt 3 ]; then
-      #      delete_files=("${sorted_files[@]:3}")
-      #      for file in "${delete_files[@]}"; do
-      #        rclone delete r2:${{ secrets.R2_BUCKET }}/archlinux/${{ matrix.repos }}/$file --config /tmp/rclone.conf
-      #      done
-      #    fi
-
-      - name: Find the package file
-        id: find_package
+      - name: 创建包仓库数据库
         run: |
-          package_file=$(find . -name "*.pkg.tar.zst" -print -quit)
-          echo "PACKAGE_FILE=$package_file" >> $GITHUB_ENV
+          # * Fix Openssl 3 issue with node.
+          # * https://github.com/tibdex/github-app-token/issues/54
+          sed -i 's/^providers = provider_sect/#&/' /etc/ssl/openssl.cnf
+          # * Build Repo
+          repo-add --sign $(basename $PWD).db.tar.gz ./*.pkg.tar.zst
+          # * Delete DB files symlink
+          find . -type l -delete
+          # * Rename compressed DB
+          rename -- .tar.gz '' *.tar.gz
+          rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
-      - name: R2 Upload
+      - name: 获取当前时间
+        run: |
+          echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+        id: date
+
+      #- name: 创建 release 并上传至 artifacts
+      #  id: upload-artifacts
+      #  continue-on-error: true
+      #  uses: ncipollo/release-action@v1
+      #  with:
+      #    token: "${{ steps.generate-token.outputs.token }}"
+      #    artifactErrorsFailBuild: true
+      #    removeArtifacts: true
+      #    allowUpdates: true
+      #    generateReleaseNotes: true
+      #    tag: x86_64
+      #    name: ${{ steps.date.outputs.builddate }}
+      #    artifacts: "./*"
+      #    body: |
+      #      Archlinux x86_64 repo packages
+
+      #- name: 失败后尝试重新创建 release 并上传至 artifacts
+      #  if: steps.upload-artifacts.outcome == 'failure'
+      #  uses: ncipollo/release-action@v1
+      #  with:
+      #    token: "${{ steps.generate-token.outputs.token }}"
+      #    artifactErrorsFailBuild: true
+      #    removeArtifacts: true
+      #    allowUpdates: true
+      #    generateReleaseNotes: true
+      #    tag: x86_64
+      #    name: ${{ steps.date.outputs.builddate }}
+      #    artifacts: "./*"
+      #    body: |
+      #      Archlinux x86_64 repo packages
+
+      - name: 上传至 R2 存储桶
+        id: upload-r2
+        continue-on-error: true
         uses: ryand56/r2-upload-action@latest
         with:
           r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: ${{ env.PACKAGE_FILE }}
+          source-dir: ./*
           destination-dir: archlinux
+
+      - name: 上传至 R2 存储桶
+        if: steps.upload-r2.outcome == 'failure'
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: ./*
+          destination-dir: archlinux/x86_64
