@@ -2,6 +2,7 @@
 name: Packages CI
 
 on:
+  workflow_dispatch:
   #schedule:
   #  - cron: "1 */12 * * *"
   push:
@@ -82,6 +83,8 @@ jobs:
                   echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
               # 验证文件完整性
               sudo -u builder makepkg -g >> ./PKGBUILD
+              # debug
+              echo $PWD && ls -l $PWD
 
       - name: Workaround '{upload/download}-artifact' #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
