@@ -3,18 +3,18 @@
 name: 触发构建
 
 on:
-  schedule:
-    - cron: "1 */12 * * *"
+  #schedule:
+  #  - cron: "1 */12 * * *"
   push:
     branches:
       - main
     paths:
-      - "./github/workflows/run-build.yml"
+      - ".github/workflows/run-build.yml"
 
 jobs:
   build:
     name: 构建
-    uses: "./github/workflows/build.yml"
+    uses: ".github/workflows/build.yml"
     with:
       parallel-build: 5
       artifact-retention: 1
