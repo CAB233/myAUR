@@ -84,9 +84,9 @@ jobs:
               # 验证文件完整性
               sudo -u builder makepkg -g >> ./PKGBUILD
               # debug
-              echo $PWD && ls -l $PWD
+              echo $PWD && ls -l $PWD && ls -l ../$PwD
 
-      - name: Workaround '{upload/download}-artifact' #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
+      - name: 处理产物文件名问题 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
           # || [ "$?" = "4" ] // I do not want to exit if nothing was renamed
           rename ':' '.' ${REPO_FOLDER}/*.pkg.tar.* || [ "$?" == "4" ]
