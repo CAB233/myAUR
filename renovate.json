@@ -2,5 +2,48 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "git-submodules": {
+    "enabled": true,
+    "versioning": "git",
+    "fileMatch": [
+      "(^|/)\\.gitmodules$"
+    ]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)PKGBUILD$"
+      ],
+      "matchStrings": [
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
+      ],
+      "extractVersionTemplate": "^v?(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "自动合并更新的子模块 PKGBUILD",
+      "matchManagers": [
+        "git-submodules"
+      ],
+      "matchDatasources": [
+        "git-refs"
+      ],
+      "enabled": true,
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "自动合并更新的自定义 PKGBUILD",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch"
+    }
   ]
 }
