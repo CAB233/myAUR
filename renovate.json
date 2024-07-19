@@ -39,7 +39,7 @@
     {
       "description": "自动合并更新的自定义 PKGBUILD",
       "matchManagers": [
-        "customManagers"
+        "custom"
       ],
       "matchDatasources": [
         "github-tags"
