@@ -17,7 +17,7 @@
         "(^|/)PKGBUILD$"
       ],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
+        "pkgver=(?<currentValue>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
@@ -38,6 +38,9 @@
     },
     {
       "description": "自动合并更新的自定义 PKGBUILD",
+      "matchManagers": [
+        "custom"
+      ],
       "matchDatasources": [
         "github-tags"
       ],
