@@ -3,7 +3,7 @@
 
 pkgname='liteloader-qqnt-lite-tools-bin'
 _pkgname='LiteLoaderQQNT-lite_tools'
-pkgver=2.31.0 # renovate: datasource=github-tags depName=xiyuesaves/LiteLoaderQQNT-lite_tools
+pkgver=2.31.1 # renovate: datasource=github-tags depName=xiyuesaves/LiteLoaderQQNT-lite_tools
 pkgrel=1
 pkgdesc='LiteLoaderQQNT插件，轻量工具箱，轻量、优雅、高效'
 arch=('any')
