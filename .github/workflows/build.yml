@@ -129,7 +129,7 @@ jobs:
 
       - name: 创建包仓库数据库
         env:
-          REPO_NAME: archlinux-zuoye
+          REPO_NAME: zuoye-aur
         run: |
           # * Fix Openssl 3 issue with node.
           # * https://github.com/tibdex/github-app-token/issues/54
