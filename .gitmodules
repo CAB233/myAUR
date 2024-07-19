@@ -7,6 +7,3 @@
 [submodule "liteloader-qqnt-bin"]
 	path = liteloader-qqnt-bin
 	url = https://aur.archlinux.org/liteloader-qqnt-bin.git
-[submodule "liteloader-qqnt-lite-tools-bin"]
-	path = liteloader-qqnt-lite-tools-bin
-	url = https://aur.archlinux.org/liteloader-qqnt-lite-tools-bin.git
