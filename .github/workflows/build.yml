@@ -46,7 +46,7 @@ jobs:
           echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
 
           # 添加基础依赖包
-          pacman -Syyu --noconfirm --needed --ignore filesystem git gnupg
+          pacman -Syyuu --noconfirm --needed --ignore filesystem git gnupg
 
       - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
