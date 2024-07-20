@@ -10,9 +10,9 @@ url="https://github.com/odomu/aliyunpan"
 license=('custom')
 depends=('pacman')
 conflicts=("aliyunpan-gaozhangmin-bin")
-source=(alixby-3.24.41217-linux-x64.pacman
-        alixby.desktop
-        app.asar)
+source=("https://github.com/CAB233/myAUR/releases/download/v0.1.1/alixby-3.24.41217-linux-x64.pacman"
+        "alixby.desktop"
+        "app.asar")
 sha256sums=('552bd1f0562868afb144718dce7a58ecb49fbe049c7569b129d0f03764bfa02e'
             '0535fce28ff22a20e919718c31d3e415600235a560a89fde34b62352ceeedf92'
             'd4f0bd1b6b8d1d62eb6b385ab3a85583ad2e59107ab2207d5c55e5dfabf2684d')
