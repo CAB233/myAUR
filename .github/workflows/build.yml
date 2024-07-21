@@ -154,7 +154,7 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: /__w/myAUR/myAUR
+          source-dir: ${{ GITHUB_WORKSPACE }}
           destination-dir: archlinux/x86_64
 
       - name: 失败后重试上传至 R2 存储桶
