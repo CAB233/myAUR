@@ -25,6 +25,6 @@ pkgver() {
 
 package() {
     mkdir -p "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
-    chmod 0777 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
-    cp -r "${srcdir}/${_pkgname}/src" "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
+    chmod 0644 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
+    cp -r "${srcdir}/${_pkgname}/"* "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
 }
