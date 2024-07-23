@@ -3,8 +3,8 @@ name: Packages CI
 
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron: "1 */12 * * *"
+  schedule:
+    - cron: "* */12 * * *"
   push:
     branches:
       - main
