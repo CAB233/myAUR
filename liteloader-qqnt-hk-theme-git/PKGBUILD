@@ -8,7 +8,7 @@ pkgdesc="BetterQQNT主题"
 arch=('any')
 url="https://github.com/huankong233/LiteLoaderQQNT-HK-Theme"
 license=("MIT")
-depends=("liteloader-qqnt")
+depends=("liteloader-qqnt-bin")
 makedepends=('git')
 provides=("liteloader-qqnt-hk-theme-git")
 
