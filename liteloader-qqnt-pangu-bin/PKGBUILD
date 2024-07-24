@@ -17,5 +17,6 @@ sha256sums=('c2e14a82ea5bbac5fba3d152637d808b4e0a8092f61793cf05531d7d55b74045')
 package() {
     mkdir -p "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
     chmod 0755 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
-    cp -r "${srcdir}/${_pkgname}/"* "${pkgdir}/opt/LiteLoader/plugins/LLPangu"
+    install -Dm644 "${srcdir}/main.js" "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}/main.js"
+    install -Dm644 "${srcdir}/manifest.json" "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}/manifest.json"
 }
