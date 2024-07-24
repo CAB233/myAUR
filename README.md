@@ -3,7 +3,6 @@
 导入我的公钥
 
 ```undefined
-pacman-key --init
 pacman-key --recv-key 62FFE3FEF4158CF1 --keyserver keys.openpgp.org
 pacman-key --lsign-key 62FFE3FEF4158CF1
 ```
