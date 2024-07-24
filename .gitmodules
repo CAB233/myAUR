@@ -4,6 +4,3 @@
 [submodule "kwin-effect-rounded-corners-git"]
 	path = kwin-effect-rounded-corners-git
 	url = https://aur.archlinux.org/kwin-effect-rounded-corners-git.git
-[submodule "liteloader-qqnt-bin"]
-	path = liteloader-qqnt-bin
-	url = https://aur.archlinux.org/liteloader-qqnt-bin.git
