@@ -1,5 +1,6 @@
 # Maintainer: Sniventals <Creeperxie@outlook.com>
 # Maintainer: Creeperxie <mingyue@ixcm.onmicrosoft.com>
+# Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
 
 pkgname='liteloader-qqnt-lite-tools-bin'
 _pkgname='LiteLoaderQQNT-lite_tools'
@@ -19,6 +20,6 @@ b2sums=('8803c7ae734ff4b9495a8101a8db0f5d0aaa4d3ab3ec946d5d5ed42cc230fd6a187367e
 
 package() {
     mkdir -p "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
-    chmod 0777 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
+    chmod 0755 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
     cp -rf "${srcdir}"/* "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
 }
