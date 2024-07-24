@@ -1,3 +1,5 @@
+[![Packages CI](https://github.com/CAB233/myAUR/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/CAB233/myAUR/actions/workflows/build.yml)
+
 ### 使用方法
 
 导入我的公钥
