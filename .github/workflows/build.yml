@@ -81,6 +81,8 @@ jobs:
           key: ${{ runner.os }}-yay-cache
 
       - name: 安装 yay
+        if: steps.cache-yay.outputs.cache-hit == 'false'
+        id: install-yay
         run: |
           echo "[archlinuxcn]" >> /etc/pacman.conf
           echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
@@ -90,22 +92,13 @@ jobs:
           pacman -S --noconfirm --needed yay
 
       - name: 保存 yay 缓存
+        if: steps.install-yay.outcome == 'success'
         uses: actions/cache@v4
         with:
           path: /var/cache/pacman/pkg
           key: ${{ runner.os }}-yay-cache
           restore-keys: |
             ${{ runner.os }}-yay-cache
-
-      - name: 恢复 ${{ matrix.package }} 构建缓存
-        id: cache-build
-        uses: actions/cache@v4
-        with:
-          path: |
-            /var/cache/pacman/pkg
-            ${{ matrix.package }}/pkg
-            ${{ matrix.package }}/src
-          key: ${{ runner.os }}-${{ matrix.package }}-build-cache
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
@@ -121,17 +114,6 @@ jobs:
 
           # 开始构建
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
-
-      - name: 保存 ${{ matrix.package }} 构建缓存
-        uses: actions/cache@v4
-        with:
-          path: |
-            /var/cache/pacman/pkg
-            ${{ matrix.package }}/pkg
-            ${{ matrix.package }}/src
-          key: ${{ runner.os }}-${{ matrix.package }}-build-cache
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.package }}-build-cache
 
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
