@@ -73,13 +73,6 @@ jobs:
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
 
-      - name: 恢复 yay 缓存
-        id: cache-yay
-        uses: actions/cache@v4
-        with:
-          path: /var/cache/pacman/pkg
-          key: ${{ runner.os }}-yay-cache
-
       - name: 安装 yay
         if: steps.cache-yay.outputs.cache-hit == 'false'
         id: install-yay
@@ -90,15 +83,6 @@ jobs:
           pacman-key --lsign-key "farseerfc@archlinux.org"
           pacman -Sy --noconfirm archlinuxcn-keyring
           pacman -S --noconfirm --needed yay
-
-      - name: 保存 yay 缓存
-        if: steps.install-yay.outcome == 'success'
-        uses: actions/cache@v4
-        with:
-          path: /var/cache/pacman/pkg
-          key: ${{ runner.os }}-yay-cache
-          restore-keys: |
-            ${{ runner.os }}-yay-cache
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
