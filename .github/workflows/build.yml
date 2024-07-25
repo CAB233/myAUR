@@ -73,6 +73,13 @@ jobs:
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
 
+      - name: 恢复 yay 缓存
+        id: cache-yay
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/pacman/pkg
+          key: ${{ runner.os }}-yay-cache
+
       - name: 安装 yay
         run: |
           echo "[archlinuxcn]" >> /etc/pacman.conf
@@ -81,6 +88,24 @@ jobs:
           pacman-key --lsign-key "farseerfc@archlinux.org"
           pacman -Sy --noconfirm archlinuxcn-keyring
           pacman -S --noconfirm --needed yay
+
+      - name: 保存 yay 缓存
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/pacman/pkg
+          key: ${{ runner.os }}-yay-cache
+          restore-keys: |
+            ${{ runner.os }}-yay-cache
+
+      - name: 恢复 ${{ matrix.package }} 构建缓存
+        id: cache-build
+        uses: actions/cache@v4
+        with:
+          path: |
+            /var/cache/pacman/pkg
+            ${{ matrix.package }}/pkg
+            ${{ matrix.package }}/src
+          key: ${{ runner.os }}-${{ matrix.package }}-build-cache
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
@@ -96,6 +121,17 @@ jobs:
 
           # 开始构建
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
+
+      - name: 保存 ${{ matrix.package }} 构建缓存
+        uses: actions/cache@v4
+        with:
+          path: |
+            /var/cache/pacman/pkg
+            ${{ matrix.package }}/pkg
+            ${{ matrix.package }}/src
+          key: ${{ runner.os }}-${{ matrix.package }}-build-cache
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.package }}-build-cache
 
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
@@ -154,7 +190,7 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: /__w/myAUR/myAUR
+          source-dir: ${{ github.workspace }}
           destination-dir: archlinux/x86_64
 
       - name: 失败后重试上传至 R2 存储桶
