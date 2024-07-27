@@ -74,8 +74,6 @@ jobs:
           chown -R builder:builder ./
 
       - name: 安装 yay
-        if: steps.cache-yay.outputs.cache-hit == 'false'
-        id: install-yay
         run: |
           echo "[archlinuxcn]" >> /etc/pacman.conf
           echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
