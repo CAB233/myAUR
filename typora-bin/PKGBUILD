@@ -60,7 +60,7 @@ package() {
 	# patch typora
 	install -m755 "${srcdir}/NodeInject/target/release/node_inject" "${pkgdir}/opt/$_pkgname/node_inject"
 	cd "${pkgdir}/opt/$_pkgname" && ./node_inject
-	rm -rf "${pkgdir}/opt/$_pkgname"
+	rm -rf "${pkgdir}/opt/$_pkgname/node"
 	install -m755 "${srcdir}/NodeInject_Hook_example/license-gen/target/release/license-gen" "${pkgdir}/usr/bin/typora-license-gen"
 
 	# fix permissions
