@@ -73,7 +73,15 @@ jobs:
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
 
+      - name: 恢复 yay 缓存
+        id: cache-yay
+        uses: actions/cache@v4
+        with:
+          path: /usr/bin/yay
+          key: yay-cache
+
       - name: 安装 yay
+        if: steps.cache-yay.outputs.cache-hit == 'false'
         run: |
           echo "[archlinuxcn]" >> /etc/pacman.conf
           echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
