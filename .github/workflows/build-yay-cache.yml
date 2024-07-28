@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "yay-bin/PKGBU1D"
+      - "yay-bin/PKGBU1LD"
 
 jobs:
   build:
