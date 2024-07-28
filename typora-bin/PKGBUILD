@@ -1,0 +1,68 @@
+# Maintainer: Jonas Bögle <aur@iwr.sh>
+# Contributor: Jonathan Duck <duckbrain30@gmail.com>
+
+pkgname=typora-bin
+_pkgname=typora
+pkgver=1.9.3 # renovate: datasource=custom depName='$(shell curl -s https://www.typora.io/linux/Packages | grep Version | cut -f 2 -d ' ' | sort -V | cut -f 1 -d '-' | uniq | tail -n 1)'
+pkgrel=1
+pkgdesc="A minimal markdown editor and reader, but with some hooks"
+arch=('x86_64')
+license=('custom:"Copyright (c) 2015 Abner Lee All Rights Reserved."' 'MIT')
+url="https://typora.io/"
+depends=('gtk3' 'nss' 'alsa-lib')
+makedepends=('rust' 'git')
+conflicts=('typora' 'typora-free' 'typora-electron')
+optdepends=(
+	'noto-fonts-emoji: Or some other emoji font to see emojis'
+	'pandoc: Import/export for extra file formats')
+source=("https://download.typora.io/linux/typora_${pkgver}_amd64.deb"
+		"typora.sh"
+		"hook.js"
+		"git+https://github.com/DiamondHunters/NodeInject.git"
+		"git+https://github.com/DiamondHunters/NodeInject_Hook_example.git")
+sha512sums=('da7714d8a2ef228d1df13bf2a6862f3be3fad51238657e8ee48350380267ecfed29b391e0c66653e3b4322e3dada02d2bea6e1041f5230988358645ea0cf4b28'
+            '2dce26e1c041ffe56f83cc53d785716f9835189d984120f117e7d427f6167442afc4be891ea31131758856e2df9f8c946c7d409886b1d4f4f3b1a80b278092de'
+            '4f265ae13c729340a55b7654be6a977761e4d0c5a9f0e4a09e070a4989b7d2c3ec30f7a467933d3f942959f37c43e0e7eb19183a9955d48ad2c005e02582b929'
+            'SKIP'
+            'SKIP')
+
+build() {
+	# Build keygen
+	cd "${srcdir}/NodeInject_Hook_example/license-gen"
+	cargo build --release
+
+	# Build NodeInject
+	cd "${srcdir}/NodeInject"
+	cp "${srcdir}/hook.js" "${srcdir}/NodeInject/src/hooklog.js"
+	cargo build --release
+}
+
+package() {
+	install -d "${pkgdir}/opt/$_pkgname"
+
+	# unpack archive
+	bsdtar -xf data.tar.xz -C "${pkgdir}/"
+	# remove lintian overrides
+	rm -rf "${pkgdir}/usr/share/lintian/"
+	# replace bin link with custom launch script
+	rm -rf "${pkgdir}/usr/bin/$_pkgname"
+	install -m755 "${srcdir}/$_pkgname.sh" "${pkgdir}/usr/bin/$_pkgname"
+	# move license to correct path
+	install -Dm644 "${pkgdir}/usr/share/doc/$_pkgname/copyright" "${pkgdir}/usr/share/licenses/$_pkgname/LICENSE"
+	rm "${pkgdir}/usr/share/doc/$_pkgname/copyright"
+	rmdir --ignore-fail-on-non-empty "${pkgdir}/usr/share/doc/$_pkgname" "${pkgdir}/usr/share/doc"
+	# remove change log from application comment
+	sed -i '/Change Log/d' "${pkgdir}/usr/share/applications/$_pkgname.desktop"
+	chmod 644 "${pkgdir}/usr/share/applications/$_pkgname.desktop"
+	cp -r "${pkgdir}/usr/share/$_pkgname/"* "${pkgdir}/opt/$_pkgname"
+	rm -rf "${pkgdir}/usr/share/$_pkgname"
+
+	# patch typora
+	install -m755 "${srcdir}/NodeInject/target/release/node_inject" "${pkgdir}/opt/$_pkgname/node_inject"
+	cd "${pkgdir}/opt/$_pkgname" && ./node_inject
+	rm -rf "${pkgdir}/opt/$_pkgname"
+	install -m755 "${srcdir}/NodeInject_Hook_example/license-gen/target/release/license-gen" "${pkgdir}/usr/bin/typora-license-gen"
+
+	# fix permissions
+	find "${pkgdir}" -type d -exec chmod 755 {} \;
+}
