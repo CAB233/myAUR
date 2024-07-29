@@ -65,4 +65,7 @@ package() {
 
 	# fix permissions
 	find "${pkgdir}" -type d -exec chmod 755 {} \;
+
+	# install hook
+	install -Dm644 "${srcdir}/patch-typora.hook" "${pkgdir}/etc/pacman.d/hooks/patch-typora.hook"
 }
