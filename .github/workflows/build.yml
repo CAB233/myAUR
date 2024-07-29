@@ -81,7 +81,7 @@ jobs:
           key: yay-cache
 
       - name: 安装 yay
-        if: steps.cache-yay.outputs.cache-hit == 'false'
+        if: steps.cache-yay.outputs.cache-hit != 'true'
         working-directory: ./yay-bin
         run: |
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
