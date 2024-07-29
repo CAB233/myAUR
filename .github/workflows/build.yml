@@ -81,14 +81,11 @@ jobs:
           key: yay-cache
 
       - name: 安装 yay
-        if: steps.cache-yay.outputs.cache-hit == 'false'
+        if: steps.cache-yay.outputs.cache-hit != 'true'
+        working-directory: ./yay-bin
         run: |
-          echo "[archlinuxcn]" >> /etc/pacman.conf
-          echo "Server = https://repo.archlinuxcn.org/x86_64" >> /etc/pacman.conf
-          pacman-key --init
-          pacman-key --lsign-key "farseerfc@archlinux.org"
-          pacman -Sy --noconfirm archlinuxcn-keyring
-          pacman -S --noconfirm --needed yay
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
+          sudo -u builder yay --version
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
