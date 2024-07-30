@@ -1,9 +1,0 @@
-[Trigger]
-Type=Package
-Operation=Upgrade
-Target=typora-bin
-
-[Action]
-Description=Patch Typora...
-When=PostTransaction
-Exec=/bin/sh -c 'rm -rf /opt/typora/node && cd /opt/typora && ./node_inject && rm -rf /opt/typora/node && echo "Please fill in the license manually" && /usr/bin/typora-license-gen'
