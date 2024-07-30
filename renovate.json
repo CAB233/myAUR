@@ -10,6 +10,12 @@
       "(^|/)\\.gitmodules$"
     ]
   },
+  "logLevelRemap": [
+    {
+      "matchMessage": "/^Custom manager fetcher/",
+      "newLogLevel": "info"
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
@@ -31,5 +37,14 @@
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
-  ]
+  ],
+  "customDatasources": {
+    "typora": {
+      "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
+      "format": "plain",
+      "transformTemplates": [
+        "$match(/Version: (\\d+\\.\\d+\\.\\d+)-\\d+/, '$1')"
+      ]
+    }
+  }
 }
