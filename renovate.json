@@ -30,16 +30,6 @@
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
-    },
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "(^|/)PKGBUILD$"
-      ],
-      "datasourceTemplate": "custom.typora",
-      "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
-      ]
     }
   ],
   "customDatasources": {
@@ -69,7 +59,7 @@
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
         "github-tags",
-        "custom.typora"
+        "custom"
       ],
       "automerge": true,
       "ignoreTests": true,
