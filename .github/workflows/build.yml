@@ -4,7 +4,7 @@ name: Packages CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "14 45 11 * * *"
+    - cron: "45 11 * * *"
   push:
     branches:
       - main

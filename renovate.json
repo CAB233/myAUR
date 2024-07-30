@@ -30,6 +30,16 @@
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)PKGBUILD$"
+      ],
+      "datasourceTemplate": "custom.typora",
+      "matchStrings": [
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
+      ]
     }
   ],
   "customDatasources": {
@@ -40,5 +50,30 @@
         "$match(/Version: (\\d+\\.\\d+\\.\\d+)-\\d+/, '$1')"
       ]
     }
-  }
+  },
+  "packageRules": [
+    {
+      "description": "自动合并 submodule 更新",
+      "matchManagers": [
+        "git-submodules"
+      ],
+      "matchDatasources": [
+        "git-refs"
+      ],
+      "enabled": true,
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "自动合并自定义 PKGBUILD 更新",
+      "matchDatasources": [
+        "github-tags",
+        "custom.typora"
+      ],
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch"
+    }
+  ]
 }
