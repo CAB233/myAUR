@@ -10,12 +10,6 @@
       "(^|/)\\.gitmodules$"
     ]
   },
-  "logLevelRemap": [
-    {
-      "matchMessage": "/^Custom manager fetcher/",
-      "newLogLevel": "info"
-    }
-  ],
   "customManagers": [
     {
       "customType": "regex",
