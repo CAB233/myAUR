@@ -161,6 +161,7 @@ jobs:
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: ${{ github.workspace }}
           destination-dir: archlinux/x86_64
+          keep-file-fresh: 'true'
 
       - name: 失败后重试上传至 R2 存储桶
         if: steps.upload-r2.outcome == 'failure'
@@ -172,3 +173,4 @@ jobs:
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: /__w/myAUR/myAUR
           destination-dir: archlinux/x86_64
+          keep-file-fresh: 'true'
