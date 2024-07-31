@@ -30,6 +30,16 @@
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)PKGBUILD$"
+      ],
+      "matchStrings": [
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) packageName=(?<packageName>.*)"
+      ],
+      "extractVersionTemplate": "^v?(?<version>.*)$"
     }
   ],
   "customDatasources": {
