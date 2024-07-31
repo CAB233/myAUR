@@ -30,16 +30,6 @@
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
-    },
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "(^|/)PKGBUILD$"
-      ],
-      "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) packageName=(?<packageName>.*)"
-      ],
-      "extractVersionTemplate": "^v?(?<version>.*)$"
     }
   ],
   "customDatasources": {
@@ -47,7 +37,7 @@
       "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
       "format": "plain",
       "transformTemplates": [
-        "$match(/Version: (\\d+\\.\\d+\\.\\d+)-\\d+/, '$1')"
+        "{\"releases\": [{ \"version\": $match(/Version: (\\d+\\.\\d+\\.\\d+)-\\d+/, '$1') }]}"
       ]
     }
   },
@@ -68,21 +58,12 @@
     {
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
-        "github-tags"
-      ],
-      "automerge": true,
-      "ignoreTests": true,
-      "automergeType": "branch"
-    },
-    {
-      "description": "typora-bin 包相关",
-      "matchDatasources": [
+        "github-tags",
         "custom.typora"
       ],
       "automerge": true,
       "ignoreTests": true,
-      "automergeType": "branch",
-      "extractVersion": "^v?(?<version>.*)$"
+      "automergeType": "branch"
     }
   ]
 }
