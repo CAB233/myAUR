@@ -151,8 +151,6 @@ jobs:
           rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
       - name: 上传至 R2 存储桶
-        id: upload-r2
-        continue-on-error: true
         uses: ryand56/r2-upload-action@latest
         with:
           r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
@@ -160,17 +158,5 @@ jobs:
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: ${{ github.workspace }}
-          destination-dir: archlinux/x86_64
-          keep-file-fresh: 'true'
-
-      - name: 失败后重试上传至 R2 存储桶
-        if: steps.upload-r2.outcome == 'failure'
-        uses: ryand56/r2-upload-action@latest
-        with:
-          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
-          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: /__w/myAUR/myAUR
           destination-dir: archlinux/x86_64
           keep-file-fresh: 'true'
