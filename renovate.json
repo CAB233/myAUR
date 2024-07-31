@@ -37,7 +37,7 @@
         "(^|/)PKGBUILD$"
       ],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) packageName=(?<packageName>.*)"
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
@@ -68,21 +68,12 @@
     {
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
-        "github-tags"
-      ],
-      "automerge": true,
-      "ignoreTests": true,
-      "automergeType": "branch"
-    },
-    {
-      "description": "typora-bin 包相关",
-      "matchDatasources": [
+        "github-tags",
         "custom.typora"
       ],
       "automerge": true,
       "ignoreTests": true,
-      "automergeType": "branch",
-      "extractVersion": "^v?(?<version>.*)$"
+      "automergeType": "branch"
     }
   ]
 }
