@@ -1,0 +1,30 @@
+# Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
+
+pkgname='liteloader-qqnt-hk-theme-git'
+_pkgname='LiteLoaderQQNT-HK-Theme'
+pkgver=r19.46b87af # renovate: datasource=git-refs depName=https://github.com/huankong233/LiteLoaderQQNT-HK-Theme
+pkgrel=1
+pkgdesc="BetterQQNT主题"
+arch=('any')
+url="https://github.com/huankong233/LiteLoaderQQNT-HK-Theme"
+license=("MIT")
+depends=("liteloader-qqnt")
+makedepends=('git')
+provides=("liteloader-qqnt-hk-theme-git")
+
+source=("git+https://github.com/huankong233/LiteLoaderQQNT-HK-Theme.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/${_pkgname}"
+    ( set -o pipefail
+    git describe --long --abbrev=7 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+    )
+}
+
+package() {
+    mkdir -p "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
+    chmod 0755 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
+    cp -r "${srcdir}/${_pkgname}/"* "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
+}
