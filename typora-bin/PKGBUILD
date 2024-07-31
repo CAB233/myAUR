@@ -3,7 +3,7 @@
 
 pkgname=typora-bin
 _pkgname=typora
-pkgver=1.9.3 # renovate: datasource=custom.typora depName=typora
+pkgver=1.8.10 # renovate: datasource=custom.typora depName=typora
 pkgrel=1
 pkgdesc="A minimal markdown editor and reader, but with some hooks"
 arch=('x86_64')
@@ -22,7 +22,7 @@ source=("https://download.typora.io/linux/typora_${pkgver}_amd64.deb"
 		"hook.js"
 		"git+https://github.com/DiamondHunters/NodeInject.git"
 		"git+https://github.com/DiamondHunters/NodeInject_Hook_example.git")
-sha512sums=('da7714d8a2ef228d1df13bf2a6862f3be3fad51238657e8ee48350380267ecfed29b391e0c66653e3b4322e3dada02d2bea6e1041f5230988358645ea0cf4b28'
+sha512sums=('6560774e283129fa556a916d412903893388194625472062a36dd84d771ae261974b0c6a3b4642b081e8e19a7bb9477720e00f39efa4934aa8301001127e69a6'
             '2dce26e1c041ffe56f83cc53d785716f9835189d984120f117e7d427f6167442afc4be891ea31131758856e2df9f8c946c7d409886b1d4f4f3b1a80b278092de'
             '4f265ae13c729340a55b7654be6a977761e4d0c5a9f0e4a09e070a4989b7d2c3ec30f7a467933d3f942959f37c43e0e7eb19183a9955d48ad2c005e02582b929'
             'SKIP'
