@@ -37,7 +37,7 @@
       "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
       "format": "plain",
       "transformTemplates": [
-        "{\"releases\": [{ \"version\": $match(/Version: (\\d+\\.\\d+\\.\\d+)-\\d+/, '$1') }]}"
+        "{\"releases\":[{\"version\":$match(/Version:(\\d+\\.\\d+\\.\\d+)-\\d+/,'$1')}]}"
       ]
     }
   },
