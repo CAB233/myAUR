@@ -151,7 +151,7 @@ jobs:
           rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
       - name: 上传至 R2 存储桶
-        uses: ryand56/r2-upload-action@latest
+        uses: ryand56/r2-upload-action@v1.3.0
         with:
           r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -159,4 +159,4 @@ jobs:
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: ${{ github.workspace }}
           destination-dir: archlinux/x86_64
-          keep-file-fresh: 'true'
+          keep-file-fresh: true
