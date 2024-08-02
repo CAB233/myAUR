@@ -19,8 +19,7 @@
       "matchStrings": [
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
-      "extractVersionTemplate": "^v?(?<version>.*)$",
-      "versioningTemplate": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      "extractVersionTemplate": "^v?(?<version>.*)$"
     },
     {
       "customType": "regex",
@@ -62,6 +61,13 @@
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
+    },
+    {
+      "description": "typora 版本匹配",
+      "matchDepNames": [
+        "typora"
+      ],
+      "versioning": "regex:^?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
     }
   ]
 }
