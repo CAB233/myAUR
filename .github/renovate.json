@@ -36,7 +36,7 @@
     "typora": {
       "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
       "transformTemplates": [
-        "{\"releases\": $map($filter($split(input, \"\\n\\n\"), function($block) { $contains($block, \"Package: typora\") }), function($block) { {\"version\": $match($block, /Version: (\\d+\\.\\d+\\.\\d+)/)[0].groups[0]} })}"
+        "{\"releases\":[{\"version\":$match(/Version:(\\d+\\.\\d+\\.\\d+)-\\d+/,'$1')}]}"
       ]
     }
   },
@@ -69,7 +69,7 @@
       "matchDepNames": [
         "typora"
       ],
-      "versioning": "regex:^?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
+      "versioning": "regex:^(?:[^/]+/[^_]+_)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:_.*)?$"
     }
   ]
 }
