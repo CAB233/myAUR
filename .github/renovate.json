@@ -30,15 +30,24 @@
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)PKGBUILD$"
+      ],
+      "matchStrings": [
+        "pkgver=(?<currentValue>.*) # renovate"
+      ],
+      "datasourceTemplate": "custom.typora",
+      "depNameTemplate": "typora",
+      "versioningTemplate": "regex:^typora_(\\d+\\.\\d+\\.\\d+)_arm64.deb$"
     }
   ],
   "customDatasources": {
     "typora": {
       "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
-      "format": "plain",
-      "transformTemplates": [
-        "{\"releases\":[{\"version\":$match(/Version:(\\d+\\.\\d+\\.\\d+)-\\d+/,'$1')}]}"
-      ]
+      "format": "plain"
     }
   },
   "packageRules": [
@@ -64,6 +73,12 @@
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
+    },
+    {
+      "matchDatasources": [
+        "custom.typora"
+      ],
+      "extractVersion": "(?<version>.+)/$"
     }
   ]
 }
