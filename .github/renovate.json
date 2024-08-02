@@ -34,13 +34,11 @@
     {
       "customType": "regex",
       "fileMatch": [
-        "(^|/)PKGBUILD$"
+        "(^|/)PKGBUILD$" 
       ],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate"
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
-      "datasourceTemplate": "custom.typora",
-      "depNameTemplate": "typora",
       "versioningTemplate": "regex:^(?:[^/]+/[^_]+_)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:_.*)?$"
     }
   ],
@@ -75,6 +73,7 @@
       "automergeType": "branch"
     },
     {
+      "description": "提取 typora 版本",
       "matchDatasources": [
         "custom.typora"
       ],
