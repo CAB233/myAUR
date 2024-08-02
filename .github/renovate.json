@@ -35,9 +35,7 @@
   "customDatasources": {
     "typora": {
       "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
-      "transformTemplates": [
-        "{\"releases\":[{\"version\":$match(/Version:(\\d+\\.\\d+\\.\\d+)-\\d+/,'$1')}]}"
-      ]
+      "format": "plain"
     }
   },
   "packageRules": [
