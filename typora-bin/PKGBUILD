@@ -3,7 +3,7 @@
 
 pkgname=typora-bin
 _pkgname=typora
-pkgver=1.9.3 # renovate
+pkgver=1.9.3 # renovate: datasource=custom.typora depName=typora
 pkgrel=1
 pkgdesc="A minimal markdown editor and reader, but with some hooks"
 arch=('x86_64')
