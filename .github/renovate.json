@@ -41,7 +41,7 @@
       ],
       "datasourceTemplate": "custom.typora",
       "depNameTemplate": "typora",
-      "versioningTemplate": "regex:^typora_(\\d+\\.\\d+\\.\\d+)_arm64.deb$"
+      "versioningTemplate": "regex:^(?:[^/]+/[^_]+_)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:_.*)?$"
     }
   ],
   "customDatasources": {
