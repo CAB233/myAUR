@@ -19,7 +19,8 @@
       "matchStrings": [
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
-      "extractVersionTemplate": "^v?(?<version>.*)$"
+      "extractVersionTemplate": "^v?(?<version>.*)$",
+      "versioningTemplate": "regex:^(?:[^/]+/[^_]+_)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:_.*)?$"
     },
     {
       "customType": "regex",
@@ -30,16 +31,6 @@
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
-    },
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "(^|/)PKGBUILD$" 
-      ],
-      "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
-      ],
-      "versioningTemplate": "regex:^(?:[^/]+/[^_]+_)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:_.*)?$"
     }
   ],
   "customDatasources": {
@@ -71,13 +62,6 @@
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
-    },
-    {
-      "description": "提取 typora 版本",
-      "matchDatasources": [
-        "custom.typora"
-      ],
-      "extractVersion": "(?<version>.+)/$"
     }
   ]
 }
