@@ -32,12 +32,6 @@
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
   ],
-  "customDatasources": {
-    "typora": {
-      "defaultRegistryUrlTemplate": "https://www.typora.io/linux/Packages",
-      "format": "plain"
-    }
-  },
   "packageRules": [
     {
       "description": "自动合并 submodule 更新",
@@ -55,22 +49,11 @@
     {
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
-        "github-tags",
-        "custom.typora"
+        "github-tags"
       ],
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
-    },
-    {
-      "description": "typora 版本匹配",
-      "matchDepNames": [
-        "typora"
-      ],
-      "matchDatasources": [
-        "custom.typora"
-      ],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     }
   ]
 }
