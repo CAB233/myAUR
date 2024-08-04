@@ -2,8 +2,13 @@
 Type=Package
 Operation=Install
 Operation=Upgrade
-Target=liteloader-qqnt-git
 Target=liteloader-qqnt-bin
+
+[Trigger]
+Type=Package
+Operation=Install
+Operation=Upgrade
+Target=linuxqq
 
 [Action]
 Description=Patch QQ for LiteLoaderQQNT...

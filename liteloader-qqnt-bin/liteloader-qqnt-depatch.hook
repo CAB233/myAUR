@@ -1,7 +1,6 @@
 [Trigger]
 Operation=Remove
 Type=Package
-Target=liteloader-qqnt-git
 Target=liteloader-qqnt-bin
 
 [Action]
