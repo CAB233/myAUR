@@ -4,3 +4,6 @@
 [submodule "kwin-effect-rounded-corners-git"]
 	path = kwin-effect-rounded-corners-git
 	url = https://aur.archlinux.org/kwin-effect-rounded-corners-git.git
+[submodule "cinny-desktop-bin"]
+	path = cinny-desktop-bin
+	url = https://aur.archlinux.org/cinny-desktop-bin.git
