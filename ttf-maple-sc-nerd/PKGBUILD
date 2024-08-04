@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
 
 pkgname='ttf-maple-sc-nerd'
-pkgver=6.4 # renovate: datasource=git-tags depName=subframe7536/maple-font
+pkgver=6.4 # renovate: datasource=github-tags depName=subframe7536/maple-font
 pkgrel=1
 pkgdesc="Open source monospace & nerd font with round corner and ligatures"
 arch=('any')
