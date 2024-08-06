@@ -689,7 +689,7 @@ _package() {
     rm "$modulesdir"/build
 }
 
-_package-headers() {
+package-headers() {
     pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
     depends=('pahole' ${pkgbase} )
 
@@ -773,14 +773,14 @@ _package-headers() {
     ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
 }
 
-_package-dbg(){
-    pkgdesc="Non-stripped vmlinux file for the $pkgdesc kernel"
-    depends=(${pkgbase}-headers)
+#_package-dbg(){
+#    pkgdesc="Non-stripped vmlinux file for the $pkgdesc kernel"
+#    depends=(${pkgbase}-headers)
 
-    cd "${srcdir}/${_srcname}"
-    mkdir -p "$pkgdir/usr/src/debug/${pkgbase}"
-    install -Dt "$pkgdir/usr/src/debug/${pkgbase}" -m644 vmlinux
-}
+#    cd "${srcdir}/${_srcname}"
+#    mkdir -p "$pkgdir/usr/src/debug/${pkgbase}"
+#    install -Dt "$pkgdir/usr/src/debug/${pkgbase}" -m644 vmlinux
+#}
 
 #_package-zfs(){
 #    pkgdesc="zfs module for the $pkgdesc kernel"
