@@ -103,7 +103,7 @@ jobs:
           sudo -u builder updpkgsums
 
           # 开始构建
-          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -sf --sig
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -sf --sig --noconfirm
 
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
