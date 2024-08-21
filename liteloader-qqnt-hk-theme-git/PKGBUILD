@@ -2,7 +2,7 @@
 
 pkgname='liteloader-qqnt-hk-theme-git'
 _pkgname='LiteLoaderQQNT-HK-Theme'
-pkgver=r19.46b87af # renovate: datasource=git-refs depName=https://github.com/huankong233/LiteLoaderQQNT-HK-Theme
+pkgver=r19.46b87af
 pkgrel=1
 pkgdesc="BetterQQNT主题"
 arch=('any')
