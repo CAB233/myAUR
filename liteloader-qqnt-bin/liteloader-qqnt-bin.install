@@ -1,4 +1,5 @@
 post_install() {
+	echo "Patch QQ for LiteLoaderQQNT..."
 	grep -q /opt/LiteLoader /opt/QQ/resources/app/app_launcher/index.js || sed -i "1 i require(\"/opt/LiteLoader\");" /opt/QQ/resources/app/app_launcher/index.js
 }
 
@@ -7,5 +8,6 @@ post_upgrade() {
 }
 
 post_remove() {
+	echo "Depatch QQ for LiteLoaderQQNT..."
 	grep -q /opt/LiteLoader /opt/QQ/resources/app/app_launcher/index.js && sed -i '1d' /opt/QQ/resources/app/app_launcher/index.js
 }

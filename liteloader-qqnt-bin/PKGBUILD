@@ -13,13 +13,9 @@ depends=("linuxqq")
 conflicts=("linuxqq-appimage" "liteloader-qqnt")
 provides=("liteloader-qqnt")
 install="${pkgname}.install"
-source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
-		"liteloader-qqnt-depatch.hook"
-		"liteloader-qqnt-patch.hook")
+source=("${url}/releases/download/${pkgver}/${_pkgname}.zip")
 
-sha256sums=('93c8520eb7cf26d2b8e06df70dc1c0d831734498dc9fd3767c099b4fbd89f5c0'
-            '6bee3d5f5f238ad42ae14253eff43e821726e68f62d22e511d9dc48522aef9d0'
-            '372a9f6faa4589fa93297171b0ed45d171e6fc6d6ae1767d521af4081165bf40')
+sha256sums=('affbd02573900d4f5743e33386d41b38adaac6ed9a130d57e7c8c75f8dc68838')
 
 package() {
 	# prepare to copy files
@@ -35,10 +31,4 @@ package() {
 
 	# clean up in target dir
 	rm -f "${pkgdir}/opt/LiteLoader/LiteLoaderQQNT.zip"
-	rm -f "${pkgdir}/opt/LiteLoader/liteloader-qqnt-patch.hook"
-	rm -f "${pkgdir}/opt/LiteLoader/liteloader-qqnt-depatch.hook"
-
-	# install hooks
-	install -Dm644 "${srcdir}/liteloader-qqnt-patch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-patch.hook"
-	install -Dm644 "${srcdir}/liteloader-qqnt-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-depatch.hook"
 }
