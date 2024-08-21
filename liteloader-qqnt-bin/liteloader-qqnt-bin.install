@@ -1,0 +1,11 @@
+post_install() {
+	grep -q /opt/LiteLoader /opt/QQ/resources/app/app_launcher/index.js || sed -i "1 i require(\"/opt/LiteLoader\");" /opt/QQ/resources/app/app_launcher/index.js
+}
+
+post_upgrade() {
+	post_install
+}
+
+post_remove() {
+	grep -q /opt/LiteLoader /opt/QQ/resources/app/app_launcher/index.js && sed -i '1d' /opt/QQ/resources/app/app_launcher/index.js
+}
