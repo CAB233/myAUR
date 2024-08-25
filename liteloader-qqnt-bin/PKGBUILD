@@ -4,7 +4,7 @@
 pkgname="liteloader-qqnt-bin"
 _pkgname="LiteLoaderQQNT"
 pkgver=1.2.1 # renovate: datasource=github-tags depName=LiteLoaderQQNT/LiteLoaderQQNT
-pkgrel=2
+pkgrel=3
 pkgdesc="轻量, 简洁, 开源的 QQNT 插件加载器"
 arch=('any')
 url="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"
@@ -12,23 +12,24 @@ license=('MIT')
 depends=("linuxqq")
 conflicts=("linuxqq-appimage" "liteloader-qqnt")
 provides=("liteloader-qqnt")
-install="${pkgname}.install"
-source=("${url}/releases/download/${pkgver}/${_pkgname}.zip")
+source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
+		"liteloader-qqnt-patch.hook"
+		"liteloader-qqnt-depatch.hook")
 
-sha256sums=('affbd02573900d4f5743e33386d41b38adaac6ed9a130d57e7c8c75f8dc68838')
+sha256sums=('affbd02573900d4f5743e33386d41b38adaac6ed9a130d57e7c8c75f8dc68838'
+            'bc1e1b74aa0be234f94fb9fe78df32be91891c3cb778ec960ff920e56f01eba2'
+            '453e1ac73bc0655b5ac394a9936ef6e80d83a0e0fd46fcefeef3fdc635987230')
 
 package() {
-	# prepare to copy files
-	mkdir -p "${pkgdir}/opt/LiteLoader"
-	mkdir -p "${pkgdir}/opt/QQ/resources/app/application"
+	# 准备文件夹
+	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/src"
 
-	# copy files
-	cp -rf "${srcdir}/"* "${pkgdir}/opt/LiteLoader/"
-	cp -f "${srcdir}/src/preload.js" "${pkgdir}/opt/QQ/resources/app/application/preload.js"
+	# 移动文件到相应位置
+	cp -rf "${srcdir}/src/"* "${pkgdir}/opt/LiteLoaderQQNT/src"
+	install -Dm644 "${srcdir}/package.json" "${pkgdir}/opt/LiteLoaderQQNT/package.json"
+	install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/$_pkgname/LICENSE"
 
-	# modify premissions
-	chmod -R 0755 "${pkgdir}/opt/LiteLoader"
-
-	# clean up in target dir
-	rm -f "${pkgdir}/opt/LiteLoader/LiteLoaderQQNT.zip"
+	# 配置 pacman hook
+	install -Dm644 "${srcdir}/liteloader-qqnt-patch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-patch.hook"
+	install -Dm644 "${srcdir}/liteloader-qqnt-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-depatch.hook"
 }
