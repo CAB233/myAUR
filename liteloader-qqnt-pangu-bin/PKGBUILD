@@ -8,15 +8,13 @@ pkgdesc="给你的 QQNT 注入盘古之力"
 arch=('any')
 url="https://github.com/MisaLiu/LiteLoaderQQNT-Pangu"
 license=("MIT")
-depends=("liteloader-qqnt")
-provides=("liteloader-qqnt-pangu-bin")
+depends=("liteloader-qqnt-bin")
 
 source=("${pkgname}-${pkgver}.zip::${url}/releases/download/${pkgver}/LLPangu.zip")
 sha256sums=('c2e14a82ea5bbac5fba3d152637d808b4e0a8092f61793cf05531d7d55b74045')
 
 package() {
-    mkdir -p "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
-    chmod 0755 "${pkgdir}/opt/LiteLoader" "${pkgdir}/opt/LiteLoader/plugins"
-    install -Dm644 "${srcdir}/main.js" "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}/main.js"
-    install -Dm644 "${srcdir}/manifest.json" "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}/manifest.json"
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    install -Dm644 "${srcdir}/main.js" "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/main.js"
+    install -Dm644 "${srcdir}/manifest.json" "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/manifest.json"
 }

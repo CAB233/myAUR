@@ -11,7 +11,6 @@ url="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"
 license=('MIT')
 depends=("linuxqq")
 conflicts=("liteloader-qqnt-git")
-provides=("liteloader-qqnt")
 source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
 		"liteloader-qqnt-patch.hook"
 		"liteloader-qqnt-depatch.hook")
