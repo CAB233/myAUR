@@ -64,6 +64,8 @@ jobs:
           sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
           echo 'MAKEFLAGS="-j$(nproc)"' >> /etc/makepkg.conf
           echo 'PACKAGER="yidaduizuoye <yidaduizuoye@outlook.com>"' >> /etc/makepkg.conf
+          # 临时解决部分构建出现的 Could not resolve host: aur.archlinux.org
+          echo 'nameserver 1.1.1.1' > /etc/resolv.conf
 
           # 配置非 root 用户
           useradd -m builder
