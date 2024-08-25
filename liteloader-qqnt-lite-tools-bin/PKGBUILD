@@ -10,16 +10,17 @@ pkgdesc='LiteLoaderQQNT插件，轻量工具箱，轻量、优雅、高效'
 arch=('any')
 url="https://github.com/xiyuesaves/${_pkgname}"
 license=('MIT')
-depends=('liteloader-qqnt')
-provides=('liteloader-qqnt-lite-tools')
-conflicts=('liteloader-qqnt-lite-tools')
+depends=('liteloader-qqnt-bin')
 
 source=("${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/lite_tools_v4.zip")
-sha256sums=('9ddf953b48325240034aaeb6d7b5b1bab88966ac8a13d16c621d8a4893b11af3')
+sha256sums=('6899feb6cfdc08884df9dfbfde56ce76c073454ea04b96681646d1a97c6a043d')
 
 package() {
-    mkdir -p "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
-    cp -rf "${srcdir}"/* "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}"
-    rm "${pkgdir}/opt/LiteLoader/plugins/${_pkgname}/${pkgname}-${pkgver}.zip"
-    find "${pkgdir}" -type d -exec chmod 755 {} \;
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    cp -rf "${srcdir}"/* "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+
+    # 清除不必要的文件
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/todoList.md"
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/changeLog.md"
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/${pkgname}-${pkgver}.zip"
 }
