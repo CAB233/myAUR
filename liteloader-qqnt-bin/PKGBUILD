@@ -4,31 +4,42 @@
 pkgname="liteloader-qqnt-bin"
 _pkgname="LiteLoaderQQNT"
 pkgver=1.2.1 # renovate: datasource=github-tags depName=LiteLoaderQQNT/LiteLoaderQQNT
-pkgrel=3
+pkgrel=4
 pkgdesc="轻量, 简洁, 开源的 QQNT 插件加载器"
 arch=('any')
 url="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"
 license=('MIT')
-depends=("linuxqq")
+depends=("linuxqq" "bubblewrap") 
 conflicts=("liteloader-qqnt-git")
 source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
 		"liteloader-qqnt-patch.hook"
-		"liteloader-qqnt-depatch.hook")
+		"liteloader-qqnt-depatch.hook"
+		"gen_preload.js"
+		"index.js"
+		"patch_liteloader_bwarp.sh")
 
 sha256sums=('affbd02573900d4f5743e33386d41b38adaac6ed9a130d57e7c8c75f8dc68838'
-            'bc1e1b74aa0be234f94fb9fe78df32be91891c3cb778ec960ff920e56f01eba2'
-            '453e1ac73bc0655b5ac394a9936ef6e80d83a0e0fd46fcefeef3fdc635987230')
+            '9efa35fecf85b1db68a4cafd295b5a8f48a1653bd740c7bfa5aeb0a63aed9860'
+            '453e1ac73bc0655b5ac394a9936ef6e80d83a0e0fd46fcefeef3fdc635987230'
+            '34647dd074b6cbcc0ab7e7b1178de6c92064703f6d219b422baee42fbe729949'
+            'da197eee75d92d5d79861d3531e59afc1caf091446b4ba2d0a8916e0a9c87b0b'
+            '952ff548905aca9a09f02795a429e30df990a095df3d059828ba20b7a57e9718')
 
 package() {
 	# 准备文件夹
 	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/src"
+	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/patching"
+	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins"
 
 	# 移动文件到相应位置
 	cp -rf "${srcdir}/src/"* "${pkgdir}/opt/LiteLoaderQQNT/src"
 	install -Dm644 "${srcdir}/package.json" "${pkgdir}/opt/LiteLoaderQQNT/package.json"
 	install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/$_pkgname/LICENSE"
+	install -Dm644 "${srcdir}/gen_preload.js" "${pkgdir}/opt/LiteLoaderQQNT/patching/gen_preload.js"
+	install -Dm644 "${srcdir}/index.js" "${pkgdir}/opt/LiteLoaderQQNT/patching/index.js"
+	install -Dm644 "${srcdir}/patch_liteloader_bwarp.sh" "${pkgdir}/opt/LiteLoaderQQNT/patching/patch_liteloader_bwarp.sh"
 
 	# 配置 pacman hook
 	install -Dm644 "${srcdir}/liteloader-qqnt-patch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-patch.hook"
-	install -Dm644 "${srcdir}/liteloader-qqnt-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-depatch.hook"
+	install -Dm644 "${srcdir}/liteloader-qqnt-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-depatch.hook" 
 }
