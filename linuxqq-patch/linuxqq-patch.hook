@@ -1,0 +1,11 @@
+[Trigger]
+Type=Package
+Operation=Install
+Operation=Upgrade
+Target=linuxqq-patch
+Target=linuxqq
+
+[Action]
+Description=Patching QQ...
+When=PostTransaction
+Exec=/bin/sh -c '[ -e /usr/bin/linuxqq.bak ] || { cp /usr/bin/linuxqq /usr/bin/linuxqq.bak && cp /usr/local/bin/linuxqq-patch /usr/bin/linuxqq; } || cp /usr/local/bin/linuxqq-patch /usr/bin/linuxqq'
