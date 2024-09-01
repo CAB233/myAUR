@@ -5,5 +5,5 @@ Target=linuxqq-patch
 
 [Action]
 Description=Depatching QQ...
-When=PostTransaction
+When=PreTransaction
 Exec=mv /usr/bin/linuxqq.bak /usr/bin/linuxqq
