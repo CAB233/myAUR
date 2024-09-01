@@ -1,5 +1,7 @@
 #!/bin/bash
+
 mkdir -p /opt/QQ/resources/app/application/
+
 bwrap --new-session --cap-drop ALL --unshare-user-try --unshare-pid --unshare-cgroup-try \
     --symlink usr/lib /lib \
     --symlink usr/lib64 /lib64 \
@@ -8,11 +10,9 @@ bwrap --new-session --cap-drop ALL --unshare-user-try --unshare-pid --unshare-cg
     --ro-bind /opt /opt \
     --dev-bind /dev /dev \
     --ro-bind /sys /sys \
-    --ro-bind-try /run/systemd/userdb /run/systemd/userdb \
     --ro-bind /etc/resolv.conf /etc/resolv.conf \
     --ro-bind /etc/localtime /etc/localtime \
     --proc /proc \
-    --tmpfs "/sys/devices/virtual" \
     --dev-bind /run/dbus /run/dbus \
     --dev-bind /tmp /tmp \
     --bind "/opt/QQ/resources/app/application/" /opt/QQ/resources/app/application/ \
