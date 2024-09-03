@@ -5,10 +5,10 @@
 pkgname=aliyunpan-odomu-bin
 _appname=alixby
 pkgver=3.24.72914
-pkgrel=1
+pkgrel=2
 pkgdesc="binary of aliyunpan liupan1890 forked by odomu"
 arch=("x86_64")
-url="https://github.com/odomu/aliyunpan"
+url="https://t.me/xbyaliyunpan"
 license=('custom')
 depends=('pacman')
 conflicts=("aliyunpan-gaozhangmin-bin")
@@ -16,16 +16,13 @@ source=("https://github.com/CAB233/myAUR/releases/download/v0.1.1/alixby-3.24.41
         "alixby.desktop"
         "app.asar")
 sha256sums=('552bd1f0562868afb144718dce7a58ecb49fbe049c7569b129d0f03764bfa02e'
-            '0535fce28ff22a20e919718c31d3e415600235a560a89fde34b62352ceeedf92'
-            'd4f0bd1b6b8d1d62eb6b385ab3a85583ad2e59107ab2207d5c55e5dfabf2684d')
+            '909fb355e6d7f3c4a02c76988901ea241464330ed45516a532d6c61dcf60db2e'
+            '9a3115a6a892b7a7d9c87713cfa6a0b0d15d279a3d906a7dc2cbb5ac2764a81d')
 
 package() {
-    mkdir "${pkgdir}/opt"
-    mv "${srcdir}/opt/阿里云盘小白羊" "${pkgdir}/opt/alixby"  # change dir to english
-    # mv "${pkgdir}/usr/share/icons/hicolor/0x0/apps/alixby.png" "${pkgdir}/opt/alixby/" # move icon
-    rm .MTREE .INSTALL .PKGINFO
-    rm -rf "${pkgdir}/usr/share/"
+    mkdir -p "${pkgdir}/opt"
+    mv "${srcdir}/opt/阿里云盘小白羊" "${pkgdir}/opt/alixby"
     install -Dm644 "${srcdir}/${_appname}.desktop" "${pkgdir}/usr/share/applications/${_appname}.desktop"
+    # 后续更新文件
     install -Dm644 "${srcdir}/app.asar" "${pkgdir}/opt/alixby/resources/app.asar"
-    chmod -R 0755 "${pkgdir}/opt/alixby/alixby"
 }
