@@ -3,7 +3,7 @@
 pkgname="linuxqq-patch"
 pkgver=1.0.0
 pkgrel=1
-pkgdesc="固定 MAC、适配 LiteLoaderQQNT"
+pkgdesc="固定 MAC 地址、适配 LiteLoaderQQNT 框架"
 arch=('any')
 license=('custom')
 depends=("linuxqq" "slirp4netns" "socat") 
