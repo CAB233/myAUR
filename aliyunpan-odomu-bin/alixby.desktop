@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=alixby
+Name=阿里云盘(odomu 版)
 Exec="/opt/alixby/alixby" %U
 Terminal=false
 Type=Application
