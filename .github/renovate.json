@@ -36,10 +36,10 @@
     }
   ],
   "customDatasources": {
-    "nvchecker": {
+    "typora": {
       "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/CAB233/myAUR/nvcheck/.github/new_ver.json",
       "transformTemplates": [
-        "{ \"releases\": { \"version\": data.{{packageName}}.version }}"
+        "{ \"releases\": { \"version\": data.typora.version }}"
       ]
     }
   },
