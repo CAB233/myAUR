@@ -1,0 +1,40 @@
+name: Run nvchecker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+  push:
+    branches:
+      - test-nvchecker
+    paths:
+      - "config.toml"
+      - ".github/workflows/nvchecker.yml"
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 安装 nvchecker
+        run: |
+          pip3 install nvchecker --break-system-packages --quiet
+          nvchecker --version
+
+      - name: 导入仓库
+        uses: actions/checkout@v4
+
+      - name: 运行 nvchecker
+        run: |
+          nvchecker --file .github/config.toml
+      
+      - name: Commit version record files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[杂项]: 更新依赖版本"
+          branch: test-nvchecker
+          commit_options: "--no-verify --signoff"
+          file_pattern: .github/*ver.json
+
+          commit_user_name: GitHub Actions Bot
+          commit_user_email: actions@github.com
+          commit_author: GitHub Actions Bot <actions@github.com>
