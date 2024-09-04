@@ -26,7 +26,9 @@ jobs:
 
       - name: 运行 nvchecker
         run: |
-          nvchecker --file .github/config.toml
+          nvchecker --file .github/config.toml 2>&1 | tee ${{ env.LOG_FILE }}
+          nvcmp --file .github/config.toml > result.tmp
+          nvtake --file .github/config.toml --all
       
       - name: 保存版本文件
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -35,7 +37,6 @@ jobs:
           branch: nvcheck
           commit_options: "--no-verify --signoff"
           file_pattern: ./*.json
-
           commit_user_name: GitHub Actions Bot
           commit_user_email: actions@github.com
           commit_author: GitHub Actions Bot <actions@github.com>
