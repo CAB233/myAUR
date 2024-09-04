@@ -3,12 +3,12 @@ name: Run nvchecker
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "2 */4 * * *"
   push:
     branches:
       - main
     paths:
-      - "config.toml"
+      - ".github/config.toml"
       - ".github/workflows/nvchecker.yml"
 
 jobs:
