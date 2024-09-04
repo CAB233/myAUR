@@ -6,7 +6,7 @@ on:
     - cron: "0 * * * *"
   push:
     branches:
-      - nvchecker
+      - nvcheck
     paths:
       - "config.toml"
       - ".github/workflows/nvchecker.yml"
@@ -20,7 +20,6 @@ jobs:
       - name: 安装 nvchecker
         run: |
           python -m pip install --upgrade nvchecker
-          nvchecker --version
 
       - name: 导入仓库
         uses: actions/checkout@v4
@@ -33,9 +32,9 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "[杂项]: 更新依赖版本"
-          branch: nvchecker
+          branch: nvcheck
           commit_options: "--no-verify --signoff"
-          file_pattern: '*ver.json'
+          file_pattern: 'new_ver.json'
 
           commit_user_name: GitHub Actions Bot
           commit_user_email: actions@github.com
