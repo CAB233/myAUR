@@ -1,6 +1,6 @@
 [__config__]
-oldver = ".github/old_ver.json"
-newver = ".github/new_ver.json"
+newver = "new_ver.json"
+oldver = "old_ver.json"
 
 [typora]
 source = "cmd"

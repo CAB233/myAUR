@@ -37,7 +37,7 @@
   ],
   "customDatasources": {
     "nvchecker": {
-      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/sunlei/nvchecker/master/new_ver.json",
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/CAB233/myAUR/nvcheck/.github/new_ver.json",
       "transformTemplates": [
         "{ \"releases\": { \"version\": data.{{packageName}}.version }}"
       ]
