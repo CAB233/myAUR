@@ -14,6 +14,8 @@ on:
 jobs:
   check-versions:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: 安装 nvchecker
         run: |
@@ -27,13 +29,13 @@ jobs:
         run: |
           nvchecker --file .github/config.toml
       
-      - name: Commit version record files
+      - name: 保存版本文件
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "[杂项]: 更新依赖版本"
           branch: nvchecker
           commit_options: "--no-verify --signoff"
-          file_pattern: .github/*ver.json
+          file_pattern: '*ver.json'
 
           commit_user_name: GitHub Actions Bot
           commit_user_email: actions@github.com
