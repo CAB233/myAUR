@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: 安装 nvchecker
         run: |
-          pip3 install nvchecker --break-system-packages --quiet
+          python -m pip install --upgrade nvchecker
           nvchecker --version
 
       - name: 导入仓库
