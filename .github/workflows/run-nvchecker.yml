@@ -34,7 +34,7 @@ jobs:
           commit_message: "[杂项]: 更新依赖版本"
           branch: nvcheck
           commit_options: "--no-verify --signoff"
-          file_pattern: '.github/new_ver.json'
+          file_pattern: './.github/new_ver.json'
 
           commit_user_name: GitHub Actions Bot
           commit_user_email: actions@github.com
