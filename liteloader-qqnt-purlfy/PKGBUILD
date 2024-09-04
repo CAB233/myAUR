@@ -1,0 +1,25 @@
+# Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
+
+pkgname=liteloader-qqnt-purlfy
+_pkgname=LiteLoaderQQNT-pURLfy
+pkgver=0.3.6 # renovate: datasource=github-tags depName=PRO-2684/LiteLoaderQQNT-pURLfy
+pkgrel=1
+pkgdesc="LiteLoaderQQNT 插件，用于净化 QQNT 中的 URL 链接"
+arch=('any')
+url="https://github.com/PRO-2684/LiteLoaderQQNT-pURLfy"
+license=("GPL-3.0")
+depends=("liteloader-qqnt-bin")
+
+source=("${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/purlfy-release.zip")
+sha256sums=('4b06cf35055288451356638aec0bdc354d685e794da49c6f076ad9d7122256ae')
+
+package() {
+    # 准备文件夹
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+
+    # 移动文件到相应位置
+    cp -r "${srcdir}/"* "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+
+    # 清除不必要的文件
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/${pkgname}-${pkgver}.zip"
+}
