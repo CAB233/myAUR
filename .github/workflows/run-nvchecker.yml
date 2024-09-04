@@ -6,7 +6,7 @@ on:
     - cron: "0 * * * *"
   push:
     branches:
-      - test-nvchecker
+      - nvchecker
     paths:
       - "config.toml"
       - ".github/workflows/nvchecker.yml"
@@ -31,7 +31,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "[杂项]: 更新依赖版本"
-          branch: test-nvchecker
+          branch: nvchecker
           commit_options: "--no-verify --signoff"
           file_pattern: .github/*ver.json
 
