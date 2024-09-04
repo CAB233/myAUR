@@ -1,5 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "schedule": [
+    "*/1 * * * *"
+  ],
   "extends": [
     "config:recommended"
   ],
@@ -32,6 +35,14 @@
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
   ],
+  "customDatasources": {
+    "nvchecker": {
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/sunlei/nvchecker/master/new_ver.json",
+      "transformTemplates": [
+        "{ \"releases\": { \"version\": data.{{packageName}}.version }}"
+      ]
+    }
+  },
   "packageRules": [
     {
       "description": "自动合并 submodule 更新",
