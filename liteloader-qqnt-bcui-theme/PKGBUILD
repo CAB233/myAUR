@@ -1,0 +1,28 @@
+# Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
+
+pkgname=liteloader-qqnt-bcui-theme
+_pkgname=Stapxs-QQ-Lite-Theme
+pkgver=1.0.4 # renovate: datasource=github-tags depName=Stapxs/Stapxs-QQ-Lite-Theme
+pkgrel=1
+pkgdesc="一个轻便简洁的 LiteLoaderQQNT 主题"
+arch=('any')
+url="https://github.com/Stapxs/Stapxs-QQ-Lite-Theme"
+license=("MIT")
+depends=("liteloader-qqnt-bin")
+
+source=("${pkgname}-${pkgver}.zip::${url}/archive/refs/tags/v${pkgver}.zip")
+sha256sums=('81c8e82fbb0a38adfacc1848d60e762dfb13f7c89d3b95497c332e7a59cf52d9')
+
+package() {
+    # 准备文件夹
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+
+    # 移动文件到相应位置
+    cp -r "${srcdir}/${_pkgname}-${pkgver}/"* "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    install -Dm644 "${_pkgname}-${pkgver}/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
+
+    # 清除不必要的文件
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/LICENSE"
+    rm -r "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/res/preview.png"
+
+}
