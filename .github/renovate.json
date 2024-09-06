@@ -60,8 +60,7 @@
     {
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
-        "github-tags",
-        "custom"
+        "github-tags"
       ],
       "automerge": true,
       "ignoreTests": true,
