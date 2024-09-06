@@ -61,7 +61,7 @@
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
         "github-tags",
-        "custom.nvchecker"
+        "custom"
       ],
       "automerge": true,
       "ignoreTests": true,
