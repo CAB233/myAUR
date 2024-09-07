@@ -66,13 +66,6 @@
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
-    },
-    {
-      "description": "忽略更新的包",
-      "matchPaths": [
-        "/liteloader-qqnt-bcui-theme"
-      ],
-      "enabled": false
     }
   ]
 }
