@@ -80,14 +80,6 @@ jobs:
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
 
-      - name: 导入本项目 AUR 仓库
-        run: |
-          echo "[zuoye-aur]" >> /etc/pacman.conf
-          echo "Server = https://repo.zuoye.win/archlinux/x86_64" >> /etc/pacman.conf
-          pacman-key --init
-          pacman-key --recv-key 62FFE3FEF4158CF1 --keyserver keys.openpgp.org
-          pacman-key --lsign-key 62FFE3FEF4158CF1
-
       - name: 恢复 yay 缓存
         id: cache-yay
         uses: actions/cache@v4
@@ -101,6 +93,14 @@ jobs:
         run: |
           sudo -u builder makepkg -si --noconfirm --needed -p PKGBU1LD
           sudo -u builder yay --version
+
+      - name: 导入本项目 AUR 仓库
+        run: |
+          echo "[zuoye-aur]" >> /etc/pacman.conf
+          echo "Server = https://repo.zuoye.win/archlinux/x86_64" >> /etc/pacman.conf
+          pacman-key --init
+          pacman-key --recv-key 62FFE3FEF4158CF1 --keyserver keys.openpgp.org
+          pacman-key --lsign-key 62FFE3FEF4158CF1
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
