@@ -26,5 +26,5 @@ package_v2ray-geosite-ly() {
     pkgdesc+=' (geosite)'
     install -Dm644 geosite.dat "${pkgdir}/usr/share/v2ray/geosite.dat"
     install -d "${pkgdir}/usr/share/xray/"
-    ln -s ../v2ray/geoip.dat "${pkgdir}/usr/share/xray/geoip.dat"
+    ln -s ../v2ray/geosite.dat "${pkgdir}/usr/share/xray/geosite.dat"
 }
