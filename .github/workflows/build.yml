@@ -52,8 +52,15 @@ jobs:
           # * https://github.com/actions/runner/issues/2058
           echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
 
+          # 导入本项目 AUR 仓库
+          echo "[zuoye-aur]" >> /etc/pacman.conf
+          echo "Server = https://repo.zuoye.win/archlinux/x86_64" >> /etc/pacman.conf
+          pacman-key --init
+          pacman-key --recv-key 62FFE3FEF4158CF1 --keyserver keys.openpgp.org
+          pacman-key --lsign-key 62FFE3FEF4158CF1
+
           # 添加基础依赖包
-          pacman -Syyuu --noconfirm --needed --ignore filesystem git gnupg pacman-contrib
+          pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib
 
       - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
@@ -93,15 +100,6 @@ jobs:
         run: |
           sudo -u builder makepkg -si --noconfirm --needed -p PKGBU1LD
           sudo -u builder yay --version
-
-      - name: 导入本项目 AUR 仓库
-        run: |
-          echo "[zuoye-aur]" >> /etc/pacman.conf
-          echo "Server = https://repo.zuoye.win/archlinux/x86_64" >> /etc/pacman.conf
-          pacman-key --init
-          pacman-key --recv-key 62FFE3FEF4158CF1 --keyserver keys.openpgp.org
-          pacman-key --lsign-key 62FFE3FEF4158CF1
-          pacman -Syy
 
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
