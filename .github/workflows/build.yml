@@ -13,7 +13,7 @@ on:
       - ".github/workflows/run-nvchecker.yml"
       - ".github/workflows/build-yay-cache.yml"
       - ".github/renovate.json"
-      - ".github/config.toml"
+      - ".github/nvchecker.toml"
       - "yay-bin/PKGBU1LD"
 
 jobs:
@@ -79,6 +79,14 @@ jobs:
           # 配置仓库文件结构
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
+
+      - name: 导入本项目 AUR 仓库
+        run: |
+          echo "[zuoye-aur]" >> /etc/pacman.conf
+          echo "Server = https://repo.zuoye.win/archlinux/x86_64" >> /etc/pacman.conf
+          pacman-key --init
+          pacman-key --recv-key 62FFE3FEF4158CF1 --keyserver keys.openpgp.org
+          pacman-key --lsign-key 62FFE3FEF4158CF1
 
       - name: 恢复 yay 缓存
         id: cache-yay
