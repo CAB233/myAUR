@@ -11,7 +11,7 @@ on:
     paths-ignore:
       - ".github/workflows/build.yml"
       - ".github/workflows/run-nvchecker.yml"
-      - ".github/workflows/build-yay-cache.yml"
+      - ".github/workflows/build-packages-cache.yml"
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
       - "yay-bin/PKGBU1LD"
@@ -88,7 +88,7 @@ jobs:
 
       - name: 恢复 yay 缓存
         id: cache-yay
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: /usr/bin/yay
           key: yay-cache
