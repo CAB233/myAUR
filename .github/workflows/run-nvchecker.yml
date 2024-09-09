@@ -8,8 +8,8 @@ on:
     branches:
       - main
     paths:
-      - ".github/config.toml"
-      - ".github/workflows/nvchecker.yml"
+      - ".github/nvchecker.toml"
+      - ".github/workflows/run-nvchecker.yml"
 
 jobs:
   check-versions:
@@ -26,9 +26,9 @@ jobs:
 
       - name: 运行 nvchecker
         run: |
-          nvchecker --file .github/config.toml 2>&1 | tee ${{ env.LOG_FILE }}
-          nvcmp --file .github/config.toml > result.tmp
-          nvtake --file .github/config.toml --all
+          nvchecker --file .github/nvchecker.toml 2>&1 | tee ${{ env.LOG_FILE }}
+          nvcmp --file .github/nvchecker.toml > result.tmp
+          nvtake --file .github/nvchecker.toml --all
       
       - name: 保存版本文件
         uses: stefanzweifel/git-auto-commit-action@v5
