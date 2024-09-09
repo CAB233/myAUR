@@ -79,16 +79,12 @@ jobs:
           # 开始构建
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
 
-      - name: 保存 yay 缓存
-        uses: actions/cache/save@v4
-        with:
-          path: /usr/bin/yay
-          key: yay-cache
-
-      - name: 保存 linuxqq 缓存
+      - name: 保存包缓存 # 后续只需要在 path 中添加包文件路径
         uses: actions/cache/save@v4
         with:
           path: |
+            /var/lib/pacman/local
+            /usr/bin/yay
             /opt/QQ
             /usr/bin/linuxqq
-          key: linuxqq-cache
+          key: packages-cache
