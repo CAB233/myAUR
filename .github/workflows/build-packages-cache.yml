@@ -58,6 +58,12 @@ jobs:
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
 
+      - name: 构建 yay
+        working-directory: ./yay-bin
+        run: |
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
+          sudo -u builder yay --version
+
       - name: 构建 ${{ matrix.package }}
         working-directory: ./${{ matrix.package }}
         run: |
