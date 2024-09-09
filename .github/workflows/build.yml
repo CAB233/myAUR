@@ -93,6 +93,15 @@ jobs:
           path: /usr/bin/yay
           key: yay-cache
 
+      - name: 恢复 linuxqq 缓存
+        id: cache-linuxqq
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            /opt/QQ
+            /usr/bin/linuxqq
+          key: linuxqq-cache
+
       - name: 安装 yay
         if: steps.cache-yay.outputs.cache-hit != 'true'
         working-directory: ./yay-bin
