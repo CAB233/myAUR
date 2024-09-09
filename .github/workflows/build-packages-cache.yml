@@ -74,7 +74,7 @@ jobs:
               echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
           
           # 验证文件完整性
-          sudo -u builder updpkgsums
+          sudo -u builder updpkgsums PKGBU1LD
 
           # 开始构建
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
