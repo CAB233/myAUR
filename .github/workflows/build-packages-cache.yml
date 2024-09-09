@@ -43,7 +43,7 @@ jobs:
       - name: 安装依赖
         run: |
           echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
-          pacman -Syyu --noconfirm --needed --ignore filesystem git
+          pacman -Syyu --noconfirm --needed --ignore filesystem git pacman-contrib
 
       - name: 仓库导入 PKGBUILD
         uses: actions/checkout@v4
