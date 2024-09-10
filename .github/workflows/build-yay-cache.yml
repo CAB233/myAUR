@@ -40,9 +40,7 @@ jobs:
           sudo -u builder yay --version
 
       - name: 保存 yay 缓存
-        uses: actions/cache@v4
+        uses: actions/cache/save@v4
         with:
           path: /usr/bin/yay
           key: yay-cache
-          restore-keys: |
-            yay-cache
