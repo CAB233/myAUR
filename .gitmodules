@@ -4,3 +4,6 @@
 [submodule "kwin-effect-rounded-corners-git"]
 	path = kwin-effect-rounded-corners-git
 	url = https://aur.archlinux.org/kwin-effect-rounded-corners-git.git
+[submodule "linuxqq"]
+	path = linuxqq
+	url = https://aur.archlinux.org/linuxqq.git

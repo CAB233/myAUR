@@ -11,7 +11,7 @@ on:
     paths-ignore:
       - ".github/workflows/build.yml"
       - ".github/workflows/run-nvchecker.yml"
-      - ".github/workflows/build-packages-cache.yml"
+      - ".github/workflows/build-yay-cache.yml"
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
       - "yay-bin/PKGBU1LD"
@@ -46,17 +46,6 @@ jobs:
       matrix: ${{ fromJson(needs.metadata.outputs.matrix) }}
       fail-fast: false
     steps:
-      - name: 恢复包缓存
-        id: cache-packages
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            /var/lib/pacman/local
-            /usr/bin/yay
-            /opt/QQ
-            /usr/bin/linuxqq
-          key: packages-cache
-
       - name: 安装依赖
         run: |
           # 准备 REPO_FOLDER 变量
@@ -97,8 +86,15 @@ jobs:
           mkdir -p ${REPO_FOLDER}
           chown -R builder:builder ./
 
+      - name: 恢复 yay 缓存
+        id: cache-yay
+        uses: actions/cache@v4
+        with:
+          path: /usr/bin/yay
+          key: yay-cache
+
       - name: 安装 yay
-        if: steps.cache-packages.outputs.cache-hit != 'true'
+        if: steps.cache-yay.outputs.cache-hit != 'true'
         working-directory: ./yay-bin
         run: |
           sudo -u builder makepkg -si --noconfirm --needed -p PKGBU1LD

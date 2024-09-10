@@ -1,0 +1,48 @@
+name: Build yay Cache
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "yay-bin/PKGBU1LD"
+      - ".github/workflows/build-yay-cache.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: 安装依赖
+        run: |
+          echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
+          pacman -Syyu --noconfirm --needed --ignore filesystem git
+
+      - name: 仓库导入 PKGBUILD
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: 配置环境
+        run: |
+          sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder
+          mkdir -p ${REPO_FOLDER}
+          chown -R builder:builder ./
+
+      - name: 构建 yay
+        working-directory: ./yay-bin
+        run: |
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
+          sudo -u builder yay --version
+
+      - name: 保存 yay 缓存
+        uses: actions/cache@v4
+        with:
+          path: /usr/bin/yay
+          key: yay-cache
+          restore-keys: |
+            yay-cache
