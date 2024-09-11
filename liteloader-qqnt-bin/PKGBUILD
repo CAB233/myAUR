@@ -20,11 +20,11 @@ source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
 		"patch_liteloader_bwrap.sh")
 
 sha256sums=('affbd02573900d4f5743e33386d41b38adaac6ed9a130d57e7c8c75f8dc68838'
-            '4f189f601724cbed7540429ad997c8c3fda01b4a63a2ea1c7258df7a88936c13'
-            '453e1ac73bc0655b5ac394a9936ef6e80d83a0e0fd46fcefeef3fdc635987230'
+            'ca9e747de8a659132e27a1c454863b5ac736356396787634abe360255607e49f'
+            '9d2ea72bb35ba91b58acdd4b1742a5a0ffae270aa609da225626a2e9b4ff578f'
             '6105389087a7d94eb743191aa1bf484bdf48f24d6470a8c1e4e7a74aa359ec23'
             'da197eee75d92d5d79861d3531e59afc1caf091446b4ba2d0a8916e0a9c87b0b'
-            '952ff548905aca9a09f02795a429e30df990a095df3d059828ba20b7a57e9718')
+            'c235afd0a8bbb0c0dc5fe59b35934802fe277eec79996a2a6d26f2ab41ce0e73')
 
 package() {
 	# 准备文件夹

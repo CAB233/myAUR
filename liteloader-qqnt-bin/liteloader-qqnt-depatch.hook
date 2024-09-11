@@ -4,6 +4,6 @@ Type=Package
 Target=liteloader-qqnt-bin
 
 [Action]
-Description=Depatch QQ for LiteLoaderQQNT...
+Description=Depatching QQ for LiteLoaderQQNT...
 When=PreTransaction
 Exec=/bin/sh -c "grep -q /opt/LiteLoaderQQNT /opt/QQ/resources/app/app_launcher/index.js && sed -i '1d' /opt/QQ/resources/app/app_launcher/index.js"
