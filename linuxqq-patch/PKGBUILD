@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
 
 pkgname="linuxqq-patch"
-pkgver=1.0.1
+pkgver=1.0.2
 pkgrel=1
 pkgdesc="固定 MAC 地址、适配 LiteLoaderQQNT 框架"
 arch=('any')
@@ -9,15 +9,17 @@ license=('custom')
 depends=("linuxqq" "slirp4netns" "socat") 
 conflicts=("linuxqq-nt-bwrap")
 source=("linuxqq.sh"
-		"linuxqq-patch.hook")
+		"linuxqq-patch.hook"
+		"linuxqq-depatch.hook")
 
 sha256sums=('36eda0434831aa020ef632e44c6dfe5e4e25259f24301d8e2b04cd4d6ce29d7a'
-            '0cbe1350de2afa57ae4efc009a921486a490eb459254321d2cd8a854d17c5fb9')
+            '130746f0b91cd57ceee0897ae4a85f52716bac5fe3c2f3cd880b422c848c7a3d'
+            'dfd8dd4af201890a5dd20976ff71e8ea322618cee55bdfc25c235c865c80cd3f')
 
 package() {
 	install -Dm755 "${srcdir}/linuxqq.sh" "${pkgdir}/usr/local/bin/linuxqq-patch"
 
 	# 配置 pacman hook
 	install -Dm644 "${srcdir}/linuxqq-patch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-patch.hook"
-	# install -Dm644 "${srcdir}/linuxqq-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-depatch.hook"
+	install -Dm644 "${srcdir}/linuxqq-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-depatch.hook"
 }

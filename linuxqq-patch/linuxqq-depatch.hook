@@ -1,0 +1,9 @@
+[Trigger]
+Type=Package
+Operation=Remove
+Target=linuxqq-patch
+
+[Action]
+Description=Depatching QQ...
+When=PreTransaction
+Exec=/bin/sh -c 'mv /usr/bin/linuxqq.bak /usr/bin/linuxqq'
