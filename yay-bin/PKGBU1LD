@@ -1,6 +1,6 @@
 # Maintainer: Jguer <pkgbuilds at jguer.space>
 pkgname=yay-bin
-pkgver=12.3.5 # renovate: datasource=github-tags depName=Jguer/yay
+pkgver=12.4.0 # renovate: datasource=github-tags depName=Jguer/yay
 pkgrel=1
 pkgdesc="Yet another yogurt. Pacman wrapper and AUR helper written in go. Pre-compiled."
 arch=('x86_64')
