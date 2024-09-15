@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "yay-bin/PKGBU1LD"
+      - "yay-git/PKGBU1LD"
       - ".github/workflows/build-yay-cache.yml"
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
           chown -R builder:builder ./
 
       - name: 构建 yay
-        working-directory: ./yay-bin
+        working-directory: ./yay-git
         run: |
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
           sudo -u builder yay --version

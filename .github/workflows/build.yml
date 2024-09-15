@@ -14,7 +14,7 @@ on:
       - ".github/workflows/build-yay-cache.yml"
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
-      - "yay-bin/PKGBU1LD"
+      - "yay-git/PKGBU1LD"
 
 jobs:
   metadata:
@@ -95,7 +95,7 @@ jobs:
 
       - name: 安装 yay
         if: steps.cache-yay.outputs.cache-hit != 'true'
-        working-directory: ./yay-bin
+        working-directory: ./yay-git
         run: |
           sudo -u builder makepkg -si --noconfirm --needed -p PKGBU1LD
           sudo -u builder yay --version
