@@ -103,6 +103,23 @@ jobs:
           sudo -u builder yay --version
 
       - name: 构建 ${{ matrix.package }}
+        id: build-package
+        working-directory: ./${{ matrix.package }}
+        run: |
+          # 安装相关包依赖
+          sudo -u builder yay -Sy --noconfirm \
+            $(pacman --deptest \
+              $(source ./PKGBUILD &&\
+              echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
+          
+          # 验证文件完整性
+          sudo -u builder updpkgsums
+
+          # 开始构建
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
+
+      - name: 构建 ${{ matrix.package }} (重试)
+        if: steps.build-package.outcome == 'failure'
         working-directory: ./${{ matrix.package }}
         run: |
           # 安装相关包依赖
