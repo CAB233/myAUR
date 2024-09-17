@@ -48,6 +48,10 @@ jobs:
     steps:
       - name: 安装依赖
         run: |
+          # 准备 REPO_FOLDER 变量
+          # * https://github.com/actions/runner/issues/2058
+          echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
+
           # 添加基础依赖包
           pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib
 
@@ -61,10 +65,6 @@ jobs:
           GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
         run: |
-          # 准备 REPO_FOLDER 变量
-          # * https://github.com/actions/runner/issues/2058
-          echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
-
           # 配置 makepkg.conf: 取消生成 debug 包、添加打包者信息
           sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
           echo 'PACKAGER="yidaduizuoye <yidaduizuoye@outlook.com>"' >> /etc/makepkg.conf
