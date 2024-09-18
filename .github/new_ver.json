@@ -1,8 +1,20 @@
 {
   "version": 2,
   "data": {
+    "dae": {
+      "version": "v0.8.0rc1",
+      "gitref": "refs/tags/v0.8.0rc1",
+      "revision": "54df978e0404e9199ae5f754fb21816fc7028df6",
+      "url": "https://github.com/daeuniverse/dae/releases/tag/v0.8.0rc1"
+    },
     "typora": {
       "version": "1.9.3"
+    },
+    "xray": {
+      "version": "v24.9.16",
+      "gitref": "refs/tags/v24.9.16",
+      "revision": "a35d5719f425f061a3274e2ba51481299853ea82",
+      "url": "https://github.com/XTLS/Xray-core/releases/tag/v24.9.16"
     }
   }
 }
