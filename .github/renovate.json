@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "schedule": [
-    "*/1 * * * *"
+    "*/2 * * * *"
   ],
   "extends": [
     "config:recommended"

@@ -9,7 +9,12 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".github/*"
+      - ".github/workflows/build.yml"
+      - ".github/workflows/build-yay-cache.yml"
+      - ".github/workflows/run-nvchecker.yml"
+      - ".github/renovate.json"
+      - ".github/nvchecker.toml"
+      - ".github/new_ver.json"
       - "yay-git/PKGBU1LD"
 
 jobs:
