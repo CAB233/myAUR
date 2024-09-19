@@ -15,7 +15,6 @@ on:
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
       - ".github/new_ver.json"
-      - "yay-git/PKGBU1LD"
 
 jobs:
   metadata:
@@ -97,9 +96,11 @@ jobs:
 
       - name: 安装 yay
         if: steps.cache-yay.outputs.cache-hit != 'true'
-        working-directory: ./yay-git
+        working-directory: /tmp
         run: |
-          sudo -u builder makepkg -si --noconfirm --needed -p PKGBU1LD
+          sudo -u builder git clone https://aur.archlinux.org/yay.git
+          cd yay
+          sudo -u builder makepkg -si --noconfirm --needed
           sudo -u builder yay --version
 
       - name: 构建 ${{ matrix.package }}

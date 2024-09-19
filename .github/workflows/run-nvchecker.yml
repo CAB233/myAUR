@@ -35,7 +35,7 @@ jobs:
       - name: 保存版本文件
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "[杂项]: 更新依赖版本"
+          commit_message: "[nvchecker]: 更新依赖版本"
           branch: main
           commit_options: "--no-verify --signoff"
           file_pattern: './.github/new_ver.json'
