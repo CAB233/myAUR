@@ -6,7 +6,6 @@ on:
     branches:
       - main
     paths:
-      - "yay-git/PKGBU1LD"
       - ".github/workflows/build-yay-cache.yml"
 
 jobs:
@@ -20,11 +19,6 @@ jobs:
           echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
           pacman -Syyu --noconfirm --needed --ignore filesystem git
 
-      - name: 仓库导入 PKGBUILD
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
       - name: 配置环境
         run: |
           sed -i 's#\(^OPTIONS.*\)\(debug\)\(.*\)#\1!\2\3#' /etc/makepkg.conf
@@ -34,9 +28,11 @@ jobs:
           chown -R builder:builder ./
 
       - name: 构建 yay
-        working-directory: ./yay-git
+        working-directory: /tmp
         run: |
-          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -si --noconfirm --needed -p PKGBU1LD
+          sudo -u builder git clone https://aur.archlinux.org/yay.git
+          cd yay
+          sudo -u builder makepkg -si --noconfirm --needed
           sudo -u builder yay --version
 
       - name: 保存 yay 缓存
