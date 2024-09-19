@@ -73,7 +73,7 @@ jobs:
           echo -n "$GPG_SIGNING_KEY" | sudo -u builder gpg --import
 
           # 导入本项目 AUR 仓库
-          sed -i '/^#Server = file:\/\/\/home\/custompkgs/a \[zuoye-aur]\nServer = https://repo.zuoye.win/archlinux/$arch' /etc/pacman.conf
+          sed -i '/^#Server = file:\/\/\/home\/custompkgs/a \[zuoye-aur]\nServer = https://github.com/CAB233/myAUR/releases/download/$arch' /etc/pacman.conf
           echo -n "$GPG_PUBLIC_KEY" | pacman-key -a -
           pacman-key --init
           pacman-key --lsign-key 62FFE3FEF4158CF1
@@ -188,3 +188,21 @@ jobs:
           source-dir: ${{ github.workspace }}
           destination-dir: archlinux/x86_64
           keep-file-fresh: true
+
+      - name: 获取当前构建时间
+        run: echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+        id: date
+
+      - name: 上传至 release
+        uses: ncipollo/release-action@v1
+        with:
+          artifactErrorsFailBuild: true
+          removeArtifacts: true
+          allowUpdates: true
+          generateReleaseNotes: false
+          tag: x86_64
+          name: ${{ steps.date.outputs.builddate }}
+          artifacts: "./*"
+          prerelease: true
+          body: |
+            Archlinux x86_64 repo packages
