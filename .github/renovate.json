@@ -3,6 +3,8 @@
   "extends": [
     "config:recommended"
   ],
+  "platform": "github",
+  "repositories": ["CAB233/myAUR"],
   "git-submodules": {
     "enabled": true,
     "versioning": "git",

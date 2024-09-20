@@ -54,5 +54,5 @@ jobs:
       - name: 运行 renovate
         uses: renovatebot/github-action@v40.2.10
         with:
+          configurationFile: .github/renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
-          docker-volumes: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}:/tmp ;
