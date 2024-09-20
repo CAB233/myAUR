@@ -1,15 +1,15 @@
-name: Run nvchecker
+name: Check and Update
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "2 */4 * * *"
+    - cron: "2 */2 * * *"
   push:
     branches:
       - main
     paths:
       - ".github/nvchecker.toml"
-      - ".github/workflows/run-nvchecker.yml"
+      - ".github/workflows/run-nvchecker-and-renovate.yml"
 
 jobs:
   check-versions:
@@ -42,3 +42,14 @@ jobs:
           commit_user_name: GitHub Actions Bot
           commit_user_email: actions@github.com
           commit_author: GitHub Actions Bot <actions@github.com>
+
+  update-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 导入仓库
+        uses: actions/checkout@v4
+
+      - name: 运行 renovate
+        uses: renovatebot/github-action@v40.2.10
+        with:
+          token: ${{ secrets.RENOVATE_TOKEN }}
