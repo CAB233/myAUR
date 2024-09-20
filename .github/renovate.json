@@ -5,6 +5,8 @@
   ],
   "platform": "github",
   "repositories": ["CAB233/myAUR"],
+  "username": "renovate[bot]",
+  "gitAuthor": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
   "git-submodules": {
     "enabled": true,
     "versioning": "git",
