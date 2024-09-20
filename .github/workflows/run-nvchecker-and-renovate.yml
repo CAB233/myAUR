@@ -48,11 +48,18 @@ jobs:
     needs: check-versions
     runs-on: ubuntu-latest
     steps:
+      - name: 生成 Token
+        uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - name: 导入仓库
         uses: actions/checkout@v4
 
       - name: 运行 renovate
         uses: renovatebot/github-action@v40.2.10
         with:
-          configurationFile: .github/renovate.json
-          token: ${{ secrets.RENOVATE_TOKEN }}
+          configurationFile: .github/renovate-bot.json
+          token: "${{ steps.generate-token.outputs.token }}"

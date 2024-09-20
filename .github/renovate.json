@@ -1,12 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "onboarding": false,
+  "requireConfig": "ignored",
+  "username": "YanamiChan[bot]",
+  "gitAuthor": "YanamiChan[bot] <182213109+yanamichan[bot]@users.noreply.github.com>",
+  "platform": "github",
+  "repositories": [
+    "CAB233/myAUR"
+  ],
   "extends": [
     "config:recommended"
   ],
-  "platform": "github",
-  "repositories": ["CAB233/myAUR"],
-  "username": "renovate[bot]",
-  "gitAuthor": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
   "git-submodules": {
     "enabled": true,
     "versioning": "git",
