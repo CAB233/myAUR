@@ -61,5 +61,5 @@ jobs:
       - name: 运行 renovate
         uses: renovatebot/github-action@v40.2.10
         with:
-          configurationFile: .github/renovate-bot.json
+          configurationFile: .github/renovate.json
           token: "${{ steps.generate-token.outputs.token }}"
