@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - ".github/nvchecker.toml"
+      - ".github/renovate.json"
       - ".github/workflows/run-nvchecker-and-renovate.yml"
 
 jobs:
