@@ -45,6 +45,7 @@ jobs:
           commit_author: GitHub Actions Bot <actions@github.com>
 
   update-versions:
+    needs: check-versions
     runs-on: ubuntu-latest
     steps:
       - name: 导入仓库
@@ -54,3 +55,4 @@ jobs:
         uses: renovatebot/github-action@v40.2.10
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
+          docker-volumes: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}:/tmp ;
