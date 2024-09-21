@@ -26,11 +26,11 @@ jobs:
       - name: 导入仓库
         uses: actions/checkout@v4
 
-      - name: 运行 nvchecker
+      - name: 运行 Nvchecker
         working-directory: ./.github
         run: nvchecker --file nvchecker.toml
       
-      - name: 解决 git safe.directory 问题
+      - name: 信任仓库
         run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: 保存版本文件
@@ -41,8 +41,8 @@ jobs:
           commit_options: "--no-verify --signoff"
           file_pattern: './.github/new_ver.json'
           commit_user_name: YanamiChan[bot]
-          commit_user_email: 182213109+yanamichan[bot]@users.noreply.github.com
-          commit_author: YanamiChan[bot] <182213109+yanamichan[bot]@users.noreply.github.com>
+          commit_user_email: 182213109+YanamiChan[bot]@users.noreply.github.com
+          commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
 
   update-versions:
     needs: check-versions
@@ -58,7 +58,7 @@ jobs:
       - name: 导入仓库
         uses: actions/checkout@v4
 
-      - name: 运行 renovate
+      - name: 运行 Renovate
         uses: renovatebot/github-action@v40.2.10
         with:
           configurationFile: .github/renovate.json
