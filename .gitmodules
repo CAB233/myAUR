@@ -1,9 +1,3 @@
-[submodule "howdy-beta-git"]
-	path = howdy-beta-git
-	url = https://aur.archlinux.org/howdy-beta-git.git
-[submodule "kwin-effect-rounded-corners-git"]
-	path = kwin-effect-rounded-corners-git
-	url = https://aur.archlinux.org/kwin-effect-rounded-corners-git.git
 [submodule "linuxqq"]
 	path = linuxqq
 	url = https://aur.archlinux.org/linuxqq.git
