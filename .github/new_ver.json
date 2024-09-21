@@ -1,6 +1,9 @@
 {
   "version": 2,
   "data": {
+    "cachyos-keyring": {
+      "version": "20240331"
+    },
     "dae": {
       "version": "v0.8.0rc1",
       "gitref": "refs/tags/v0.8.0rc1",
