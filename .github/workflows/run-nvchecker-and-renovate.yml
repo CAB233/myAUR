@@ -41,8 +41,8 @@ jobs:
           commit_options: "--no-verify --signoff"
           file_pattern: './.github/new_ver.json'
           commit_user_name: YanamiChan[bot]
-          commit_user_email: 182213109+yanamichan[bot]@users.noreply.github.com
-          commit_author: YanamiChan[bot] <182213109+yanamichan[bot]@users.noreply.github.com>
+          commit_user_email: 182213109+YanamiChan[bot]@users.noreply.github.com
+          commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
 
   update-versions:
     needs: check-versions
