@@ -19,3 +19,9 @@ source = "github"
 github = "XTLS/Xray-core"
 include_prereleases = true
 use_max_tag = true
+
+[cachyos-keyring]
+source = "cmd"
+cmd = '''
+curl -s https://raw.githubusercontent.com/CachyOS/CachyOS-PKGBUILDS/refs/heads/master/cachyos-keyring/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}'
+'''
