@@ -22,7 +22,7 @@ jobs:
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
-      - name: 仓库导入 PKGBUILD
+      - name: 导入 PKGBUILD
         uses: actions/checkout@v4
         with:
           submodules: true
@@ -55,7 +55,7 @@ jobs:
           # 添加基础依赖包
           pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib
 
-      - name: 仓库导入 PKGBUILD
+      - name: 导入 PKGBUILD
         uses: actions/checkout@v4
         with:
           submodules: true

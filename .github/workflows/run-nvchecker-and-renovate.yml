@@ -26,11 +26,11 @@ jobs:
       - name: 导入仓库
         uses: actions/checkout@v4
 
-      - name: 运行 nvchecker
+      - name: 运行 Nvchecker
         working-directory: ./.github
         run: nvchecker --file nvchecker.toml
       
-      - name: 解决 git safe.directory 问题
+      - name: 信任仓库
         run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: 保存版本文件
@@ -58,7 +58,7 @@ jobs:
       - name: 导入仓库
         uses: actions/checkout@v4
 
-      - name: 运行 renovate
+      - name: 运行 Renovate
         uses: renovatebot/github-action@v40.2.10
         with:
           configurationFile: .github/renovate.json
