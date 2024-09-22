@@ -78,6 +78,6 @@
     }
   ],
   "allowedPostUpgradeCommands": [
-    "^sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD$"
+    "^sed -i"
   ]
 }
