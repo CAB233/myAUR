@@ -27,7 +27,8 @@
       "matchStrings": [
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
       ],
-      "extractVersionTemplate": "^v?(?<version>.*)$"
+      "extractVersionTemplate": "^v?(?<version>.*)$",
+      "autoReplaceStringTemplate": "pkgver={{{newValue}}} # renovate: datasource={{{datasource}}} depName={{{depName}}}\npkgrel=1"
     }
   ],
   "customDatasources": {
