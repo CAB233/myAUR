@@ -35,7 +35,7 @@
     "nvchecker": {
       "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/CAB233/myAUR/main/.github/new_ver.json",
       "transformTemplates": [
-        "{ \"releases\": [{ \"version\": data.{{packageName}}.version }] }"
+        "{ \"releases\": [{ \"version\": data.'{{packageName}}'.version }] }"
       ]
     }
   },
@@ -63,6 +63,9 @@
       "ignoreTests": true,
       "automergeType": "branch"
     }
+  ],
+  "allowedPostUpgradeCommands": [
+    "sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD"
   ],
   "postUpgradeTasks": {
     "commands": [
