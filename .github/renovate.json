@@ -71,7 +71,7 @@
           "sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD"
         ],
         "fileFilters": [
-          "PKGBUILD"
+          "**/PKGBUILD"
         ],
         "executionMode": "update"
       }
