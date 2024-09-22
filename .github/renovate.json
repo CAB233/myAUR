@@ -26,7 +26,8 @@
         "(^|/)PKGBUILD$"
       ],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)",
+        "pkgver=(?<pkgrel>.*)"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
@@ -62,16 +63,21 @@
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
+    },
+    {
+      "description": "更新 pkgrel",
+      "postUpgradeTasks": {
+        "commands": [
+          "sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD"
+        ],
+        "fileFilters": [
+          "PKGBUILD"
+        ],
+        "executionMode": "update"
+      }
     }
   ],
   "allowedPostUpgradeCommands": [
-    "sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD"
-  ],
-  "postUpgradeTasks": {
-    "commands": [
-      "sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD"
-    ],
-    "fileFilters": ["PKGBUILD"],
-    "executionMode": "update"
-  }
+    "^sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD$"
+  ]
 }
