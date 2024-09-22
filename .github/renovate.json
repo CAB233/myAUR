@@ -35,7 +35,7 @@
     "nvchecker": {
       "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/CAB233/myAUR/main/.github/new_ver.json",
       "transformTemplates": [
-        "{ \"releases\": [{ \"version\": data.{{packageName}}.version }] }"
+        "{ \"releases\": [{ \"version\": data.'{{packageName}}'.version }] }"
       ]
     }
   },
