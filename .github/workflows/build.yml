@@ -30,7 +30,6 @@ jobs:
       - name: 生成数组
         id: generate-matrix
         run: |
-          sudo apt-get install jq
           MATRIX_JSON=`find * -type f -name "PKGBUILD" -printf "%h\n" | jq -Rnc '."package" |= [inputs]'`
           echo ${MATRIX_JSON}
           echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
@@ -77,7 +76,7 @@ jobs:
           echo -n "$GPG_SIGNING_KEY" | sudo -u builder gpg --import
 
           # 导入本项目 AUR 仓库
-          sed -i '/^#Server = file:\/\/\/home\/custompkgs/a \[zuoye-aur]\nServer = https://github.com/CAB233/myAUR/releases/download/$arch' /etc/pacman.conf
+          sed -i '$a \[zuoye-aur]\nServer = https://github.com/CAB233/myAUR/releases/download/$arch' /etc/pacman.conf
           echo -n "$GPG_PUBLIC_KEY" | pacman-key -a -
           pacman-key --init
           pacman-key --lsign-key 62FFE3FEF4158CF1
@@ -170,17 +169,13 @@ jobs:
         env:
           REPO_NAME: zuoye-aur
         run: |
-          # * Fix Openssl 3 issue with node.
-          # * https://github.com/tibdex/github-app-token/issues/54
-          sed -i 's/^providers = provider_sect/#&/' /etc/ssl/openssl.cnf
-
-          # * Build Repo
+          # 生成包数据库
           repo-add --sign $(basename $REPO_NAME).db.tar.gz ./*.pkg.tar.zst
 
-          # * Delete DB files symlink
+          # 删除数据库中的系统链接
           find . -type l -delete
 
-          # * Rename compressed DB
+          # 重命名已压缩的数据库文件
           rename -- .tar.gz '' *.tar.gz
           rename -- .tar.gz.sig '.sig' *.tar.gz.sig
 
@@ -199,7 +194,7 @@ jobs:
         run: echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
         id: date
 
-      - name: 上传至 release
+      - name: 上传至 GitHub Release
         uses: ncipollo/release-action@v1
         with:
           artifactErrorsFailBuild: true
