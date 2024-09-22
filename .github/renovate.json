@@ -62,5 +62,12 @@
       "ignoreTests": true,
       "automergeType": "branch"
     }
-  ]
+  ],
+  "postUpgradeTasks": {
+    "commands": [
+      "sed -i 's/^pkgrel=.*/pkgrel=1/' PKGBUILD"
+    ],
+    "fileFilters": ["PKGBUILD"],
+    "executionMode": "update"
+  }
 }
