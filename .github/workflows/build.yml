@@ -170,10 +170,6 @@ jobs:
         env:
           REPO_NAME: zuoye-aur
         run: |
-          # * Fix Openssl 3 issue with node.
-          # * https://github.com/tibdex/github-app-token/issues/54
-          sed -i 's/^providers = provider_sect/#&/' /etc/ssl/openssl.cnf
-
           # * Build Repo
           repo-add --sign $(basename $REPO_NAME).db.tar.gz ./*.pkg.tar.zst
 
