@@ -4,7 +4,7 @@
 pkgname=typora-bin
 _pkgname=typora
 pkgver=1.9.3 # renovate: datasource=custom.nvchecker depName=typora
-pkgrel=2
+pkgrel=3
 pkgdesc="A minimal markdown editor and reader, but with some hooks"
 arch=('x86_64')
 license=('custom:"Copyright (c) 2015 Abner Lee All Rights Reserved."' 'MIT')

@@ -1,22 +1,21 @@
 # Maintainer: Rocket Aaron <i at rocka dot me>
 # Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
 
-pkgbase=v2ray-rules-dat
 pkgname=('v2ray-geoip-ly' 'v2ray-geosite-ly')
 pkgver=202409222211 # renovate: datasource=github-tags depName=Loyalsoldier/v2ray-rules-dat
-pkgrel=1
+pkgrel=2
 pkgdesc="V2Ray 路由规则文件加强版，可代替 V2Ray 官方 geoip.dat 和 geosite.dat"
 arch=('any')
 url="https://github.com/Loyalsoldier/v2ray-rules-dat"
 license=("GPL-3.0")
-conflicts=('v2ray-geoip' 'v2ray-domain-list-community' 'xray-geoip' 'xray-geosite')
 source=("https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
         "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat")
-sha512sums=('cb62502a3bb5da8be5c97a9ae2fa6b003ae4e09eb5123359ff017e199f70be25af2ad3673d745a702b41390fb523a0cb21bfd939857ecaf931888027e02cf741'
-            '822fcb03bcb3048191d8736d88458f6704130d005bbfa656edae7343ec5fb7f19644b898633de635afef0a756d893c809fdaeb3af27a711396df5051bae92b15')
+sha512sums=('9f710dc19166eb548232e0ebc8248f5a95a14fa09cfe7eaefcb8ee19644db367b0cf5c9a5ec541db37082eb40604945f574a3372601ac1e6474bebe72e86388e'
+            '389828ddea3053275e1da80e31e348a2b2092e62c12c1f9357ef96cf2e6587189ded2bc4a400228af0093fbf7a21124bb71626602a3d2e0acce1f280fe89cefa')
 
 package_v2ray-geoip-ly() {
     pkgdesc+=' (geoip)'
+    conflicts=('v2ray-geoip' 'xray-geoip')
     install -Dm644 geoip.dat "${pkgdir}/usr/share/v2ray/geoip.dat"
     install -d "${pkgdir}/usr/share/xray/"
     ln -s ../v2ray/geoip.dat "${pkgdir}/usr/share/xray/geoip.dat"
@@ -24,6 +23,7 @@ package_v2ray-geoip-ly() {
 
 package_v2ray-geosite-ly() {
     pkgdesc+=' (geosite)'
+    conflicts=('v2ray-domain-list-community' 'xray-geosite')
     install -Dm644 geosite.dat "${pkgdir}/usr/share/v2ray/geosite.dat"
     install -d "${pkgdir}/usr/share/xray/"
     ln -s ../v2ray/geosite.dat "${pkgdir}/usr/share/xray/geosite.dat"

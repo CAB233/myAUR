@@ -5,7 +5,7 @@
 pkgname=aliyunpan-odomu-bin
 _appname=alixby
 pkgver=3.24.72914
-pkgrel=2
+pkgrel=3
 pkgdesc="binary of aliyunpan liupan1890 forked by odomu"
 arch=("x86_64")
 url="https://t.me/xbyaliyunpan"
@@ -16,7 +16,7 @@ source=("https://github.com/CAB233/myAUR/releases/download/v0.1.1/alixby-3.24.41
         "alixby.desktop"
         "app.asar")
 sha256sums=('552bd1f0562868afb144718dce7a58ecb49fbe049c7569b129d0f03764bfa02e'
-            '909fb355e6d7f3c4a02c76988901ea241464330ed45516a532d6c61dcf60db2e'
+            '58ed3fe654f4e369128f0ea86bf9da848dd2e7ef0c37ccf4655068c342582d46'
             '9a3115a6a892b7a7d9c87713cfa6a0b0d15d279a3d906a7dc2cbb5ac2764a81d')
 
 package() {
