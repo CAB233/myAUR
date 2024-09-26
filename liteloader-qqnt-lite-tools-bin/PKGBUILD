@@ -5,21 +5,25 @@
 pkgname='liteloader-qqnt-lite-tools-bin'
 _pkgname='LiteLoaderQQNT-lite_tools'
 pkgver=2.33.6 # renovate: datasource=github-tags depName=xiyuesaves/LiteLoaderQQNT-lite_tools
-pkgrel=1
-pkgdesc='LiteLoaderQQNT插件，轻量工具箱，轻量、优雅、高效'
+pkgrel=2
+pkgdesc='轻量工具箱，轻量、优雅、高效'
 arch=('any')
-url="https://github.com/xiyuesaves/${_pkgname}"
-license=('MIT')
+url="https://github.com/xiyuesaves/LiteLoaderQQNT-lite_tools"
+license=('GPL3')
 depends=('liteloader-qqnt-bin')
 
-source=("${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/lite_tools_v4.zip")
-sha256sums=('6899feb6cfdc08884df9dfbfde56ce76c073454ea04b96681646d1a97c6a043d')
+source=("${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/lite_tools_v4.zip"
+        "LICENSE")
+sha256sums=('ecea6e42849ca0f8b18c18c3bcc5f56c0f380e4c10d6d2bd7855a9343ad46194'
+            '8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b')
 
 package() {
-    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    install -d "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
     cp -rf "${srcdir}"/* "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    install -Dm644 "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
 
     # 清除不必要的文件
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/LICENSE"
     rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/todoList.md"
     rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/changeLog.md"
     rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/${pkgname}-${pkgver}.zip"

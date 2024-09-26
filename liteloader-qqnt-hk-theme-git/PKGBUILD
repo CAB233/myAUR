@@ -4,13 +4,12 @@ pkgname='liteloader-qqnt-hk-theme-git'
 _pkgname='LiteLoaderQQNT-HK-Theme'
 pkgver=r21.59c858c
 pkgrel=1
-pkgdesc="BetterQQNT主题"
+pkgdesc="BetterQQNT 主题"
 arch=('any')
 url="https://github.com/huankong233/LiteLoaderQQNT-HK-Theme"
 license=("MIT")
 depends=("liteloader-qqnt-bin")
 makedepends=('git')
-provides=("liteloader-qqnt-hk-theme-git")
 
 source=("git+https://github.com/huankong233/LiteLoaderQQNT-HK-Theme.git")
 sha256sums=('SKIP')
@@ -24,6 +23,10 @@ pkgver() {
 }
 
 package() {
-    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    install -d "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
     cp -r "${srcdir}/${_pkgname}/"* "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
+    install -Dm644 "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
+
+    # 清除不必要的文件
+    rm "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/LICENSE"
 }

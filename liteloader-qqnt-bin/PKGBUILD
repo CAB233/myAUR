@@ -4,7 +4,7 @@
 pkgname="liteloader-qqnt-bin"
 _pkgname="LiteLoaderQQNT"
 pkgver=1.2.2 # renovate: datasource=github-tags depName=LiteLoaderQQNT/LiteLoaderQQNT
-pkgrel=2
+pkgrel=3
 pkgdesc="轻量, 简洁, 开源的 QQNT 插件加载器"
 arch=('any')
 url="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"
@@ -20,7 +20,7 @@ source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
 		"patch_liteloader_bwrap.sh")
 
 sha256sums=('a325c592ec53b7469c44f7eea5d27a0984e14d54ccd8d596446d0938bc91d561'
-            'acd272eb6a46e66945e1b7061b6b5e909bd82759f7be2d6917d959973092b42e'
+            'bd3566bb237ceef5bc40713d23714b5ce7e324e19626086bf2836c8d67eb6f7e'
             '9d2ea72bb35ba91b58acdd4b1742a5a0ffae270aa609da225626a2e9b4ff578f'
             '6105389087a7d94eb743191aa1bf484bdf48f24d6470a8c1e4e7a74aa359ec23'
             'da197eee75d92d5d79861d3531e59afc1caf091446b4ba2d0a8916e0a9c87b0b'
