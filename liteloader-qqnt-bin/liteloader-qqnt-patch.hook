@@ -8,4 +8,4 @@ Target=linuxqq
 [Action]
 Description=Patching QQ for LiteLoaderQQNT...
 When=PostTransaction
-Exec = /bin/sh -c 'grep -q /opt/LiteLoaderQQNT /opt/QQ/resources/app/app_launcher/index.js || sed -i "1 i require(\"/opt/LiteLoaderQQNT\");" /opt/QQ/resources/app/app_launcher/index.js; sed -i "s/.\/application\/app_launcher\/index.js/.\/app_launcher\/index.js" /opt/QQ/resources/app/package.json; /bin/bash /opt/LiteLoaderQQNT/patching/patch_liteloader_bwrap.sh'
+Exec = /bin/sh -c 'grep -q /opt/LiteLoaderQQNT /opt/QQ/resources/app/app_launcher/index.js || sed -i "1 i require(\"/opt/LiteLoaderQQNT\");" /opt/QQ/resources/app/app_launcher/index.js; sed -i "s/.\/application\/app_launcher\/index.js/.\/app_launcher\/index.js/" /opt/QQ/resources/app/package.json; /bin/bash /opt/LiteLoaderQQNT/patching/patch_liteloader_bwrap.sh'
