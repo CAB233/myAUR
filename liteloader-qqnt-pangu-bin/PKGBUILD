@@ -3,18 +3,21 @@
 pkgname='liteloader-qqnt-pangu-bin'
 _pkgname='LiteLoaderQQNT-Pangu'
 pkgver=1.0.3 # renovate: datasource=github-tags depName=MisaLiu/LiteLoaderQQNT-Pangu
-pkgrel=1
+pkgrel=2
 pkgdesc="给你的 QQNT 注入盘古之力"
 arch=('any')
 url="https://github.com/MisaLiu/LiteLoaderQQNT-Pangu"
-license=("MIT")
+license=("GPL3")
 depends=("liteloader-qqnt-bin")
 
-source=("${pkgname}-${pkgver}.zip::${url}/releases/download/${pkgver}/LLPangu.zip")
-sha256sums=('c2e14a82ea5bbac5fba3d152637d808b4e0a8092f61793cf05531d7d55b74045')
+source=("${pkgname}-${pkgver}.zip::${url}/releases/download/${pkgver}/LLPangu.zip"
+        "LICENSE")
+sha256sums=('c2e14a82ea5bbac5fba3d152637d808b4e0a8092f61793cf05531d7d55b74045'
+            '8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b')
 
 package() {
     mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
     install -Dm644 "${srcdir}/main.js" "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/main.js"
     install -Dm644 "${srcdir}/manifest.json" "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}/manifest.json"
+    install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
 }
