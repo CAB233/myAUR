@@ -7,7 +7,6 @@ fi
 rm -rf ~/.config/QQ/crash_files/*
 
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
-LITELOADERQQNT_PROFILE=${LITELOADERQQNT_PROFILE:-~/.config/LiteLoaderQQNT}
 
 if [[ -f "${XDG_CONFIG_HOME}/qq-flags.conf" ]]; then
 	mapfile -t QQ_USER_FLAGS <<<"$(grep -v '^#' "${XDG_CONFIG_HOME}/qq-flags.conf")"
@@ -15,16 +14,19 @@ if [[ -f "${XDG_CONFIG_HOME}/qq-flags.conf" ]]; then
 fi
 
 # 适配 LiteLoaderQQNT
+LITELOADERQQNT_PROFILE_DIR=${LITELOADERQQNT_PROFILE_DIR:-~/.config/QQ/LiteLoaderQQNT}
+
 export LITELOADERQQNT_PROFILE
 if [ -n "${LITELOADERQQNT_PROFILE}" ]; then
     mkdir -p "${LITELOADERQQNT_PROFILE}/plugins"
 else
-    mkdir -p "${XDG_CONFIG_HOME}/LiteLoaderQQNT/plugins"
+    mkdir -p "${LITELOADERQQNT_PROFILE_DIR}/plugins"
 fi
 
-cp -r /opt/LiteLoaderQQNT/plugins/* "${LITELOADERQQNT_PROFILE}/plugins/" 2>/dev/null
+cp -r /opt/LiteLoaderQQNT/plugins/* "${LITELOADERQQNT_PROFILE}/plugins/"
 
 # 固定 MAC
+# https://alampy.com/2024/05/15/fix-mac-for-linux-qq/
 if [ -z "$(which slirp4netns)" ]; then
     echo "Please install slirp4netns"
     exit 1

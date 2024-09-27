@@ -1,5 +1,5 @@
 # Maintainer: Rocket Aaron <i at rocka dot me>
-# Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=('v2ray-geoip-ly' 'v2ray-geosite-ly')
 pkgver=202409262211 # renovate: datasource=github-tags depName=Loyalsoldier/v2ray-rules-dat

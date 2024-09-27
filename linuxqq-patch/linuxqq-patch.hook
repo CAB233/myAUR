@@ -8,4 +8,4 @@ Target=linuxqq
 [Action]
 Description=Patching QQ...
 When=PostTransaction
-Exec=/bin/sh -c '[ ! -f /usr/bin/linuxqq.bak ] && cp /usr/bin/linuxqq /usr/bin/linuxqq.bak; cp /usr/local/bin/linuxqq-patch /usr/bin/linuxqq'
+Exec=/bin/sh -c '[ ! -f /usr/bin/linuxqq.bak ] && cp /usr/bin/linuxqq /usr/bin/linuxqq.bak; cp /usr/bin/linuxqq-patch /usr/bin/linuxqq'
