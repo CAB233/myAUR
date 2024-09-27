@@ -23,7 +23,7 @@ jobs:
       version-file: ${{ steps.version-file.outputs.version-file }}
     steps:
       - name: 安装依赖
-        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git
+        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git jq
 
       - name: 导入仓库
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
         run: |
           nvchecker --file nvchecker.toml
           echo "$(jq -c . new_ver.json)" >> "$GITHUB_OUTPUT"
-          echo "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
 
   update-versions:
     needs: check-versions
@@ -53,7 +53,7 @@ jobs:
       - name: 写入 new_ver.json
         run: |
           echo '${{ fromJson(needs.check-versions.outputs.version-file) }}' > new_ver.json
-          echo '${{ fromJson(needs.check-versions.outputs.version-file) }}'
+          echo ${{ fromJson(needs.check-versions.outputs.version-file) }}
 
       - name: 运行 Renovate
         uses: renovatebot/github-action@v40.2.10
