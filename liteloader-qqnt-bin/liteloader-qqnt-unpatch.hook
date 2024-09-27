@@ -1,0 +1,9 @@
+[Trigger]
+Operation=Remove
+Type=Package
+Target=liteloader-qqnt-bin
+
+[Action]
+Description=Unpatching QQ for LiteLoaderQQNT...
+When=PreTransaction
+Exec=/bin/sh -c '/opt/LiteLoaderQQNT/patching/patch.sh .\/application\/app_launcher\/index.js'

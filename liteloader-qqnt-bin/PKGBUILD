@@ -4,27 +4,27 @@
 pkgname="liteloader-qqnt-bin"
 _pkgname="LiteLoaderQQNT"
 pkgver=1.2.2 # renovate: datasource=github-tags depName=LiteLoaderQQNT/LiteLoaderQQNT
-pkgrel=3
+pkgrel=4
 pkgdesc="轻量, 简洁, 开源的 QQNT 插件加载器"
 arch=('any')
 url="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"
 license=('MIT')
-depends=("linuxqq" "bubblewrap")
+depends=("linuxqq")
 optdepends=("linuxqq-patch: 固定 MAC 地址、适配 LiteLoaderQQNT 框架")
 conflicts=("liteloader-qqnt-git" "linuxqq-nt-bwrap")
 source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
 		"liteloader-qqnt-patch.hook"
-		"liteloader-qqnt-depatch.hook"
-		"gen_preload.js"
-		"index.js"
-		"patch_liteloader_bwrap.sh")
+		"liteloader-qqnt-unpatch.hook"
+		"patch.sh")
 
 sha256sums=('a325c592ec53b7469c44f7eea5d27a0984e14d54ccd8d596446d0938bc91d561'
-            'bd3566bb237ceef5bc40713d23714b5ce7e324e19626086bf2836c8d67eb6f7e'
-            '9d2ea72bb35ba91b58acdd4b1742a5a0ffae270aa609da225626a2e9b4ff578f'
-            '6105389087a7d94eb743191aa1bf484bdf48f24d6470a8c1e4e7a74aa359ec23'
-            'da197eee75d92d5d79861d3531e59afc1caf091446b4ba2d0a8916e0a9c87b0b'
-            'c235afd0a8bbb0c0dc5fe59b35934802fe277eec79996a2a6d26f2ab41ce0e73')
+            '4971654acccffe1219539501fcafeae9dd7342db292933e8ce322b6e757f8de6'
+            '8ab84ac0c2c1ef38dfb729782b294de88020f2a69b32768aa9d537a8a29918e3'
+            '0ba02246ca3fb9483c961e9f26b5e7616acd77c20881987e9bee61001aa8e98e')
+
+prepare() {
+	echo "require(String.raw\`/opt/LiteLoaderQQNT\`)" > "${srcdir}/LiteLoaderQQNT.js"
+}
 
 package() {
 	# 准备文件夹
@@ -32,15 +32,15 @@ package() {
 	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/patching"
 	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins"
 
-	# 移动文件到相应位置
+	# 安装 LiteLoaderQQNT
 	cp -rf "${srcdir}/src/"* "${pkgdir}/opt/LiteLoaderQQNT/src"
 	install -Dm644 "${srcdir}/package.json" "${pkgdir}/opt/LiteLoaderQQNT/package.json"
 	install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/$_pkgname/LICENSE"
-	install -Dm644 "${srcdir}/gen_preload.js" "${pkgdir}/opt/LiteLoaderQQNT/patching/gen_preload.js"
-	install -Dm644 "${srcdir}/index.js" "${pkgdir}/opt/LiteLoaderQQNT/patching/index.js"
-	install -Dm644 "${srcdir}/patch_liteloader_bwrap.sh" "${pkgdir}/opt/LiteLoaderQQNT/patching/patch_liteloader_bwrap.sh"
+	# 安装 LiteLoaderQQNT 运行必要的 patch
+	install -Dm644 "${srcdir}/LiteLoaderQQNT.js" "${pkgdir}/opt/QQ/resources/app/app_launcher/LiteLoaderQQNT.js"
+	install -Dm755 "${srcdir}/patch.sh" "${pkgdir}/opt/LiteLoaderQQNT/patching/patch.sh"
 
 	# 配置 pacman hook
 	install -Dm644 "${srcdir}/liteloader-qqnt-patch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-patch.hook"
-	install -Dm644 "${srcdir}/liteloader-qqnt-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-depatch.hook" 
+	install -Dm644 "${srcdir}/liteloader-qqnt-unpatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-unpatch.hook" 
 }
