@@ -33,7 +33,7 @@ jobs:
         working-directory: ./.github
         run: |
           nvchecker --file nvchecker.toml
-          cat new_ver.json >> "$GITHUB_OUTPUT"
+          echo "$(jq -c . new_ver.json)" >> "$GITHUB_OUTPUT"
           echo "$GITHUB_OUTPUT"
 
   update-versions:
