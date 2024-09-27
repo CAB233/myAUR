@@ -119,22 +119,6 @@ jobs:
           # 开始构建
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
 
-      - name: 构建 ${{ matrix.package }} (重试)
-        if: steps.build-package.outcome == 'failure'
-        working-directory: ./${{ matrix.package }}
-        run: |
-          # 安装相关包依赖
-          sudo -u builder yay -Sy --noconfirm \
-            $(pacman --deptest \
-              $(source ./PKGBUILD &&\
-              echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
-          
-          # 验证文件完整性
-          sudo -u builder updpkgsums
-
-          # 开始构建
-          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
-
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
           # || [ "$?" = "4" ] // I do not want to exit if nothing was renamed
@@ -181,6 +165,7 @@ jobs:
 
       - name: 上传至 R2 存储桶
         uses: ryand56/r2-upload-action@v1.3.2
+        continue-on-error: true
         with:
           r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
