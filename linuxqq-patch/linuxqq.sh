@@ -20,7 +20,8 @@ export LITELOADERQQNT_PROFILE
 if [ -n "${LITELOADERQQNT_PROFILE}" ]; then
     mkdir -p "${LITELOADERQQNT_PROFILE}/plugins"
 else
-    mkdir -p "${LITELOADERQQNT_PROFILE_DIR}/plugins"
+    export LITELOADERQQNT_PROFILE=${LITELOADERQQNT_PROFILE_DIR}
+    mkdir -p "${LITELOADERQQNT_PROFILE}/plugins"
 fi
 
 cp -r /opt/LiteLoaderQQNT/plugins/* "${LITELOADERQQNT_PROFILE}/plugins/"
