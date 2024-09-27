@@ -2,8 +2,6 @@ name: Check and Update
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "2 */2 * * *"
   push:
     branches:
       - main
@@ -23,7 +21,7 @@ jobs:
       file: ${{ steps.generate-file.outputs.file }}
     steps:
       - name: 安装依赖
-        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git jq
+        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git
 
       - name: 导入仓库
         uses: actions/checkout@v4
