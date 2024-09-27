@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye@outlook.com>
 
 pkgname="linuxqq-patch"
-pkgver=1.0.2
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="固定 MAC 地址、适配 LiteLoaderQQNT 框架"
 arch=('any')
@@ -12,12 +12,12 @@ source=("linuxqq.sh"
 		"linuxqq-patch.hook"
 		"linuxqq-depatch.hook")
 
-sha256sums=('36eda0434831aa020ef632e44c6dfe5e4e25259f24301d8e2b04cd4d6ce29d7a'
-            '130746f0b91cd57ceee0897ae4a85f52716bac5fe3c2f3cd880b422c848c7a3d'
+sha256sums=('7cf9fbcd494fc5ba0fb8ec0776962c310d4f97187a37f077f6b308954cbf1aed'
+            'c0e5ae332f0b728461c3cc6936a50a85f619f08c848633eb24a9b3b90055a23e'
             'dfd8dd4af201890a5dd20976ff71e8ea322618cee55bdfc25c235c865c80cd3f')
 
 package() {
-	install -Dm755 "${srcdir}/linuxqq.sh" "${pkgdir}/usr/local/bin/linuxqq-patch"
+	install -Dm755 "${srcdir}/linuxqq.sh" "${pkgdir}/usr/bin/linuxqq-patch"
 
 	# 配置 pacman hook
 	install -Dm644 "${srcdir}/linuxqq-patch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-patch.hook"
