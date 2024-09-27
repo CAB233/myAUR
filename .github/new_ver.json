@@ -5,10 +5,10 @@
       "version": "20240331"
     },
     "dae": {
-      "version": "v0.8.0rc1",
-      "gitref": "refs/tags/v0.8.0rc1",
-      "revision": "54df978e0404e9199ae5f754fb21816fc7028df6",
-      "url": "https://github.com/daeuniverse/dae/releases/tag/v0.8.0rc1"
+      "version": "v0.8.0rc2",
+      "gitref": "refs/tags/v0.8.0rc2",
+      "revision": "cfdf9306414fe9469a6964cf511222a1638bbf2c",
+      "url": "https://github.com/daeuniverse/dae/releases/tag/v0.8.0rc2"
     },
     "typora": {
       "version": "1.9.3"
