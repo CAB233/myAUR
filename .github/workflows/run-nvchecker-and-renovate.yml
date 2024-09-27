@@ -32,7 +32,8 @@ jobs:
         id: version-file
         working-directory: ./.github
         run: |
-          nvchecker --file nvchecker.toml >> "$GITHUB_OUTPUT"
+          nvchecker --file nvchecker.toml
+          cat new_ver.json >> "$GITHUB_OUTPUT"
           echo "$GITHUB_OUTPUT"
 
   update-versions:
