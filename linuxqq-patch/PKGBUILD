@@ -12,7 +12,7 @@ source=("linuxqq.sh"
 		"linuxqq-patch.hook"
 		"linuxqq-depatch.hook")
 
-sha256sums=('0ebaae8d6fdb86093163af1e9a51987149b080b751d4811131932a31ca74fb30'
+sha256sums=('f3434d8351dc8a7c4a86e91d6e4aac6e84900542bdbb74e6fa2006ff81a052ff'
             'c0e5ae332f0b728461c3cc6936a50a85f619f08c848633eb24a9b3b90055a23e'
             'dfd8dd4af201890a5dd20976ff71e8ea322618cee55bdfc25c235c865c80cd3f')
 
