@@ -20,7 +20,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      version-file: ${{ steps.version-file.outputs.version-file }}
+      file: ${{ steps.generate-file.outputs.file }}
     steps:
       - name: 安装依赖
         run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git jq
@@ -29,12 +29,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 运行 Nvchecker
-        id: version-file
+        id: generate-file
         working-directory: ./.github
         run: |
           nvchecker --file nvchecker.toml
-          echo "$(jq -c . new_ver.json)" >> "$GITHUB_OUTPUT"
-          echo $GITHUB_OUTPUT
+          FILE_JSON=`cat new_ver.json`
+          echo ${FILE_JSON}
+          echo "file=${FILE_JSON}" >> $GITHUB_OUTPUT
 
   update-versions:
     needs: check-versions
@@ -52,8 +53,8 @@ jobs:
 
       - name: 写入 new_ver.json
         run: |
-          echo '${{ fromJson(needs.check-versions.outputs.version-file) }}' > new_ver.json
-          echo ${{ fromJson(needs.check-versions.outputs.version-file) }}
+          echo '${{ fromJson(needs.check-versions.outputs.file) }}' > new_ver.json
+          echo ${{ fromJson(needs.check-versions.outputs.file) }}
 
       - name: 运行 Renovate
         uses: renovatebot/github-action@v40.2.10
