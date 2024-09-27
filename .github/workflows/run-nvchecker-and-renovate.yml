@@ -19,6 +19,8 @@ jobs:
       image: archlinux:base-devel
     permissions:
       contents: write
+    outputs:
+      version-file: ${{ steps.version-file.outputs.version-file }}
     steps:
       - name: 安装依赖
         run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git
@@ -27,22 +29,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 运行 Nvchecker
+        id: version-file
         working-directory: ./.github
-        run: nvchecker --file nvchecker.toml
-      
-      - name: 信任仓库
-        run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
-
-      - name: 保存版本文件
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "[nvchecker]: 更新依赖版本"
-          branch: main
-          commit_options: "--no-verify --signoff"
-          file_pattern: './.github/new_ver.json'
-          commit_user_name: YanamiChan[bot]
-          commit_user_email: 182213109+YanamiChan[bot]@users.noreply.github.com
-          commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
+        run: |
+          nvchecker --file nvchecker.toml >> "$GITHUB_OUTPUT"
+          echo "$GITHUB_OUTPUT"
 
   update-versions:
     needs: check-versions
@@ -57,6 +48,11 @@ jobs:
 
       - name: 导入仓库
         uses: actions/checkout@v4
+
+      - name: 写入 new_ver.json
+        run: |
+          echo '${{ fromJson(needs.check-versions.outputs.version-file) }}' > new_ver.json
+          echo '${{ fromJson(needs.check-versions.outputs.version-file) }}'
 
       - name: 运行 Renovate
         uses: renovatebot/github-action@v40.2.10
