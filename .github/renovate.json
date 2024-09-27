@@ -45,9 +45,6 @@
       "matchManagers": [
         "git-submodules"
       ],
-      "matchDatasources": [
-        "git-refs"
-      ],
       "enabled": true,
       "automerge": true,
       "ignoreTests": true,
