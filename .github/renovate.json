@@ -33,7 +33,7 @@
   ],
   "customDatasources": {
     "nvchecker": {
-      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/CAB233/myAUR/main/.github/new_ver.json",
+      "defaultRegistryUrlTemplate": "file://$GITHUB_WORKSPACE/new_ver.json",
       "transformTemplates": [
         "{ \"releases\": [{ \"version\": data.'{{packageName}}'.version }] }"
       ]
