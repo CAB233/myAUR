@@ -14,13 +14,11 @@ if [[ -f "${XDG_CONFIG_HOME}/qq-flags.conf" ]]; then
 fi
 
 # 适配 LiteLoaderQQNT
-LITELOADERQQNT_PROFILE_DIR=${LITELOADERQQNT_PROFILE_DIR:-~/.config/QQ/LiteLoaderQQNT}
-
 export LITELOADERQQNT_PROFILE
 if [ -n "${LITELOADERQQNT_PROFILE}" ]; then
     mkdir -p "${LITELOADERQQNT_PROFILE}/plugins"
 else
-    export LITELOADERQQNT_PROFILE=${LITELOADERQQNT_PROFILE_DIR}
+    export LITELOADERQQNT_PROFILE=${XDG_CONFIG_HOME}/QQ/LiteLoaderQQNT
     mkdir -p "${LITELOADERQQNT_PROFILE}/plugins"
 fi
 
