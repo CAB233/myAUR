@@ -22,7 +22,7 @@
     {
       "customType": "regex",
       "fileMatch": [
-        "^/(?!deprecated(/|$)).+/PKGBUILD$"
+        "(^|/)PKGBUILD$"
       ],
       "matchStrings": [
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)\\npkgrel=(?<pkgrel>.*)"
