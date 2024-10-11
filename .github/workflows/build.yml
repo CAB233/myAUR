@@ -30,7 +30,7 @@ jobs:
       - name: 生成数组
         id: generate-matrix
         run: |
-          MATRIX_JSON=`find * -type f -name "PKGBUILD" -printf "%h\n" | jq -Rnc '."package" |= [inputs]'`
+          MATRIX_JSON=`find * -type f -name "PKGBUILD" -not -path "*/deprecated/*" -printf "%h\n" | jq -Rnc '."package" |= [inputs]'`
           echo ${MATRIX_JSON}
           echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
 
