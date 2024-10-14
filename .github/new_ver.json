@@ -4,20 +4,8 @@
     "cachyos-keyring": {
       "version": "20240331"
     },
-    "dae": {
-      "version": "v0.8.0",
-      "gitref": "refs/tags/v0.8.0",
-      "revision": "3b77ddfd67c93b8cc9972bc327bdb54722dada95",
-      "url": "https://github.com/daeuniverse/dae/releases/tag/v0.8.0"
-    },
     "typora": {
       "version": "1.9.3"
-    },
-    "xray": {
-      "version": "v24.9.30",
-      "gitref": "refs/tags/v24.9.30",
-      "revision": "3b06af882de4a73759770bbe13d219943cdf0d0c",
-      "url": "https://github.com/XTLS/Xray-core/releases/tag/v24.9.30"
     }
   }
 }
