@@ -3,7 +3,7 @@
 # Contributor: ajbura, hbarsaiyan
 
 pkgname='cinny-desktop-bin'
-pkgver=4.2.1 # renovate: datasource=github-tags depName=cinnyapp/cinny-desktop
+pkgver=4.2.2 # renovate: datasource=github-tags depName=cinnyapp/cinny-desktop
 pkgrel=1
 pkgdesc='Matrix client focusing primarily on a simple, elegant and secure interface (binary release)'
 arch=('x86_64')
