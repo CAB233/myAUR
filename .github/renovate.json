@@ -62,6 +62,14 @@
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch"
+    },
+    {
+      "description": "自定义 v2ray-rules-dat 监控周期",
+      "matchDatasources": "github-tags",
+      "matchDepNames": "Loyalsoldier/v2ray-rules-dat",
+      "schedule": [
+        "every weekend"
+      ]
     }
   ]
 }
