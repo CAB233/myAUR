@@ -15,6 +15,7 @@ on:
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
       - ".github/new_ver.json"
+      - "Archived/"
 
 jobs:
   metadata:
