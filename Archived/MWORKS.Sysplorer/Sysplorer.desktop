@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=MWORKS.Sysplorer 2024b
+Exec="/usr/bin/sysplorer"
+Icon=/opt/MWORKS/Sysplorer/Install/config/logo.png
+Terminal=false
+Type=Application
+Categories=Development;
