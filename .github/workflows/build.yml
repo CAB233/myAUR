@@ -9,13 +9,11 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".github/workflows/build.yml"
-      - ".github/workflows/build-yay-cache.yml"
-      - ".github/workflows/run-nvchecker-and-renovate.yml"
+      - ".github/workflows/*.yml"
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
       - ".github/new_ver.json"
-      - "Archived/"
+      - "Archived/**"
 
 jobs:
   metadata:
