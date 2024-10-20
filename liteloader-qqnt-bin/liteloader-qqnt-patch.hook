@@ -9,7 +9,7 @@ Target=linuxqq
 Type=Path
 Operation=Install
 Operation=Upgrade
-Target=/opt/QQ/resources/app/package.json
+Target=opt/QQ/resources/app/package.json
 
 [Action]
 Description=Patching QQ for LiteLoaderQQNT...
