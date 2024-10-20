@@ -2,7 +2,7 @@
 
 pkgname="linuxqq-patch"
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="固定 MAC 地址、适配 LiteLoaderQQNT 框架"
 arch=('any')
 license=('custom')
@@ -10,16 +10,16 @@ depends=("linuxqq" "slirp4netns" "socat")
 conflicts=("linuxqq-nt-bwrap")
 source=("linuxqq.sh"
 		"linuxqq-patch.hook"
-		"linuxqq-depatch.hook")
+		"linuxqq-unpatch.hook")
 
-sha256sums=('f3434d8351dc8a7c4a86e91d6e4aac6e84900542bdbb74e6fa2006ff81a052ff'
+sha256sums=('22a569d28ce5da5806aeba7ac87afa2fe15bd735723e8d6f306f9007ad700032'
             'c0e5ae332f0b728461c3cc6936a50a85f619f08c848633eb24a9b3b90055a23e'
-            'dfd8dd4af201890a5dd20976ff71e8ea322618cee55bdfc25c235c865c80cd3f')
+            '3087df774107a98732ad8ef1c0a7d4475266ab8785fe9e9bbac03f5b251847ea')
 
 package() {
 	install -Dm755 "${srcdir}/linuxqq.sh" "${pkgdir}/usr/bin/linuxqq-patch"
 
 	# 配置 pacman hook
 	install -Dm644 "${srcdir}/linuxqq-patch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-patch.hook"
-	install -Dm644 "${srcdir}/linuxqq-depatch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-depatch.hook"
+	install -Dm644 "${srcdir}/linuxqq-unpatch.hook" "${pkgdir}/etc/pacman.d/hooks/linuxqq-unpatch.hook"
 }
