@@ -3,8 +3,8 @@
 
 pkgname="liteloader-qqnt-bin"
 _pkgname="LiteLoaderQQNT"
-pkgver=1.2.2 # renovate: datasource=github-tags depName=LiteLoaderQQNT/LiteLoaderQQNT
-pkgrel=4
+pkgver=1.2.3 # renovate: datasource=github-tags depName=LiteLoaderQQNT/LiteLoaderQQNT
+pkgrel=1
 pkgdesc="轻量, 简洁, 开源的 QQNT 插件加载器"
 arch=('any')
 url="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"
