@@ -14,10 +14,10 @@
       "version": "1.9.3"
     },
     "xray": {
-      "version": "v24.11.5",
-      "gitref": "refs/tags/v24.11.5",
-      "revision": "afc7ec55062c14ae69fc67b148155faae1c31548",
-      "url": "https://github.com/XTLS/Xray-core/releases/tag/v24.11.5"
+      "version": "v24.11.11",
+      "gitref": "refs/tags/v24.11.11",
+      "revision": "0df2446f824dd657717d29ef99b8b47cf50b2364",
+      "url": "https://github.com/XTLS/Xray-core/releases/tag/v24.11.11"
     }
   }
 }
