@@ -51,7 +51,7 @@ jobs:
           echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
 
           # 添加基础依赖包
-          pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib
+          pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib curl
 
       - name: 导入 PKGBUILD
         uses: actions/checkout@v4
@@ -119,6 +119,7 @@ jobs:
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
 
       - name: 构建 ${{ matrix.package }} (重试)
+        id: build-package-again
         if: steps.build-package.outcome == 'failure'
         working-directory: ./${{ matrix.package }}
         run: |
@@ -133,6 +134,12 @@ jobs:
 
           # 开始构建
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
+
+      - name: 构建失败通知
+        if: steps.build-package-again.outcome == 'failure'
+        run: |
+          curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
+            --data-urlencode "title=${{ matrix.package }} 构建失败"
 
       - name: 处理产物文件名 #limitation on name for epoch https://github.com/actions/upload-artifact/issues/22#issuecomment-568561966
         run: |
