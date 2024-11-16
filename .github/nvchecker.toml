@@ -8,6 +8,11 @@ cmd = '''
 curl -s https://www.typora.io/linux/Packages | grep Version | cut -f 2 -d ' ' | sort -V | cut -f 1 -d '-' | uniq | tail -n 1
 '''
 
+[64gram-desktop]
+source = "github"
+github = "TDesktop-x64/tdesktop"
+use_latest_release = true
+
 [dae]
 source = "github"
 github = "daeuniverse/dae"

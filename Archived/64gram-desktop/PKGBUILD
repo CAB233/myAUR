@@ -1,0 +1,79 @@
+# Maintainer: Alesar1
+# Contributor: solopasha <daron439 at gmail dot com>
+# Contributor: KspLite <ksplite@outlook.com>
+# Contributor: Daniil Kovalev <daniil@kovalev.website>
+pkgname=64gram-desktop
+_pkgname=64Gram
+pkgver=1.1.46 # renovate: datasource=custom.nvchecker depName=64gram-desktop
+pkgrel=1
+epoch=1
+pkgdesc='Unofficial desktop version of Telegram messaging app'
+arch=('x86_64')
+url="https://github.com/TDesktop-x64/tdesktop"
+license=('GPL3')
+depends=('hunspell' 'ffmpeg' 'hicolor-icon-theme' 'lz4' 'minizip' 'openal'
+         'qt6-imageformats' 'qt6-svg' 'qt6-wayland' 'xxhash' 'ada'
+         'rnnoise' 'pipewire' 'libxtst' 'libxrandr' 'abseil-cpp' 'libdispatch'
+         'openssl' 'protobuf' 'glib2' 'libsigc++-3.0'
+         'libxcomposite' 'libvpx' 'libxdamage' 'kcoreaddons' 'jemalloc' 'openh264')
+makedepends=('cmake' 'git' 'ninja' 'python' 'range-v3' 'tl-expected' 'microsoft-gsl' 'meson'
+             'extra-cmake-modules' 'wayland-protocols' 'plasma-wayland-protocols' 'libtg_owt'
+             'gobject-introspection' 'boost' 'fmt' 'mm-common' 'perl-xml-parser' 'python-packaging'
+             'dos2unix' 'glib2-devel')
+optdepends=('webkit2gtk: embedded browser features'
+            'xdg-desktop-portal: desktop integration')
+source=("https://github.com/TDesktop-x64/tdesktop/releases/download/v${pkgver}/${_pkgname}-${pkgver}-full.tar.gz"
+        "io.github.tdesktop_x64.TDesktop.desktop"
+        "0001-fix-core_settings.h-use-system-window-decoration.patch"
+        "0002-fix-settings-use-system-fonts-by-default.patch"
+        "0003-Remove-the-confusing-Default-option-from-selectable.patch"
+        "0004-fix-lib_tl-add-missing-cstring-include.patch"
+        "0005-fix-lib_webview-add-missing-cstdint-include.patch"
+        "0006-Fix-some-ffmpeg-7.x-related-errors.patch"
+        "0007-Use-alternate-fix-for-ffmpeg-const-issue.patch")
+noextract=("${_pkgname}-${pkgver}-full.tar.gz")
+sha512sums=('274b4de242da4ef812c32fc74fc0ee612f994ff90ae5c45d87245ddb785453be51d8ccd51c5f53f87c746fa5e9d0bcb78750e862d75a16a21dd8bc76c849cff4'
+            'ea027bc2d40c74507adf32380444207210a8c31cdba57f3f468d23d8e9c7376647cc8c713f188660f9b1dacd9041227aafd5a27c7889f47ea3985712b6b74b8b'
+            'b6c09e869142b85f8f176a916527b08232eeb1c35bd2beab285ecbabfff95bb2b33545616e9ede7ddc5d348e3ef8ffb2835affd6446aa96236595ce8fa391570'
+            '5e4859d8b23e5ad54497201b38f6f13376fa77d01df56e992459a2eff7aec06488af8454b0e185331202cadbb8e8d2330eb51f298aad47824b4a56d6dbed23f2'
+            '30532f586c1ed9375fba3b7e4744b0e3597b6a345c866acce134136b075483906065b8ebd71e42cbc6e88ca60b6d57cb4bda08487f3223061881361a5927cc97'
+            '9ca981e7cb343a76ca4b79a307b29744b54f8b8e3d422582cf9ef31345a88aaee1f335fbc6d3fbe82f6c2e1aabff4abdad41950d329f62cc1c5dd3909ef4c9e1'
+            '7933e4530916706cd4dbd7e3ca1b8120ddf5b6d81205c7e7f5f9a52388cf1807817454304a521b625f38fe2da02b222d4628e66e1907a8e2c5705e170eeee0c3'
+            '9aa2e9662d65b67de8f32ddf1d4d0446d1212198e6fb49c9ffdba4072f019fdc42ebdfd761316443296edc79e5ec3a96d805363edb336b70c0bce4ecd4261eca'
+            '4bb29c286c1b7b3154f478f30384e8380df4d6cbe9bfb5300d7379db4a488f0af3bf55300f2ce9c4928eada52320f0bb54d0cd376668b986da38cfebf968e355')
+
+prepare() {
+    LANG=C.UTF-8 bsdtar -xf ${_pkgname}-${pkgver}-full.tar.gz
+    cd $_pkgname-$pkgver-full
+    find "${srcdir}"/ -type f -exec dos2unix {} \;
+    patch -p1 --binary < "$srcdir"/0001-fix-core_settings.h-use-system-window-decoration.patch
+    patch -p1 --binary < "$srcdir"/0002-fix-settings-use-system-fonts-by-default.patch
+    patch -p1 --binary < "$srcdir"/0003-Remove-the-confusing-Default-option-from-selectable.patch
+    patch -p1 --binary < "$srcdir"/0004-fix-lib_tl-add-missing-cstring-include.patch
+    patch -p1 --binary < "$srcdir"/0005-fix-lib_webview-add-missing-cstdint-include.patch
+    patch -p1 --binary < "$srcdir"/0006-Fix-some-ffmpeg-7.x-related-errors.patch
+    patch -p1 --binary < "$srcdir"/0007-Use-alternate-fix-for-ffmpeg-const-issue.patch
+    }
+
+build() {
+    CXXFLAGS+=' -ffat-lto-objects'
+
+    cmake -B build -S $_pkgname-$pkgver-full -G Ninja \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_INSTALL_PREFIX="/usr" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DDESKTOP_APP_DISABLE_AUTOUPDATE=ON \
+        -DTDESKTOP_API_ID=611335 \
+        -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+    mv "$pkgdir/usr/bin/telegram-desktop" "$pkgdir/usr/bin/64gram-desktop"
+    install -Dm644 "$srcdir/io.github.tdesktop_x64.TDesktop.desktop" -t "$pkgdir/usr/share/applications"
+    find "$pkgdir" -type f -name "telegram.png" -exec rename telegram.png 64gram.png {} \;
+    mv "$pkgdir/usr/share/icons/hicolor/symbolic/apps/telegram-symbolic.svg" "$pkgdir/usr/share/icons/hicolor/symbolic/apps/64gram-symbolic.svg"
+    mkdir -p "$pkgdir/usr/share/64Gram/externalupdater.d"
+    echo "/usr/bin/64gram-desktop" >"$pkgdir/usr/share/64Gram/externalupdater.d/telegram-desktop.conf"
+}
