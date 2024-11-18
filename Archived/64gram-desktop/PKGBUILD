@@ -25,34 +25,19 @@ optdepends=('webkit2gtk: embedded browser features'
 source=("https://github.com/TDesktop-x64/tdesktop/releases/download/v${pkgver}/${_pkgname}-${pkgver}-full.tar.gz"
         "io.github.tdesktop_x64.TDesktop.desktop"
         "0001-fix-core_settings.h-use-system-window-decoration.patch"
-        "0002-fix-settings-use-system-fonts-by-default.patch"
-        "0003-Remove-the-confusing-Default-option-from-selectable.patch"
-        "0004-fix-lib_tl-add-missing-cstring-include.patch"
-        "0005-fix-lib_webview-add-missing-cstdint-include.patch"
-        "0006-Fix-some-ffmpeg-7.x-related-errors.patch"
-        "0007-Use-alternate-fix-for-ffmpeg-const-issue.patch")
+        "0002-fix-settings-use-system-fonts-by-default.patch")
 noextract=("${_pkgname}-${pkgver}-full.tar.gz")
-sha512sums=('274b4de242da4ef812c32fc74fc0ee612f994ff90ae5c45d87245ddb785453be51d8ccd51c5f53f87c746fa5e9d0bcb78750e862d75a16a21dd8bc76c849cff4'
+sha512sums=('c7ccc9ef0fb44eabe94849cf553dd1787e39e00ca30c29da8a30610efe8872245aac2ece4e0e0934b3e6c3e706b4ea00cf0c6740f48420112cb4f82a33dee705'
             'ea027bc2d40c74507adf32380444207210a8c31cdba57f3f468d23d8e9c7376647cc8c713f188660f9b1dacd9041227aafd5a27c7889f47ea3985712b6b74b8b'
             'b6c09e869142b85f8f176a916527b08232eeb1c35bd2beab285ecbabfff95bb2b33545616e9ede7ddc5d348e3ef8ffb2835affd6446aa96236595ce8fa391570'
-            '5e4859d8b23e5ad54497201b38f6f13376fa77d01df56e992459a2eff7aec06488af8454b0e185331202cadbb8e8d2330eb51f298aad47824b4a56d6dbed23f2'
-            '30532f586c1ed9375fba3b7e4744b0e3597b6a345c866acce134136b075483906065b8ebd71e42cbc6e88ca60b6d57cb4bda08487f3223061881361a5927cc97'
-            '9ca981e7cb343a76ca4b79a307b29744b54f8b8e3d422582cf9ef31345a88aaee1f335fbc6d3fbe82f6c2e1aabff4abdad41950d329f62cc1c5dd3909ef4c9e1'
-            '7933e4530916706cd4dbd7e3ca1b8120ddf5b6d81205c7e7f5f9a52388cf1807817454304a521b625f38fe2da02b222d4628e66e1907a8e2c5705e170eeee0c3'
-            '9aa2e9662d65b67de8f32ddf1d4d0446d1212198e6fb49c9ffdba4072f019fdc42ebdfd761316443296edc79e5ec3a96d805363edb336b70c0bce4ecd4261eca'
-            '4bb29c286c1b7b3154f478f30384e8380df4d6cbe9bfb5300d7379db4a488f0af3bf55300f2ce9c4928eada52320f0bb54d0cd376668b986da38cfebf968e355')
+            '5e4859d8b23e5ad54497201b38f6f13376fa77d01df56e992459a2eff7aec06488af8454b0e185331202cadbb8e8d2330eb51f298aad47824b4a56d6dbed23f2')
 
 prepare() {
     LANG=C.UTF-8 bsdtar -xf ${_pkgname}-${pkgver}-full.tar.gz
-    cd $_pkgname-$pkgver-full
     find "${srcdir}"/ -type f -exec dos2unix {} \;
-    patch -p1 --binary < "$srcdir"/0001-fix-core_settings.h-use-system-window-decoration.patch
-    patch -p1 --binary < "$srcdir"/0002-fix-settings-use-system-fonts-by-default.patch
-    patch -p1 --binary < "$srcdir"/0003-Remove-the-confusing-Default-option-from-selectable.patch
-    patch -p1 --binary < "$srcdir"/0004-fix-lib_tl-add-missing-cstring-include.patch
-    patch -p1 --binary < "$srcdir"/0005-fix-lib_webview-add-missing-cstdint-include.patch
-    patch -p1 --binary < "$srcdir"/0006-Fix-some-ffmpeg-7.x-related-errors.patch
-    patch -p1 --binary < "$srcdir"/0007-Use-alternate-fix-for-ffmpeg-const-issue.patch
+    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0001-fix-core_settings.h-use-system-window-decoration.patch
+    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0002-fix-settings-use-system-fonts-by-default.patch
+    cd $_pkgname-$pkgver-full
     }
 
 build() {
