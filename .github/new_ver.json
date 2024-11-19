@@ -2,9 +2,9 @@
   "version": 2,
   "data": {
     "64gram-desktop": {
-      "version": "v1.1.48",
-      "gitref": "refs/tags/v1.1.48",
-      "url": "https://github.com/TDesktop-x64/tdesktop/releases/tag/v1.1.48"
+      "version": "v1.1.49",
+      "gitref": "refs/tags/v1.1.49",
+      "url": "https://github.com/TDesktop-x64/tdesktop/releases/tag/v1.1.49"
     },
     "cachyos-keyring": {
       "version": "20240331"
