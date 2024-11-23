@@ -30,8 +30,11 @@ jobs:
         working-directory: ./.github
         run: |
           nvchecker --file nvchecker.toml
+          # 精简输出内容
           jq '.data |= with_entries(.value |= {version: .version})' new_ver.json > temp.json
           mv temp.json new_ver.json
+          nvcmp --file nvchecker.toml | tee ${{ env.UPDATED_LOG }}
+          nvtake --file nvchecker.toml --all
 
       - name: 信任仓库
         run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
@@ -42,10 +45,16 @@ jobs:
           commit_message: "[CI]: 更新版本记录"
           branch: main
           commit_options: "--no-verify --signoff"
-          file_pattern: './.github/new_ver.json'
+          file_pattern: './.github/new_ver.json ./.github/old_ver.json'
           commit_user_name: YanamiChan[bot]
           commit_user_email: 182213109+YanamiChan[bot]@users.noreply.github.com
           commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
+
+      - name: 推送更新通知
+        run: |
+          curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
+            --data-urlencode "title=软件包更新" \
+            --data-urlencode "desp=${{ env.UPDATED_LOG }}"
 
   update-versions:
     needs: check-versions
