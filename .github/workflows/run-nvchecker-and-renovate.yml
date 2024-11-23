@@ -21,22 +21,25 @@ jobs:
       contents: write
     steps:
       - name: 安装依赖
-        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git
+        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git jq
 
       - name: 导入仓库
         uses: actions/checkout@v4
 
       - name: 运行 Nvchecker
         working-directory: ./.github
-        run: nvchecker --file nvchecker.toml
-      
+        run: |
+          nvchecker --file nvchecker.toml
+          jq '.data |= with_entries(.value |= {version: .version})' new_ver.json > temp.json
+          mv temp.json new_ver.json
+
       - name: 信任仓库
         run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: 保存版本文件
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "[CI]: 更新依赖版本"
+          commit_message: "[CI]: 更新版本记录"
           branch: main
           commit_options: "--no-verify --signoff"
           file_pattern: './.github/new_ver.json'
