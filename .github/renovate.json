@@ -72,12 +72,6 @@
       "schedule": [
         "on friday"
       ]
-    },
-    {
-      "description": "解决 rc 版本号",
-      "matchDatasources": "custom.nvchecker",
-      "matchDepNames": "dae",
-      "versioning": "semver-coerced"
     }
   ]
 }

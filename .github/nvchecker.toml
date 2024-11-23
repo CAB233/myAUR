@@ -16,8 +16,7 @@ use_latest_release = true
 [dae]
 source = "github"
 github = "daeuniverse/dae"
-include_prereleases = true
-use_max_tag = true
+use_latest_release = true
 
 [xray]
 source = "github"
