@@ -2,27 +2,19 @@
   "version": 2,
   "data": {
     "64gram-desktop": {
-      "version": "v1.1.49",
-      "gitref": "refs/tags/v1.1.49",
-      "url": "https://github.com/TDesktop-x64/tdesktop/releases/tag/v1.1.49"
+      "version": "v1.1.49"
     },
     "cachyos-keyring": {
       "version": "20240331"
     },
     "dae": {
-      "version": "v0.9.0rc1",
-      "gitref": "refs/tags/v0.9.0rc1",
-      "revision": "d3ab0b25e705399d7e610d6f09453623674e20d3",
-      "url": "https://github.com/daeuniverse/dae/releases/tag/v0.9.0rc1"
+      "version": "v0.9.0rc1"
     },
     "typora": {
       "version": "1.9.3"
     },
     "xray": {
-      "version": "v24.11.21",
-      "gitref": "refs/tags/v24.11.21",
-      "revision": "513f18bf531ef5f92464c2affefed0db4f28280b",
-      "url": "https://github.com/XTLS/Xray-core/releases/tag/v24.11.21"
+      "version": "v24.11.21"
     }
   }
 }
