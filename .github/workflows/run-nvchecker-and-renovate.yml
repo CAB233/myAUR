@@ -33,7 +33,7 @@ jobs:
           # 精简输出内容
           jq '.data |= with_entries(.value |= {version: .version})' new_ver.json > temp.json
           mv temp.json new_ver.json
-          nvcmp --file nvchecker.toml | tee ${{ env.UPDATED_LOG }}
+          nvcmp --file nvchecker.toml > result.tmp
           nvtake --file nvchecker.toml --all
 
       - name: 信任仓库
@@ -51,10 +51,14 @@ jobs:
           commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
 
       - name: 推送更新通知
+        working-directory: ./.github
         run: |
-          curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
+          RESULT=$(cat result.tmp) \
+          && [ ! -z $RESULT ] \
+          && curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
             --data-urlencode "title=软件包更新" \
-            --data-urlencode "desp=${{ env.UPDATED_LOG }}"
+            --data-urlencode "desp=$RESULT" \
+          || echo "No new versions" \
 
   update-versions:
     needs: check-versions
