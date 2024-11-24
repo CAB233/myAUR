@@ -26,10 +26,14 @@ jobs:
       - name: 导入仓库
         uses: actions/checkout@v4
 
+      - name: 配置环境
+        run: sed -i -e "s/__GITHUB_ACCESS_TOKEN__/${{ secrets.GITHUB_TOKEN }}/g" ./.github/keyfile.toml
+
       - name: 运行 Nvchecker
         working-directory: ./.github
         run: |
-          nvchecker --file nvchecker.toml
+          # keyfile 用于提升 GitHub API 请求限额
+          nvchecker --file nvchecker.toml --keyfile keyfile.toml
           # 精简输出内容
           jq '.data |= with_entries(.value |= {version: .version})' new_ver.json > temp.json
           mv temp.json new_ver.json
@@ -51,9 +55,8 @@ jobs:
           commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
 
       - name: 推送更新通知
-        working-directory: ./.github
         run: |
-          RESULT=$(cat result.tmp) \
+          RESULT=$(cat ./.github/result.tmp) \
           && [ ! -z $RESULT ] \
           && curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
             --data-urlencode "title=软件包更新" \

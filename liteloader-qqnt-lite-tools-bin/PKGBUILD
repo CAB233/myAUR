@@ -4,7 +4,7 @@
 
 pkgname='liteloader-qqnt-lite-tools-bin'
 _pkgname='LiteLoaderQQNT-lite_tools'
-pkgver=2.33.9 # renovate: datasource=github-tags depName=xiyuesaves/LiteLoaderQQNT-lite_tools
+pkgver=2.33.9 # renovate: datasource=custom.nvchecker depName=LiteLoaderQQNT-lite_tools
 pkgrel=1
 pkgdesc='轻量工具箱，轻量、优雅、高效'
 arch=('any')

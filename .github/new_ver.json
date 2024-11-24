@@ -4,14 +4,38 @@
     "64gram-desktop": {
       "version": "v1.1.49"
     },
+    "LiteLoaderQQNT": {
+      "version": "1.2.3"
+    },
+    "LiteLoaderQQNT-Pangu": {
+      "version": "1.0.3"
+    },
+    "LiteLoaderQQNT-Telegram-Theme": {
+      "version": "v4.5.2"
+    },
+    "LiteLoaderQQNT-lite_tools": {
+      "version": "v2.33.9"
+    },
+    "LiteLoaderQQNT-pURLfy": {
+      "version": "v0.3.8"
+    },
     "cachyos-keyring": {
       "version": "20240331"
+    },
+    "cinny-desktop": {
+      "version": "v4.2.3"
     },
     "dae": {
       "version": "v0.8.0"
     },
+    "maple-font": {
+      "version": "v6.4"
+    },
     "typora": {
       "version": "1.9.3"
+    },
+    "v2ray-rules-dat": {
+      "version": "202411232211"
     },
     "xray": {
       "version": "v24.11.21"

@@ -2,7 +2,7 @@
 
 pkgname=liteloader-qqnt-purlfy
 _pkgname=LiteLoaderQQNT-pURLfy
-pkgver=0.3.8 # renovate: datasource=github-tags depName=PRO-2684/LiteLoaderQQNT-pURLfy
+pkgver=0.3.8 # renovate: datasource=custom.nvchecker depName=LiteLoaderQQNT-pURLfy
 pkgrel=2
 pkgdesc="用于净化 QQNT 中的 URL 链接"
 arch=('any')

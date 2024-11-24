@@ -2,15 +2,20 @@
 newver = "new_ver.json"
 oldver = "old_ver.json"
 
-[typora]
-source = "cmd"
-cmd = '''
-curl -s https://www.typora.io/linux/Packages | grep Version | cut -f 2 -d ' ' | sort -V | cut -f 1 -d '-' | uniq | tail -n 1
-'''
-
 [64gram-desktop]
 source = "github"
 github = "TDesktop-x64/tdesktop"
+use_latest_release = true
+
+[cachyos-keyring]
+source = "cmd"
+cmd = '''
+curl -s https://raw.githubusercontent.com/CachyOS/CachyOS-PKGBUILDS/refs/heads/master/cachyos-keyring/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}'
+'''
+
+[cinny-desktop]
+source = "github"
+github = "cinnyapp/cinny-desktop"
 use_latest_release = true
 
 [dae]
@@ -18,14 +23,50 @@ source = "github"
 github = "daeuniverse/dae"
 use_latest_release = true
 
+[LiteLoaderQQNT]
+source = "github"
+github = "LiteLoaderQQNT/LiteLoaderQQNT"
+use_latest_release = true
+
+[LiteLoaderQQNT-lite_tools]
+source = "github"
+github = "xiyuesaves/LiteLoaderQQNT-lite_tools"
+use_latest_release = true
+
+[LiteLoaderQQNT-Pangu]
+source = "github"
+github = "MisaLiu/LiteLoaderQQNT-Pangu"
+use_latest_release = true
+
+[LiteLoaderQQNT-pURLfy]
+source = "github"
+github = "PRO-2684/LiteLoaderQQNT-pURLfy"
+use_latest_release = true
+
+[LiteLoaderQQNT-Telegram-Theme]
+source = "github"
+github = "festoney8/LiteLoaderQQNT-Telegram-Theme"
+use_latest_release = true
+
+[maple-font]
+source = "github"
+github = "subframe7536/maple-font"
+use_latest_release = true
+
+[typora]
+source = "cmd"
+cmd = '''
+curl -s https://www.typora.io/linux/Packages | grep Version | cut -f 2 -d ' ' | sort -V | cut -f 1 -d '-' | uniq | tail -n 1
+'''
+
+[v2ray-rules-dat]
+source = "github"
+github = "Loyalsoldier/v2ray-rules-dat"
+use_latest_tag = true
+
 [xray]
 source = "github"
 github = "XTLS/Xray-core"
 include_prereleases = true
 use_max_tag = true
 
-[cachyos-keyring]
-source = "cmd"
-cmd = '''
-curl -s https://raw.githubusercontent.com/CachyOS/CachyOS-PKGBUILDS/refs/heads/master/cachyos-keyring/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}'
-'''

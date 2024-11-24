@@ -2,7 +2,7 @@
 
 pkgname='liteloader-qqnt-pangu-bin'
 _pkgname='LiteLoaderQQNT-Pangu'
-pkgver=1.0.3 # renovate: datasource=github-tags depName=MisaLiu/LiteLoaderQQNT-Pangu
+pkgver=1.0.3 # renovate: datasource=custom.nvchecker depName=LiteLoaderQQNT-Pangu
 pkgrel=2
 pkgdesc="给你的 QQNT 注入盘古之力"
 arch=('any')
