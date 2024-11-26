@@ -58,7 +58,6 @@
     {
       "description": "自动合并自定义 PKGBUILD 更新",
       "matchDatasources": [
-        "github-tags",
         "custom.nvchecker"
       ],
       "automerge": true,
@@ -67,8 +66,8 @@
     },
     {
       "description": "自定义 v2ray-rules-dat 监控周期",
-      "matchDatasources": "github-tags",
-      "matchDepNames": "Loyalsoldier/v2ray-rules-dat",
+      "matchDatasources": "custom.nvchecker",
+      "matchDepNames": "v2ray-rules-dat",
       "schedule": [
         "on friday"
       ]
