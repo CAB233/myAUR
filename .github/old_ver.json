@@ -2,7 +2,7 @@
   "version": 2,
   "data": {
     "64gram-desktop": {
-      "version": "v1.1.50"
+      "version": "v1.1.51"
     },
     "LiteLoaderQQNT": {
       "version": "1.2.3"
@@ -35,7 +35,7 @@
       "version": "1.9.3"
     },
     "v2ray-rules-dat": {
-      "version": "202411262212"
+      "version": "202411272212"
     },
     "xray": {
       "version": "v24.11.21"
