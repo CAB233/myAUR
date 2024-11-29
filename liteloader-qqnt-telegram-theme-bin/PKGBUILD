@@ -2,7 +2,7 @@
 
 pkgname=liteloader-qqnt-telegram-theme-bin
 _pkgname=LiteLoaderQQNT-Telegram-Theme
-pkgver=4.5.2 # renovate: datasource=custom.nvchecker depName=LiteLoaderQQNT-Telegram-Theme
+pkgver=4.5.3 # renovate: datasource=custom.nvchecker depName=LiteLoaderQQNT-Telegram-Theme
 pkgrel=1
 pkgdesc="LiteLoaderQQNT 插件，高仿 Telegram 风格的 QQNT 主题"
 arch=('any')
