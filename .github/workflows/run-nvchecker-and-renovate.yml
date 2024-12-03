@@ -49,19 +49,31 @@ jobs:
             --data-urlencode "desp=$RESULT" \
           || echo "No new versions" \
 
-      - name: 信任仓库
-        run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
-
-      - name: 保存版本文件
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: 将版本记录文件上传至 artifact
+        uses: actions/upload-artifact@v4
         with:
-          commit_message: "[CI]: 更新版本记录"
-          branch: main
-          commit_options: "--no-verify --signoff"
-          file_pattern: './.github/new_ver.json ./.github/old_ver.json'
-          commit_user_name: YanamiChan[bot]
-          commit_user_email: 182213109+YanamiChan[bot]@users.noreply.github.com
-          commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
+          name: version-record-files
+          path: |
+            ./.github/new_ver.json
+            ./.github/old_ver.json
+          retention-days: 1
+
+      - name: 获取当前构建时间
+        run: echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+        id: date
+
+      - name: 上传至 GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifactErrorsFailBuild: true
+          removeArtifacts: true
+          allowUpdates: true
+          generateReleaseNotes: false
+          tag: nvchecker
+          name: ${{ steps.date.outputs.builddate }}
+          artifacts: "./version-record-files"
+          body: |
+            Version Record Files
 
   update-versions:
     needs: check-versions
