@@ -21,7 +21,7 @@ jobs:
       contents: write
     steps:
       - name: 安装依赖
-        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker git jq
+        run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker wget jq
 
       - name: 导入仓库
         uses: actions/checkout@v4
@@ -32,6 +32,7 @@ jobs:
       - name: 运行 Nvchecker
         working-directory: ./.github
         run: |
+          wget https://github.com/CAB233/myAUR/releases/download/nvchecker/old_ver.json || true
           # keyfile 用于提升 GitHub API 请求限额
           nvchecker --file nvchecker.toml --keyfile keyfile.toml
           # 精简输出内容
@@ -49,19 +50,23 @@ jobs:
             --data-urlencode "desp=$RESULT" \
           || echo "No new versions" \
 
-      - name: 信任仓库
-        run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+      - name: 获取当前构建时间
+        run: echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+        id: date
 
-      - name: 保存版本文件
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: 上传至 GitHub Release
+        uses: ncipollo/release-action@v1
         with:
-          commit_message: "[CI]: 更新版本记录"
-          branch: main
-          commit_options: "--no-verify --signoff"
-          file_pattern: './.github/new_ver.json ./.github/old_ver.json'
-          commit_user_name: YanamiChan[bot]
-          commit_user_email: 182213109+YanamiChan[bot]@users.noreply.github.com
-          commit_author: YanamiChan[bot] <182213109+YanamiChan[bot]@users.noreply.github.com>
+          artifactErrorsFailBuild: true
+          removeArtifacts: true
+          allowUpdates: true
+          generateReleaseNotes: false
+          tag: nvchecker
+          name: ${{ steps.date.outputs.builddate }}
+          artifacts: "./.github/new_ver.json, ./.github/old_ver.json"
+          prerelease: true
+          body: |
+            Version Record Files
 
   update-versions:
     needs: check-versions

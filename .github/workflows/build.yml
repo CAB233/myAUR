@@ -12,8 +12,6 @@ on:
       - ".github/workflows/*.yml"
       - ".github/renovate.json"
       - ".github/nvchecker.toml"
-      - ".github/new_ver.json"
-      - ".github/old_ver.json"
       - "Archived/**"
 
 jobs:

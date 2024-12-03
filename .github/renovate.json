@@ -35,7 +35,7 @@
   ],
   "customDatasources": {
     "nvchecker": {
-      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/CAB233/myAUR/main/.github/new_ver.json",
+      "defaultRegistryUrlTemplate": "https://github.com/CAB233/myAUR/releases/download/nvchecker/new_ver.json",
       "transformTemplates": [
         "{ \"releases\": [{ \"version\": data.'{{packageName}}'.version }] }"
       ]
