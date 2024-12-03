@@ -35,8 +35,8 @@ sha512sums=('c7ccc9ef0fb44eabe94849cf553dd1787e39e00ca30c29da8a30610efe8872245aa
 prepare() {
     LANG=C.UTF-8 bsdtar -xf ${_pkgname}-${pkgver}-full.tar.gz
     find "${srcdir}"/ -type f -exec dos2unix {} \;
-    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0001-fix-core_settings.h-use-system-window-decoration.patch
-    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0002-fix-settings-use-system-fonts-by-default.patch
+    #patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0001-fix-core_settings.h-use-system-window-decoration.patch
+    #patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0002-fix-settings-use-system-fonts-by-default.patch
     cd $_pkgname-$pkgver-full
     }
 
