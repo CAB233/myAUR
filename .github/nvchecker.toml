@@ -53,6 +53,11 @@ source = "github"
 github = "subframe7536/maple-font"
 use_latest_release = true
 
+[minegrub-theme]
+source = "github"
+github = "Lxtharia/minegrub-theme"
+use_latest_release = true
+
 [typora]
 source = "cmd"
 cmd = '''
