@@ -1,0 +1,30 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname="grub-theme-minegrub"
+_pkgname="minegrub-theme"
+pkgver=3.1.0 # renovate: datasource=custom.nvchecker depName=minegrub-theme
+pkgrel=1
+pkgdesc="A Grub Theme in the style of Minecraft"
+arch=('any')
+url="https://github.com/Lxtharia/minegrub-theme"
+license=('MIT')
+depends=('grub')
+makedepends=('git')
+optdepends=('fastfetch: Updating splash text, background and "x Packages Installed" text after every boot'
+            'python-pillow: Updating splash text, background and "x Packages Installed" text after every boot')
+source=("git+$url")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "$srcdir"/$_pkgname
+    git checkout v$pkgver
+}
+
+package() {
+    mkdir -p "$pkgdir"/usr/share/grub/themes/minegrub/{background_options,minegrub}
+	cp -r "$srcdir"/$_pkgname/background_options/* "$pkgdir"/usr/share/grub/themes/minegrub/background_options
+	cp -r "$srcdir"/$_pkgname/minegrub/* "$pkgdir"/usr/share/grub/themes/minegrub/minegrub
+    install -Dm755 "$srcdir"/$_pkgname/choose_background.sh -t "$pkgdir"/usr/share/grub/themes/minegrub
+    install -Dm644 "$srcdir"/$_pkgname/minegrub-update.service -t "$pkgdir"/usr/lib/systemd/system
+    install -Dm644 "$srcdir"/$_pkgname/LICENSE -t "$pkgdir"/usr/share/licenses/$_pkgname
+}
