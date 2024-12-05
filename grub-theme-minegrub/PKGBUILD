@@ -3,7 +3,7 @@
 pkgname="grub-theme-minegrub"
 _pkgname="minegrub-theme"
 pkgver=3.1.0 # renovate: datasource=custom.nvchecker depName=minegrub-theme
-pkgrel=1
+pkgrel=2
 pkgdesc="A Grub Theme in the style of Minecraft"
 arch=('any')
 url="https://github.com/Lxtharia/minegrub-theme"
@@ -11,13 +11,20 @@ license=('MIT')
 depends=('grub')
 makedepends=('git')
 optdepends=('fastfetch: Updating splash text, background and "x Packages Installed" text after every boot'
+            'python: Updating splash text, background and "x Packages Installed" text after every boot'
             'python-pillow: Updating splash text, background and "x Packages Installed" text after every boot')
-source=("git+$url")
-sha256sums=('SKIP')
+source=("git+$url"
+        "0001-fix-update-theme-script-path.patch"
+        "0002-fix-cachedir-path.patch")
+sha256sums=('SKIP'
+            '78029e69f46000848a247b4dc61f05f26ffc2ff5e13a40e3e0e92011f27a8f2e'
+            'bd2e560cd7e4361e1583a11991ce60a02f509aafb64e31d4225c88598babea0e')
 
 prepare() {
     cd "$srcdir"/$_pkgname
     git checkout v$pkgver
+    patch -b -l -d "$srcdir"/$_pkgname -Np1 -i "$srcdir"/0001-fix-update-theme-script-path.patch
+    patch -b -l -d "$srcdir"/$_pkgname -Np1 -i "$srcdir"/0002-fix-cachedir-path.patch
 }
 
 package() {
