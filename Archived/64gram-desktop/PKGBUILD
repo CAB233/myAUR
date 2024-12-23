@@ -23,25 +23,16 @@ makedepends=('cmake' 'git' 'ninja' 'python' 'range-v3' 'tl-expected' 'microsoft-
 optdepends=('webkit2gtk: embedded browser features'
             'xdg-desktop-portal: desktop integration')
 source=("https://github.com/TDesktop-x64/tdesktop/releases/download/v${pkgver}/${_pkgname}-${pkgver}-full.tar.gz"
-        "io.github.tdesktop_x64.TDesktop.desktop"
-        "0001-fix-core_settings.h-use-system-window-decoration.patch"
-        "0002-fix-settings-use-system-fonts-by-default.patch"
-        "0003-Remove-the-confusing-Default-option-from-selectable.patch")
+        "io.github.tdesktop_x64.TDesktop.desktop")
 noextract=("${_pkgname}-${pkgver}-full.tar.gz")
 sha512sums=('7ed95984cbf0c4b9ad3b9e582369e63c33c991f4cd777349050fc7221e23d1c8f17f0edea0290e298526bd6163c62f904a52288897ee018a393cc7ea80599f30'
-            'ea027bc2d40c74507adf32380444207210a8c31cdba57f3f468d23d8e9c7376647cc8c713f188660f9b1dacd9041227aafd5a27c7889f47ea3985712b6b74b8b'
-            'b6c09e869142b85f8f176a916527b08232eeb1c35bd2beab285ecbabfff95bb2b33545616e9ede7ddc5d348e3ef8ffb2835affd6446aa96236595ce8fa391570'
-            '5e4859d8b23e5ad54497201b38f6f13376fa77d01df56e992459a2eff7aec06488af8454b0e185331202cadbb8e8d2330eb51f298aad47824b4a56d6dbed23f2'
-            '30532f586c1ed9375fba3b7e4744b0e3597b6a345c866acce134136b075483906065b8ebd71e42cbc6e88ca60b6d57cb4bda08487f3223061881361a5927cc97')
+            'ea027bc2d40c74507adf32380444207210a8c31cdba57f3f468d23d8e9c7376647cc8c713f188660f9b1dacd9041227aafd5a27c7889f47ea3985712b6b74b8b')
 
 prepare() {
     LANG=C.UTF-8 bsdtar -xf ${_pkgname}-${pkgver}-full.tar.gz
     find "${srcdir}"/ -type f -exec dos2unix {} \;
-    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0001-fix-core_settings.h-use-system-window-decoration.patch
-    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0002-fix-settings-use-system-fonts-by-default.patch
-    patch -b -l -d $_pkgname-$pkgver-full -Np1 -i "$srcdir"/0003-Remove-the-confusing-Default-option-from-selectable.patch
     cd $_pkgname-$pkgver-full
-    }
+}
 
 build() {
     CXXFLAGS+=' -ffat-lto-objects'
