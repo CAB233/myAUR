@@ -69,9 +69,14 @@ source = "github"
 github = "Loyalsoldier/v2ray-rules-dat"
 use_latest_tag = true
 
+[v2rayn]
+source = "github"
+github = "2dust/v2rayN"
+include_prereleases = true
+use_max_tag = true
+
 [xray]
 source = "github"
 github = "XTLS/Xray-core"
 include_prereleases = true
 use_max_tag = true
-
