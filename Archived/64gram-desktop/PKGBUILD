@@ -4,7 +4,7 @@
 # Contributor: Daniil Kovalev <daniil@kovalev.website>
 pkgname=64gram-desktop
 _pkgname=64Gram
-pkgver=1.1.53 # renovate: datasource=custom.nvchecker depName=64gram-desktop
+pkgver=1.1.54 # renovate: datasource=custom.nvchecker depName=64gram-desktop
 pkgrel=1
 epoch=1
 pkgdesc='Unofficial desktop version of Telegram messaging app'
