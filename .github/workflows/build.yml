@@ -110,24 +110,7 @@ jobs:
             $(pacman --deptest \
               $(source ./PKGBUILD &&\
               echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
-          
-          # 验证文件完整性
-          sudo -u builder updpkgsums
 
-          # 开始构建
-          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
-
-      - name: 构建 ${{ matrix.package }} (重试)
-        id: build-package-again
-        if: steps.build-package.outcome == 'failure'
-        working-directory: ./${{ matrix.package }}
-        run: |
-          # 安装相关包依赖
-          sudo -u builder yay -Sy --noconfirm \
-            $(pacman --deptest \
-              $(source ./PKGBUILD &&\
-              echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
-          
           # 验证文件完整性
           sudo -u builder updpkgsums
 
@@ -135,7 +118,7 @@ jobs:
           sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sig
 
       - name: 构建失败通知
-        if: steps.build-package-again.outcome == 'failure'
+        if: steps.build-package.outcome == 'failure'
         run: |
           curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
             --data-urlencode "title=${{ matrix.package }} 构建失败"
