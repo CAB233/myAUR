@@ -43,6 +43,20 @@
   },
   "packageRules": [
     {
+      "description": "自动合并 github-actions 更新",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "automerge": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "ignoreTests": true
+    },
+    {
       "description": "自动合并 submodule 更新",
       "matchManagers": [
         "git-submodules"
