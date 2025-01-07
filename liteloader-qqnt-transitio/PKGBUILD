@@ -3,7 +3,7 @@
 pkgname=liteloader-qqnt-transitio
 _pkgname=transitio
 pkgver=1.5.6 # renovate: datasource=custom.nvchecker depName=transitio
-pkgrel=1
+pkgrel=2
 pkgdesc="Load custom UserStyles for QQNT"
 arch=('any')
 url="https://github.com/PRO-2684/transitio"
@@ -19,7 +19,6 @@ package() {
     mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
 
     # 移动文件到相应位置
-    rm -r "${srcdir}/node_modules"
     cp -r "${srcdir}/"* "${pkgdir}/opt/LiteLoaderQQNT/plugins/${_pkgname}"
     install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
 
