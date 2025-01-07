@@ -43,9 +43,9 @@ source = "github"
 github = "PRO-2684/LiteLoaderQQNT-pURLfy"
 use_latest_release = true
 
-[LiteLoaderQQNT-Telegram-Theme]
+[transitio]
 source = "github"
-github = "festoney8/LiteLoaderQQNT-Telegram-Theme"
+github = "PRO-2684/transitio"
 use_latest_release = true
 
 [maple-font]
