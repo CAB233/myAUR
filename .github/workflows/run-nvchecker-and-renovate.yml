@@ -43,7 +43,7 @@ jobs:
 
       - name: 推送更新通知
         run: |
-          RESULT=$(<./.github/result.tmp) \
+          RESULT=$(cat ./.github/result.tmp | sed 's/$/  /') \
           && [[ ! -z $RESULT ]] \
           && curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
             --data-urlencode "title=软件包更新" \
