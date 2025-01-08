@@ -43,12 +43,12 @@ jobs:
 
       - name: 推送更新通知
         run: |
-          RESULT=$(cat ./.github/result.tmp) \
+          RESULT=$(<./.github/result.tmp) \
           && [[ ! -z $RESULT ]] \
           && curl "https://${{ secrets.SERVERCHAN_UID }}.push.ft07.com/send/${{ secrets.SERVERCHAN_SENDKEY }}.send" \
             --data-urlencode "title=软件包更新" \
             --data-urlencode "desp=$RESULT" \
-          || echo "No new versions" \
+          || echo "没有发现更新" \
 
       - name: 获取当前构建时间
         run: echo "builddate=$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
