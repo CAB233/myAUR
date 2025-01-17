@@ -12,12 +12,11 @@ depends=('glibc' 'v2ray-geoip-ly' 'v2ray-geosite-ly')
 makedepends=('clang' 'go' 'git')
 provides=("dae")
 backup=("etc/dae/config.dae")
-source=("git+https://github.com/daeuniverse/dae.git")
+source=("git+https://github.com/daeuniverse/dae.git#tag=v$pkgver")
 sha256sums=('SKIP')
 
 prepare() {
 	cd "$srcdir"/$pkgname
-	git switch v$pkgver --detach
 	git submodule update --init --recursive
 }
 
