@@ -7,7 +7,7 @@
 
 _repo=Xray-core
 pkgname=xray
-pkgver=25.2.9 # renovate: datasource=custom.nvchecker depName=xray
+pkgver=25.1.30 # renovate: datasource=custom.nvchecker depName=xray
 pkgrel=1
 pkgdesc='The best v2ray-core, with XTLS support'
 arch=('x86_64')
@@ -16,33 +16,46 @@ license=('MPL-2.0')
 depends=('glibc' 'v2ray-geoip-ly' 'v2ray-geosite-ly')
 makedepends=('go')
 provides=('v2raya-core')
-source=("${url}/archive/v${pkgver}.tar.gz"
+source=("git+${url}#tag=v${pkgver}"
         "xray.sysusers"
         "xray.tmpfiles"
         "xray.service"
         "xray@.service")
-sha256sums=('c8e9bf9ca66a197eeaf24a67697fab9b11d889c79a229660cae45a8d6b115467'
+sha256sums=('5643726f8dcdfd7a26aeb3aa1fe3f288ba4a514a289e44c64746725f75ee6452'
             '801131bf2eb079750f17d3e703e414eab8494db0d512164cdef3cc68cef308b8'
             '2d301e9f2fae728da55f33a15b2c36e90cdb657deafb5d6ab7d74375ce9fdf38'
             '66a8a3280aa5b3ed41b9855ba3de3f884bd2113b4a965cf097fcb31c3a6066ed'
             '05d16acd6e00989ece245bf0df919accae858555c7165a50ce2b3db9c0c5a725')
 
+prepare() {
+    cd "${_repo}"
+    commit=$(git describe --always --dirty)
+}
+
 build() {
-    cd "${_repo}-${pkgver}"
-    export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external"
+    cd "${_repo}"
+    export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
     export CGO_LDFLAGS="${LDFLAGS}"
     export CGO_CFLAGS="${CFLAGS}"
     export CGO_CPPFLAGS="${CPPFLAGS}"
-    go build -o xray ./main
+    export CGO_CXXFLAGS="$CXXFLAGS"
+    go build \
+        -v \
+        -ldflags " \
+            -s -w \
+            -linkmode=external \
+            -X 'github.com/xtls/xray-core/core.build=$commit'" \
+        -o xray \
+        ./main
 }
 
 check() {
-    cd "${_repo}-${pkgver}"
+    cd "${_repo}"
     go test -p 1 -tags json -v -timeout 30m github.com/xtls/xray-core/core/...
 }
 
 package() {
-    cd "${_repo}-${pkgver}"
+    cd "${_repo}"
     install -d "${pkgdir}"/etc/xray/
     install -Dm 755 xray -t "${pkgdir}"/usr/bin/
     install -Dm 644 LICENSE -t "${pkgdir}"/usr/share/licenses/xray/
