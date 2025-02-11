@@ -170,4 +170,4 @@ jobs:
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: ${{ github.workspace }}
           destination-dir: archlinux/x86_64
-          keep-file-fresh: true
+          keep-file-fresh: false
