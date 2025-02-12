@@ -37,11 +37,9 @@ jobs:
     steps:
       - name: 安装依赖
         run: |
-          # 准备 REPO_FOLDER 变量
           # * https://github.com/actions/runner/issues/2058
           echo "REPO_FOLDER=$GITHUB_WORKSPACE/repo/x86_64" >> $GITHUB_ENV
-
-          # 添加基础依赖包
+          # 添加构建工具
           pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib curl
 
       - name: 导入 PKGBUILD
@@ -97,11 +95,15 @@ jobs:
         working-directory: ./${{ matrix.package }}
         continue-on-error: true
         run: |
+          # 安装依赖
+          sudo -u builder paru -Sy --noconfirm \
+            $(pacman --deptest \
+              $(source ./PKGBUILD &&\
+              echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
           # 验证文件完整性
           sudo -u builder updpkgsums
-
           # 开始构建
-          sudo -u builder PKGDEST=${REPO_FOLDER} paru --build --noconfirm --needed --sign ./
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sign
 
       - name: 构建失败通知
         if: steps.build-package.outcome == 'failure'

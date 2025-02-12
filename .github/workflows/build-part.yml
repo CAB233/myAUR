@@ -102,11 +102,15 @@ jobs:
         working-directory: ./${{ matrix.package }}
         continue-on-error: true
         run: |
+          # 安装依赖
+          sudo -u builder paru -Sy --noconfirm \
+            $(pacman --deptest \
+              $(source ./PKGBUILD &&\
+              echo ${depends[@]} ${checkdepends[@]} ${makedepends[@]}))
           # 验证文件完整性
           sudo -u builder updpkgsums
-
           # 开始构建
-          sudo -u builder PKGDEST=${REPO_FOLDER} paru --build --noconfirm --needed --sign ./
+          sudo -u builder PKGDEST=${REPO_FOLDER} makepkg -f --sign
 
       - name: 构建失败通知
         if: steps.build-package.outcome == 'failure'
