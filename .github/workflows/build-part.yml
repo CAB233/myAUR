@@ -31,7 +31,8 @@ jobs:
         id: generate-matrix
         run: |
           if [ -n "${{ github.event.inputs.directory_name }}" ]; then
-            dirs="${{ github.event.inputs.directory_name }}"
+            # 使用逗号分割成数组
+            dirs=$(echo "${{ github.event.inputs.directory_name }}" | tr ',' '\n' | xargs -I {} echo {} | sort -u)
           else
             files=$(git log -1 --name-only --pretty=format: | grep 'PKGBUILD$' | grep -v '^Archived/')
             dirs=$(echo "$files" | xargs -I {} dirname {} | sort -u)
