@@ -167,7 +167,7 @@ jobs:
           curl -O https://repo.zuoye.win/archlinux/x86_64/zuoye-aur.files.tar.gz || true
           for pkg in ./*.pkg.tar.zst; do
             PKGNAME=$(bsdtar -Oxf "$pkg" .PKGINFO | awk -F'= ' '/^pkgname/ {print $2}')
-            repo-remove $(basename $REPO_NAME).db.tar.gz "$PKGNAME"
+            repo-remove $(basename $REPO_NAME).db.tar.gz "$PKGNAME" || true
           done
 
       - name: 添加新软件包数据
