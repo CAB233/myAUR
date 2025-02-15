@@ -3,6 +3,11 @@ name: Packages CI(part)
 
 on:
   workflow_dispatch:
+    inputs:
+      directory_name:
+        description: '待构建包的目录'
+        required: false
+        type: string
   push:
     branches:
       - main
@@ -25,8 +30,12 @@ jobs:
       - name: 生成数组
         id: generate-matrix
         run: |
-          files=$(git log -1 --name-only --pretty=format: | grep 'PKGBUILD$' | grep -v '^Archived/')
-          dirs=$(echo "$files" | xargs -I {} dirname {} | sort -u)
+          if [ -n "${{ github.event.inputs.directory_name }}" ]; then
+            dirs="${{ github.event.inputs.directory_name }}"
+          else
+            files=$(git log -1 --name-only --pretty=format: | grep 'PKGBUILD$' | grep -v '^Archived/')
+            dirs=$(echo "$files" | xargs -I {} dirname {} | sort -u)
+          fi
           MATRIX_JSON=$(echo "$dirs" | jq -Rnc '[inputs] | {package: .}')
           echo ${MATRIX_JSON}
           echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
