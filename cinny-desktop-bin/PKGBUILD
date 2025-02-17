@@ -3,7 +3,7 @@
 # Contributor: ajbura, hbarsaiyan
 
 pkgname='cinny-desktop-bin'
-pkgver=4.3.1 # renovate: datasource=custom.nvchecker depName=cinny-desktop
+pkgver=4.3.2 # renovate: datasource=custom.nvchecker depName=cinny-desktop
 pkgrel=1
 pkgdesc='Matrix client focusing primarily on a simple, elegant and secure interface (binary release)'
 arch=('x86_64')
