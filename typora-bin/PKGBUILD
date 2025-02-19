@@ -3,8 +3,8 @@
 
 pkgname=typora-bin
 _pkgname=typora
-pkgver=1.9.3 # renovate: datasource=custom.nvchecker depName=typora
-pkgrel=3
+pkgver=1.10.7 # renovate: datasource=custom.nvchecker depName=typora
+pkgrel=1
 pkgdesc="A minimal markdown editor and reader, but with some hooks"
 arch=('x86_64')
 license=('custom:"Copyright (c) 2015 Abner Lee All Rights Reserved."' 'MIT')
@@ -21,7 +21,7 @@ source=("https://download.typora.io/linux/typora_${pkgver}_amd64.deb"
 		"typora.sh"
 		"git+https://github.com/DiamondHunters/NodeInject.git"
 		"git+https://github.com/DiamondHunters/NodeInject_Hook_example.git")
-sha512sums=('da7714d8a2ef228d1df13bf2a6862f3be3fad51238657e8ee48350380267ecfed29b391e0c66653e3b4322e3dada02d2bea6e1041f5230988358645ea0cf4b28'
+sha512sums=('917d1c52edb0833e9eb5336587dcb49fcdeff2aac9fb720c1be6d9893ca47c3fcd59d0e4f390e058a216032ac7168c27fce4fa621c35453b4805b594be2506de'
             '2dce26e1c041ffe56f83cc53d785716f9835189d984120f117e7d427f6167442afc4be891ea31131758856e2df9f8c946c7d409886b1d4f4f3b1a80b278092de'
             'SKIP'
             'SKIP')
@@ -42,8 +42,7 @@ build() {
 
 package() {
 	install -d "${pkgdir}/opt/$_pkgname"
-
-	bsdtar -xf data.tar.xz -C "${pkgdir}/"
+	bsdtar -xf data.tar.zst -C "${pkgdir}/"
 
 	# remove lintian overrides
 	rm -rf "${pkgdir}/usr/share/lintian/"
