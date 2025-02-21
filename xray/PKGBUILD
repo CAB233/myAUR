@@ -38,13 +38,13 @@ build() {
     export CGO_LDFLAGS="${LDFLAGS}"
     export CGO_CFLAGS="${CFLAGS}"
     export CGO_CPPFLAGS="${CPPFLAGS}"
-    export CGO_CXXFLAGS="$CXXFLAGS"
+    export CGO_CXXFLAGS="${CXXFLAGS}"
     go build \
         -v \
         -ldflags " \
             -s -w \
             -linkmode=external \
-            -X 'github.com/xtls/xray-core/core.build=$commit'" \
+            -X 'github.com/xtls/xray-core/core.build=${commit}'" \
         -o xray \
         ./main
 }
