@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "timezone": "Asia/Shanghai",
-  "commitMessagePrefix": "[CI]: ",
+  "commitMessagePrefix": "ci: ",
   "onboarding": false,
   "requireConfig": "ignored",
   "username": "YanamiChan[bot]",
