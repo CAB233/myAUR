@@ -4,7 +4,7 @@ name: Packages CI(part)
 on:
   workflow_dispatch:
     inputs:
-      directory_name:
+      directory:
         description: '待构建包的目录'
         required: false
         type: string
@@ -33,14 +33,18 @@ jobs:
       - name: 生成数组
         id: generate-matrix
         run: |
-          if [ -n "${{ github.event.inputs.directory_name }}" ]; then
-            # 使用逗号分割成数组
-            dirs=$(echo "${{ github.event.inputs.directory_name }}" | tr ',' '\n' | xargs -I {} echo {} | sort -u)
+          if [ -n "${{ github.event.inputs.directory }}" ]; then
+            # 使用逗号分割数组
+            dir=$(echo "${{ github.event.inputs.directory }}" | tr ',' '\n' | sort -u)
           else
-            files=$(git log -1 --name-only --pretty=format: | grep 'PKGBUILD$' | grep -v '^Archived/')
-            dirs=$(echo "$files" | xargs -I {} dirname {} | sort -u)
+            file=$(git log -1 --name-only --pretty=format: | grep -v '^Archived/')
+            if echo "$file" | grep -q '/'; then
+              dir=$(echo "$file" | xargs -I {} dirname {} | sort -u)
+            else
+              dir="$file"
+            fi
           fi
-          MATRIX_JSON=$(echo "$dirs" | jq -Rnc '[inputs] | {package: .}')
+          MATRIX_JSON=$(echo "$dir" | jq -Rnc '[inputs] | {package: .}')
           echo ${MATRIX_JSON}
           echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
 
