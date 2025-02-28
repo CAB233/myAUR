@@ -4,7 +4,7 @@ name: Packages CI(full)
 on:
   workflow_dispatch:
   schedule:
-    - cron: "19 11 * * *" # 默认 UTC+0
+    - cron: "4 20 */2 * *" # 默认 UTC+0
 
 jobs:
   metadata:
