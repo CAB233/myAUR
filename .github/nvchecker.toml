@@ -80,3 +80,9 @@ source = "github"
 github = "XTLS/Xray-core"
 include_prereleases = true
 use_max_tag = true
+
+[qbittorrent-enhanced]
+source = "github"
+github = "c0re100/qBittorrent-Enhanced-Edition"
+use_latest_release = true
+prefix = "release-"
