@@ -38,7 +38,7 @@ jobs:
             dir=$(echo "${{ github.event.inputs.directory }}" | tr ',' '\n' | sort -u)
           else
             file=$(git log -1 --name-only --pretty=format: | grep 'PKGBUILD$' | grep -v '^Archived/')
-            if [ -n "$file"]; then
+            if [ -n "$file" ]; then
               dir=$(echo "$file" | xargs -I {} dirname {} | sort -u)
             else
               dir=$(git log -1 --name-only --pretty=format:)
