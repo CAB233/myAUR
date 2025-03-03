@@ -9,17 +9,17 @@ license=('custom')
 depends=("linuxqq" "slirp4netns" "socat")
 conflicts=("linuxqq-nt-bwrap")
 source=("linuxqq.sh"
-		"linuxqq-patch.hook"
-		"linuxqq-unpatch.hook")
+        "linuxqq-patch.hook"
+        "linuxqq-unpatch.hook")
 
 sha256sums=('22a569d28ce5da5806aeba7ac87afa2fe15bd735723e8d6f306f9007ad700032'
             'c0e5ae332f0b728461c3cc6936a50a85f619f08c848633eb24a9b3b90055a23e'
             '3087df774107a98732ad8ef1c0a7d4475266ab8785fe9e9bbac03f5b251847ea')
 
 package() {
-	install -Dm755 "${srcdir}/linuxqq.sh" "${pkgdir}/usr/bin/linuxqq-patch"
+    install -Dm755 "${srcdir}/linuxqq.sh" "${pkgdir}/usr/bin/linuxqq-patch"
 
-	# 配置 pacman hook
-	install -Dm644 "${srcdir}/linuxqq-patch.hook" "${pkgdir}/usr/share/libalpm/hooks/linuxqq-patch.hook"
-	install -Dm644 "${srcdir}/linuxqq-unpatch.hook" "${pkgdir}/usr/share/libalpm/hooks/linuxqq-unpatch.hook"
+    # 配置 pacman hook
+    install -Dm644 "${srcdir}/linuxqq-patch.hook" "${pkgdir}/usr/share/libalpm/hooks/linuxqq-patch.hook"
+    install -Dm644 "${srcdir}/linuxqq-unpatch.hook" "${pkgdir}/usr/share/libalpm/hooks/linuxqq-unpatch.hook"
 }

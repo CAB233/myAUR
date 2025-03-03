@@ -32,5 +32,5 @@ sha256sums=('d13841933518aea0ec9e30f31400d624f01202ad3d4807764c2fb4513e1a7d94')
 install="${pkgname}.install"
 
 package() {
-	tar -xzf 'data.tar.gz' -C "${pkgdir}"
+    tar -xzf 'data.tar.gz' -C "${pkgdir}"
 }

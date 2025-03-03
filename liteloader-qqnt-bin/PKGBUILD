@@ -13,9 +13,9 @@ depends=("linuxqq")
 optdepends=("linuxqq-patch: 固定 MAC 地址、适配 LiteLoaderQQNT 框架")
 conflicts=("liteloader-qqnt-git" "linuxqq-nt-bwrap")
 source=("${url}/releases/download/${pkgver}/${_pkgname}.zip"
-		"liteloader-qqnt-patch.hook"
-		"liteloader-qqnt-unpatch.hook"
-		"patch.sh")
+        "liteloader-qqnt-patch.hook"
+        "liteloader-qqnt-unpatch.hook"
+        "patch.sh")
 
 sha256sums=('a325c592ec53b7469c44f7eea5d27a0984e14d54ccd8d596446d0938bc91d561'
             '4971654acccffe1219539501fcafeae9dd7342db292933e8ce322b6e757f8de6'
@@ -23,24 +23,24 @@ sha256sums=('a325c592ec53b7469c44f7eea5d27a0984e14d54ccd8d596446d0938bc91d561'
             '0ba02246ca3fb9483c961e9f26b5e7616acd77c20881987e9bee61001aa8e98e')
 
 prepare() {
-	echo "require(String.raw\`/opt/LiteLoaderQQNT\`)" > "${srcdir}/LiteLoaderQQNT.js"
+    echo "require(String.raw\`/opt/LiteLoaderQQNT\`)" > "${srcdir}/LiteLoaderQQNT.js"
 }
 
 package() {
-	# 准备文件夹
-	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/src"
-	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/patching"
-	mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins"
+    # 准备文件夹
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/src"
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/patching"
+    mkdir -p "${pkgdir}/opt/LiteLoaderQQNT/plugins"
 
-	# 安装 LiteLoaderQQNT
-	cp -rf "${srcdir}/src/"* "${pkgdir}/opt/LiteLoaderQQNT/src"
-	install -Dm644 "${srcdir}/package.json" "${pkgdir}/opt/LiteLoaderQQNT/package.json"
-	install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/$_pkgname/LICENSE"
-	# 安装 LiteLoaderQQNT 运行必要的 patch
-	install -Dm644 "${srcdir}/LiteLoaderQQNT.js" "${pkgdir}/opt/QQ/resources/app/app_launcher/LiteLoaderQQNT.js"
-	install -Dm755 "${srcdir}/patch.sh" "${pkgdir}/opt/LiteLoaderQQNT/patching/patch.sh"
+    # 安装 LiteLoaderQQNT
+    cp -rf "${srcdir}/src/"* "${pkgdir}/opt/LiteLoaderQQNT/src"
+    install -Dm644 "${srcdir}/package.json" "${pkgdir}/opt/LiteLoaderQQNT/package.json"
+    install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/$_pkgname/LICENSE"
+    # 安装 LiteLoaderQQNT 运行必要的 patch
+    install -Dm644 "${srcdir}/LiteLoaderQQNT.js" "${pkgdir}/opt/QQ/resources/app/app_launcher/LiteLoaderQQNT.js"
+    install -Dm755 "${srcdir}/patch.sh" "${pkgdir}/opt/LiteLoaderQQNT/patching/patch.sh"
 
-	# 配置 pacman hook
-	install -Dm644 "${srcdir}/liteloader-qqnt-patch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-patch.hook"
-	install -Dm644 "${srcdir}/liteloader-qqnt-unpatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-unpatch.hook" 
+    # 配置 pacman hook
+    install -Dm644 "${srcdir}/liteloader-qqnt-patch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-patch.hook"
+    install -Dm644 "${srcdir}/liteloader-qqnt-unpatch.hook" "${pkgdir}/etc/pacman.d/hooks/liteloader-qqnt-unpatch.hook"
 }

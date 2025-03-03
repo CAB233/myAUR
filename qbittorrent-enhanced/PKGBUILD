@@ -15,15 +15,15 @@ source=("qbittorrent-enhanced-${pkgver}.tar.gz::https://github.com/c0re100/qBitt
 sha256sums=('19f7f8e7cffbc81bee3da3cdfe72b3171d61a4f48078a5a12a9c0df12b0726e5')
 
 build() {
-	cd qBittorrent-Enhanced-Edition-release-${pkgver}
-	cmake -B build -S . \
+    cd qBittorrent-Enhanced-Edition-release-${pkgver}
+    cmake -B build -S . \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=Release
-	cmake --build build
-}
+    cmake --build build
+    }
 
-package() {
-	cd qBittorrent-Enhanced-Edition-release-${pkgver}
-	DESTDIR="${pkgdir}" cmake --install build
-	install -Dm644 COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/COPYING
+    package() {
+    cd qBittorrent-Enhanced-Edition-release-${pkgver}
+    DESTDIR="${pkgdir}" cmake --install build
+    install -Dm644 COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/COPYING
 }
