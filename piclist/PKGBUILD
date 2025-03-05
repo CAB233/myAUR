@@ -1,0 +1,77 @@
+# Maintainer: zxp19821005 <zxp19821005 at 163 dot com>
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=piclist
+_pkgname=PicList
+pkgver=2.9.8 # renovate: datasource=custom.nvchecker depName=piclist
+pkgrel=1
+_electronversion=27
+pkgdesc="An image upload and manage tool, base on PicGo"
+arch=('x86_64')
+url="https://github.com/Kuingsmile/PicList"
+license=('MIT')
+depends=(
+    "electron${_electronversion}"
+    'nodejs'
+)
+makedepends=(
+    'nvm'
+    'yarn'
+    'fuse2'
+)
+source=(
+    "git+${url}#tag=v${pkgver}"
+    "piclist.sh"
+)
+sha256sums=('177a9f5e069a06295416ef0c0a1baaab8ea13471df1a2530dbcba3077d7e9c60'
+            '291f50480f5a61bc9c68db7d44cd0412071128706baa868a9cb854f8779a1980')
+
+_ensure_local_nvm() {
+    which nvm >/dev/null 2>&1 && nvm deactivate && nvm unload
+    export NVM_DIR="${srcdir}/.nvm"
+    source /usr/share/nvm/init-nvm.sh || [[ $? != 1 ]]
+}
+
+prepare() {
+    _ensure_local_nvm
+    nvm install 18.20.7
+    sed -i -e "
+        s/@electronversion@/${_electronversion}/g
+        s/@appname@/${pkgname}/g
+        s/@runname@/app.asar/g
+        s/@cfgdirname@/${pkgname}/g
+        s/@options@//g
+    " "${srcdir}/${pkgname}.sh"
+}
+
+build() {
+    cd "${srcdir}/${_pkgname}/"
+    yarn
+    yarn run build
+}
+
+package() {
+    # Extract file
+    cp -v "${srcdir}/${_pkgname}/dist_electron/${_pkgname}-${pkgver}.AppImage" \
+        "${srcdir}/${pkgname}-${pkgver}.AppImage"
+    chmod +x "${srcdir}/${pkgname}-${pkgver}.AppImage"
+    "${srcdir}/${pkgname}-${pkgver}.AppImage" --appimage-extract > /dev/null
+    sed -i "s/AppRun --no-sandbox/${pkgname}/g" "${srcdir}/squashfs-root/${pkgname}.desktop"
+    find "${srcdir}/squashfs-root/resources" -type d -perm 700 -exec chmod 755 {} \;
+
+    # Install package
+    install -Dvm755 "${srcdir}/${pkgname}.sh" \
+        "${pkgdir}/usr/bin/${pkgname}"
+    install -Dvm644 "${srcdir}/squashfs-root/resources/app.asar" \
+        -t "${pkgdir}/usr/lib/${pkgname}/"
+    cp -Pr --no-preserve=ownership "${srcdir}/squashfs-root/resources/app.asar.unpacked" \
+        "${pkgdir}/usr/lib/${pkgname}/"
+    install -Dvm644 "${srcdir}/squashfs-root/usr/lib/"*.* \
+        -t "${pkgdir}/usr/lib/${pkgname}/lib/"
+    install -Dvm644 "${srcdir}/squashfs-root/usr/share/icons/hicolor/256x256/apps/${pkgname}.png" \
+        -t "${pkgdir}/usr/share/pixmaps/"
+    install -Dvm644 "${srcdir}/squashfs-root/${pkgname}.desktop" \
+        -t "${pkgdir}/usr/share/applications/"
+    install -Dvm644 "${srcdir}/${_pkgname}/LICENSE" \
+        -t "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
