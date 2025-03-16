@@ -83,7 +83,7 @@
       "matchDatasources": "custom.nvchecker",
       "matchDepNames": "v2ray-rules-dat",
       "schedule": [
-        "on friday"
+        "* 3 * * 5"
       ]
     }
   ]
