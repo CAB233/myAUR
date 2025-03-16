@@ -2,8 +2,8 @@
 
 pkgname=liteloader-qqnt-transitio
 _pkgname=transitio
-pkgver=1.5.6 # renovate: datasource=custom.nvchecker depName=transitio
-pkgrel=2
+pkgver=1.5.7 # renovate: datasource=custom.nvchecker depName=transitio
+pkgrel=1
 pkgdesc="Load custom UserStyles for QQNT"
 arch=('any')
 url="https://github.com/PRO-2684/transitio"
