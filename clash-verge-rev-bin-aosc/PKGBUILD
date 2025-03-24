@@ -1,0 +1,38 @@
+pkgname=clash-verge-rev-bin-aosc
+_pkgname=clash-verge-rev
+pkgver=2.1.2
+pkgrel=1
+pkgdesc="A GUI configuration manager for the Clash rule-based proxy"
+provides=('clash-verge-rev')
+arch=('x86_64')
+url="https://github.com/clash-verge-rev/clash-verge-rev"
+license=('GPL3')
+depends=(
+    'webkit2gtk-4.1'
+    'gtk3'
+    'libayatana-appindicator'
+)
+makedepends=('dpkg')
+conflicts=(
+    "$_pkgname"
+    "$_pkgname-alpha"
+    "$_pkgname-alpha-bin"
+    "$_pkgname-bin"
+    "$_pkgname-git"
+    "clash-verge"
+    "clash-verge-bin"
+    "clash-verge-rev"
+)
+options=(!strip)
+noextract=('clash-verge-service.deb')
+source=(
+    "${_pkgname}-${pkgver}.deb::https://repo.aosc.io/debs/pool/stable/main/c/clash-verge-rev_${pkgver}-0_amd64.deb"
+    "clash-verge-service.deb::https://repo.aosc.io/debs/pool/stable/main/c/clash-verge-service_0+git20250227-0_amd64.deb"
+)
+sha256sums=('23c43cc15c06421a95427d3de7fbfb8fa589cda39eab33fb2a9ebe48a6dfda04'
+            'b461e615f0590ca9b12302f0b256e482441e132ec93090c8c640db70ee236554')
+
+package() {
+    tar xpf data.tar.zst -C "${pkgdir}"
+    dpkg -X clash-verge-service.deb "${pkgdir}"
+}
