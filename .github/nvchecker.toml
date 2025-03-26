@@ -2,11 +2,6 @@
 newver = "new_ver.json"
 oldver = "old_ver.json"
 
-[64gram-desktop]
-source = "github"
-github = "TDesktop-x64/tdesktop"
-use_latest_release = true
-
 [cachyos-keyring]
 source = "cmd"
 cmd = '''
