@@ -171,8 +171,8 @@ jobs:
         env:
           REPO_NAME: zuoye-aur
         run: |
-          curl -O https://repo.zuoye.win/archlinux/x86_64/zuoye-aur.db.tar.gz || true
-          curl -O https://repo.zuoye.win/archlinux/x86_64/zuoye-aur.files.tar.gz || true
+          curl -LSso zuoye-aur.db.tar.gz "https://repo.zuoye.win/archlinux/x86_64/zuoye-aur.db.tar.gz" || true
+          curl -LSso zuoye-aur.files.tar.gz "https://repo.zuoye.win/archlinux/x86_64/zuoye-aur.files.tar.gz" || true
           for pkg in ./*.pkg.tar.zst; do
             PKGNAME=$(bsdtar -Oxf "$pkg" .PKGINFO | awk -F'= ' '/^pkgname/ {print $2}')
             repo-remove $(basename $REPO_NAME).db.tar.gz "$PKGNAME" || true
