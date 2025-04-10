@@ -11,12 +11,9 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - ".github/**"
-      - "Archived/**"
-      - ".gitignore"
-      - ".gitmodules"
-      - "README.md"
+    paths:
+      - "**/PKGBUILD"
+      - "!Archived/**"
 
 jobs:
   metadata:
