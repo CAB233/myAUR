@@ -6,24 +6,33 @@ pkgname=(
     "clash-verge-service"
 )
 pkgdesc="A GUI configuration manager for the Clash rule-based proxy"
-pkgver=2.1.2
-pkgrel=2
+pkgver=2.2.2
+pkgrel=1
 arch=('x86_64')
 url="https://github.com/AOSC-Tracking/clash-verge-rev"
 license=('GPL3')
 makedepends=('dpkg')
 options=(!strip)
-noextract=('clash-verge-service.deb')
+noextract=(
+    "clash-verge-service-${pkgver}-${pkgrel}.deb"
+    "mihomo-rules-dat-${pkgver}-${pkgrel}.deb"
+)
 source=(
-    "clash-verge-rev-${pkgver}.deb::https://repo.aosc.io/debs/pool/stable/main/c/clash-verge-rev_${pkgver}-0_amd64.deb"
-    "clash-verge-service.deb::https://repo.aosc.io/debs/pool/stable/main/c/clash-verge-service_0+git20250227-0_amd64.deb"
+    "clash-verge-rev-${pkgver}-${pkgrel}.deb::https://repo.aosc.io/debs/pool/stable/main/c/clash-verge-rev_2.2.2-1_amd64.deb"
+    "clash-verge-service-${pkgver}-${pkgrel}.deb::https://repo.aosc.io/debs/pool/stable/main/c/clash-verge-service_0+git20250324-0_amd64.deb"
+    "mihomo-rules-dat-${pkgver}-${pkgrel}.deb::https://repo.aosc.io/debs/pool/stable/main/m/mihomo-rules-dat_20250403-0_noarch.deb"
 )
 sha256sums=('23c43cc15c06421a95427d3de7fbfb8fa589cda39eab33fb2a9ebe48a6dfda04'
             'b461e615f0590ca9b12302f0b256e482441e132ec93090c8c640db70ee236554')
 
 package_clash-verge-service() {
     pkgdesc="System daemon for Clash Verge"
-    dpkg -X clash-verge-service.deb "${pkgdir}"
+    dpkg -X "clash-verge-service-${pkgver}-${pkgrel}.deb" "${pkgdir}"
+}
+
+package_mihomo-rules-dat() {
+    pkgdesc="GeoIP, GeoSite, and country rule data for Mihomo"
+    dpkg -X "mihomo-rules-dat-${pkgver}-${pkgrel}.deb" "${pkgdir}"
 }
 
 package_clash-verge-rev-bin-aosc() {
@@ -33,6 +42,7 @@ package_clash-verge-rev-bin-aosc() {
         'gtk3'
         'libayatana-appindicator'
         'mihomo'
+        'mihomo-rules-dat'
         'clash-verge-service'
     )
     conflicts=(
