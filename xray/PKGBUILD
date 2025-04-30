@@ -7,8 +7,8 @@
 
 _repo=Xray-core
 pkgname=xray
-pkgver=25.3.31 # renovate: datasource=custom.nvchecker depName=xray
-pkgrel=2
+pkgver=25.4.30 # renovate: datasource=custom.nvchecker depName=xray
+pkgrel=1
 pkgdesc='The best v2ray-core, with XTLS support'
 arch=('x86_64')
 url='https://github.com/XTLS/Xray-core'
