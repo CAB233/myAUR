@@ -20,9 +20,9 @@ build() {
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=Release
     cmake --build build
-    }
+}
 
-    package() {
+package() {
     cd qBittorrent-Enhanced-Edition-release-${pkgver}
     DESTDIR="${pkgdir}" cmake --install build
     install -Dm644 COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/COPYING
