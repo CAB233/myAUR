@@ -3,8 +3,8 @@
 
 _pkgname=klassy
 pkgname="${_pkgname}"
-pkgver=6.2.breeze6.2.1 # renovate: datasource=custom.nvchecker depName=klassy
-pkgrel=5
+pkgver=6.3.breeze6.3.5 # renovate: datasource=custom.nvchecker depName=klassy
+pkgrel=1
 pkgdesc='Highly customizable binary Window Decoration, Application Style and Global Theme plugin for recent versions of the KDE Plasma desktop.'
 arch=("x86_64")
 url="https://github.com/paulmcauley/klassy"
@@ -34,19 +34,13 @@ depends=(
 )
 makedepends=(
   extra-cmake-modules
-  #kcmutils5
-  #frameworkintegration5
-  #kconfigwidgets5
-  #kiconthemes5
   kirigami2
-  #kwindowsystem5
 )
 source=("${_pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz")
 sha256sums=('658c183b182fd86316e3a055f51d31e77a77a283be641908b6d4469a5ce9d035')
 
 prepare() {
   cd "${_pkgname}-${pkgver}"
-  #patch -Np1 < "${srcdir}/project-version.patch"
 }
 
 build() {
