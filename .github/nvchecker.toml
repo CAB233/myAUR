@@ -86,3 +86,8 @@ prefix = "release-"
 source = "github"
 github = "Kuingsmile/PicList"
 use_max_tag = true
+
+[klassy]
+source = "github"
+github = "paulmcauley/klassy"
+use_latest_tag = true
