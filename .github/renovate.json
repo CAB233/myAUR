@@ -85,6 +85,12 @@
       "schedule": [
         "on friday"
       ]
+    },
+    {
+      "description": "qbittorrent-enhanced versioning",
+      "matchDatasources": "custom.nvchecker",
+      "matchDepNames": "qbittorrent-enhanced",
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)?$"
     }
   ]
 }
