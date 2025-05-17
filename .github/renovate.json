@@ -16,15 +16,15 @@
   "git-submodules": {
     "enabled": true,
     "versioning": "git",
-    "fileMatch": [
-      "(^|/)\\.gitmodules$"
+    "managerFilePatterns": [
+      "/(^|/)\\.gitmodules$/"
     ]
   },
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "(^|/)PKGBUILD$"
+      "managerFilePatterns": [
+        "/(^|/)PKGBUILD$/"
       ],
       "matchStrings": [
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)\\npkgrel=(?<pkgrel>.*)"
