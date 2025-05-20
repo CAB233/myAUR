@@ -8,11 +8,6 @@ cmd = '''
 curl -s https://raw.githubusercontent.com/CachyOS/CachyOS-PKGBUILDS/refs/heads/master/cachyos-keyring/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}'
 '''
 
-[cinny-desktop]
-source = "github"
-github = "cinnyapp/cinny-desktop"
-use_latest_release = true
-
 [dae]
 source = "github"
 github = "daeuniverse/dae"
