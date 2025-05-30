@@ -2,8 +2,8 @@
 # Maintainer: Integral <integral at member dot fsf dot org>
 
 pkgname=dae
-pkgver=0.9.0 # renovate: datasource=custom.nvchecker depName=dae
-pkgrel=2
+pkgver=1.0.0 # renovate: datasource=custom.nvchecker depName=dae
+pkgrel=1
 pkgdesc="A Linux lightweight and high-performance transparent proxy solution based on eBPF."
 arch=('x86_64')
 url="https://github.com/daeuniverse/dae"
