@@ -2,7 +2,7 @@
 
 pkgbase=nerd-fonts
 pkgname="ttf-maple-sc-nerd"
-pkgver=7.2 # renovate: datasource=custom.nvchecker depName=maple-font
+pkgver=7.3 # renovate: datasource=custom.nvchecker depName=maple-font
 pkgrel=1
 pkgdesc="Open source monospace & nerd font with round corner and ligatures"
 arch=('any')
