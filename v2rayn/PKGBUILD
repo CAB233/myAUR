@@ -2,8 +2,8 @@
 
 pkgname=v2rayn
 _pkgname=v2rayN
-pkgver=7.12.5 # renovate: datasource=custom.nvchecker depName=v2rayn
-pkgrel=2
+pkgver=7.12.6 # renovate: datasource=custom.nvchecker depName=v2rayn
+pkgrel=1
 pkgdesc="A GUI client supporting Xray core, sing-box core and other cores"
 arch=('x86_64')
 url="https://github.com/2dust/v2rayN"
