@@ -50,9 +50,9 @@
       "automerge": true,
       "automergeType": "branch",
       "matchUpdateTypes": [
+        "major",
         "minor",
-        "patch",
-        "digest"
+        "patch"
       ],
       "ignoreTests": true
     },
