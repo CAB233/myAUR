@@ -1,6 +1,6 @@
 # Maintainer: Leo <i@setuid0.dev>
 pkgname=qbittorrent-enhanced
-pkgver=5.1.0.11 # renovate: datasource=custom.nvchecker depName=qbittorrent-enhanced
+pkgver=5.1.1.10 # renovate: datasource=custom.nvchecker depName=qbittorrent-enhanced
 pkgrel=1
 pkgdesc="A bittorrent client powered by C++, Qt and libtorrent (Enhanced Edition)"
 arch=('x86_64')
