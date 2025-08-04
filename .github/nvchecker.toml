@@ -86,3 +86,8 @@ use_max_tag = true
 source = "github"
 github = "paulmcauley/klassy"
 use_latest_tag = true
+
+[sing-box]
+source = "github"
+github = "SagerNet/sing-box"
+use_latest_release = true
