@@ -91,3 +91,8 @@ use_latest_tag = true
 source = "github"
 github = "SagerNet/sing-box"
 use_latest_release = true
+
+[openlist]
+source = "github"
+github = "OpenListTeam/OpenList"
+use_latest_release = true
