@@ -5,14 +5,14 @@
 pkgname='liteloader-qqnt-lite-tools-bin'
 _pkgname='LiteLoaderQQNT-lite_tools'
 pkgver=2.33.12 # renovate: datasource=custom.nvchecker depName=LiteLoaderQQNT-lite_tools
-pkgrel=1
+pkgrel=2
 pkgdesc='轻量工具箱，轻量、优雅、高效'
 arch=('any')
 url="https://github.com/xiyuesaves/LiteLoaderQQNT-lite_tools"
 license=('GPL3')
 depends=('liteloader-qqnt-bin')
 
-source=("${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/lite_tools_v4.zip"
+source=("${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/LiteLoaderQQNT-lite_tools.zip"
         "LICENSE")
 sha256sums=('e669a563ef692227d75cf56416d22ef1991aecc6a6bc20ae1c1d5cfc8371ae0d'
             '8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b')
