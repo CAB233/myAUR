@@ -22,7 +22,7 @@ jobs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
       - name: 导入 PKGBUILD
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
@@ -61,7 +61,7 @@ jobs:
           pacman -Syyuu --noconfirm --needed --ignore filesystem git pacman-contrib curl
 
       - name: 导入 PKGBUILD
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true
 

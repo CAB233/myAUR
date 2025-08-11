@@ -24,7 +24,7 @@ jobs:
         run: pacman -Syyuu --noconfirm --needed --ignore filesystem nvchecker wget jq
 
       - name: 导入仓库
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 配置环境
         run: sed -i -e "s/__GITHUB_ACCESS_TOKEN__/${{ secrets.GITHUB_TOKEN }}/g" ./.github/keyfile.toml
@@ -80,7 +80,7 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
 
       - name: 导入仓库
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 运行 Renovate
         uses: renovatebot/github-action@v43.0.7
