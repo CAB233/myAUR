@@ -77,11 +77,6 @@ github = "c0re100/qBittorrent-Enhanced-Edition"
 use_latest_tag = true
 prefix = "release-"
 
-[piclist]
-source = "github"
-github = "Kuingsmile/PicList"
-use_max_tag = true
-
 [klassy]
 source = "github"
 github = "paulmcauley/klassy"
