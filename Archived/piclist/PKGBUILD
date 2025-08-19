@@ -3,7 +3,7 @@
 
 pkgname=piclist
 _pkgname=PicList
-pkgver=3.0.0 # renovate: datasource=custom.nvchecker depName=piclist
+pkgver=3.0.1 # renovate: datasource=custom.nvchecker depName=piclist
 pkgrel=1
 _electronversion=27
 pkgdesc="An image upload and manage tool, base on PicGo"
