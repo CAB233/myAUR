@@ -91,3 +91,8 @@ use_latest_release = true
 source = "github"
 github = "OpenListTeam/OpenList"
 use_latest_release = true
+
+[jsonnet]
+source = "github"
+github = "google/jsonnet"
+use_latest_release = true
