@@ -2,7 +2,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=('v2ray-geoip-ly' 'v2ray-geosite-ly')
-pkgver=202508142214 # renovate: datasource=custom.nvchecker depName=v2ray-rules-dat
+pkgver=202508202212 # renovate: datasource=custom.nvchecker depName=v2ray-rules-dat
 pkgrel=1
 pkgdesc="V2Ray 路由规则文件加强版，可代替 V2Ray 官方 geoip.dat 和 geosite.dat"
 arch=('any')
