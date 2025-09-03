@@ -96,3 +96,9 @@ use_latest_release = true
 source = "github"
 github = "google/jsonnet"
 use_latest_release = true
+
+[sing-box-reF1nd]
+source = "github"
+github = "reF1nd/sing-box"
+use_max_tag = true
+include_regex = '^v\d+\.\d+\.\d+-reF1nd$'

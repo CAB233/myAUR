@@ -2,22 +2,23 @@
 
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
-pkgver=1.12.0rc.4 # renovate: datasource=custom.nvchecker depName=sing-box-reF1nd
+pkgver=1.12.4 # renovate: datasource=custom.nvchecker depName=sing-box-reF1nd
 pkgrel=1
-_pkgver=$(echo "${pkgver}" | sed 's/\([0-9]\+\.[0-9]\+.[0-9]\+\)\(alpha\|beta\|rc\)/\1-\2/')
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
 license=('custom:GPL-3.0-or-later WITH name use or association addition')
 depends=(
     'glibc'
+    'dbus'
+    'polkit'
 )
 makedepends=(
     'git'
     'go'
 )
-source=("git+https://github.com/reF1nd/sing-box.git#tag=v${_pkgver}-reF1nd")
-sha256sums=('dcbe5c6d96c9a284c597d9821d1745aed49998cd2dcfd65582503e426caca780')
+source=("git+https://github.com/reF1nd/sing-box.git#tag=v${pkgver}-reF1nd")
+sha256sums=('2bbbab61dc2a196c8d3547649e7c9ed5382bdb97bf16871b76f37f46c252e4a0')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
 backup=("etc/${_pkgname}/config.json")
@@ -25,22 +26,21 @@ backup=("etc/${_pkgname}/config.json")
 build() {
     local tags=(
         'with_quic'
-        'with_grpc'
+        #'with_grpc'
         'with_dhcp'
-        'with_wireguard'
+        #'with_wireguard'
         'with_utls'
-        'with_acme'
+        #'with_acme'
         'with_clash_api'
-        'with_v2ray_api'
+        #'with_v2ray_api'
         'with_gvisor'
-        'with_embedded_tor'
-        'with_tailscale'
+        #'with_tailscale'
     )
     local ldflags=(
         "-s"
         "-w"
         "-linkmode=external"
-        "-X github.com/sagernet/sing-box/constant.Version=${_pkgver}"
+        "-X github.com/sagernet/sing-box/constant.Version=${pkgver}"
     )
 
     export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
@@ -72,9 +72,9 @@ package() {
     install -Dm644 "release/config/${_pkgname}@.service" -t "${pkgdir}/usr/lib/systemd/system"
     install -Dm644 "release/config/${_pkgname}.sysusers" "${pkgdir}/usr/lib/sysusers.d/${_pkgname}.conf"
     install -Dm644 "release/config/${_pkgname}.rules" -t "${pkgdir}/usr/share/polkit-1/rules.d"
-    install -Dm644 "release/config/${_pkgname}-split-dns.xml" "${pkgdir}/usr/share/dbus-1/system.d/${_pkgname}-split-dns.conf"
+    install -Dm644 "release/config/${_pkgname}-split-dns.xml" "${pkgdir}/usr/share/dbus-1/system.d/${_pkgname}.conf"
 
-    install -Dm644 completions/bash "${pkgdir}/usr/share/bash-completion/completions/${_pkgname}.bash"
+    install -Dm644 completions/bash "${pkgdir}/usr/share/bash-completion/completions/${_pkgname}"
     install -Dm644 completions/fish "${pkgdir}/usr/share/fish/vendor_completions.d/${_pkgname}.fish"
     install -Dm644 completions/zsh "${pkgdir}/usr/share/zsh/site-functions/_${_pkgname}"
 }
