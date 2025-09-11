@@ -3,7 +3,7 @@
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
 pkgver=1.12.4 # renovate: datasource=custom.nvchecker depName=sing-box-reF1nd
-pkgrel=2
+pkgrel=3
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
@@ -56,11 +56,6 @@ build() {
         -tags "${tags[*]}" \
         -ldflags "${ldflags[*]}" \
         ./cmd/sing-box
-
-    install -d completions
-    go run ./cmd/sing-box completion bash > completions/bash
-    go run ./cmd/sing-box completion fish > completions/fish
-    go run ./cmd/sing-box completion zsh > completions/zsh
 }
 
 package() {
@@ -74,7 +69,10 @@ package() {
     install -Dm644 "release/config/${_pkgname}.rules" -t "${pkgdir}/usr/share/polkit-1/rules.d"
     install -Dm644 "release/config/${_pkgname}-split-dns.xml" "${pkgdir}/usr/share/dbus-1/system.d/${_pkgname}.conf"
 
-    install -Dm644 completions/bash "${pkgdir}/usr/share/bash-completion/completions/${_pkgname}"
-    install -Dm644 completions/fish "${pkgdir}/usr/share/fish/vendor_completions.d/${_pkgname}.fish"
-    install -Dm644 completions/zsh "${pkgdir}/usr/share/zsh/site-functions/_${_pkgname}"
+    mkdir -pv "${pkgdir}/usr/share/bash-completion/completions"
+    "${pkgdir}/usr/bin/${_pkgname}" completion bash > "${pkgdir}/usr/share/bash-completion/completions/${_pkgname}"
+    mkdir -pv "${pkgdir}/usr/share/zsh/site-functions"
+    "${pkgdir}/usr/bin/${_pkgname}" completion zsh > "${pkgdir}/usr/share/zsh/site-functions/_${_pkgname}"
+    mkdir -pv "${pkgdir}/usr/share/fish/vendor_completions.d"
+    "${pkgdir}/usr/bin/${_pkgname}" completion fish > "${pkgdir}/usr/share/fish/vendor_completions.d/${_pkgname}.fish"
 }
