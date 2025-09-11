@@ -3,7 +3,7 @@
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
 pkgver=1.12.4 # renovate: datasource=custom.nvchecker depName=sing-box-reF1nd
-pkgrel=1
+pkgrel=2
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
@@ -40,7 +40,7 @@ build() {
         "-s"
         "-w"
         "-linkmode=external"
-        "-X github.com/sagernet/sing-box/constant.Version=${pkgver}"
+        "-X 'github.com/sagernet/sing-box/constant.Version=${pkgver}-reF1nd'"
     )
 
     export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
