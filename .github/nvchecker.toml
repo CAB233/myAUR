@@ -100,4 +100,4 @@ use_latest_release = true
 source = "github"
 github = "reF1nd/sing-box"
 use_max_tag = true
-include_regex = '^v\d+\.\d+\.\d+-reF1nd$'
+include_regex = '^v\d+\.\d+\.\d'
