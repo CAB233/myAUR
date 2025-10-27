@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=sing-box
-pkgver=1.12.11 # renovate: datasource=custom.nvchecker depName=sing-box
+pkgver=1.12.12 # renovate: datasource=custom.nvchecker depName=sing-box
 pkgrel=1
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
