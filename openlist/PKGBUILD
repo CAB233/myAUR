@@ -2,7 +2,7 @@
 
 pkgname=openlist
 _pkgname=OpenList
-pkgver=4.1.5 # renovate: datasource=custom.nvchecker depName=openlist
+pkgver=4.1.6 # renovate: datasource=custom.nvchecker depName=openlist
 pkgrel=1
 pkgdesc='A new AList Fork to Anti Trust Crisis'
 arch=('x86_64')
