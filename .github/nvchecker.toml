@@ -13,11 +13,6 @@ source = "github"
 github = "daeuniverse/dae"
 use_latest_release = true
 
-[LiteLoaderQQNT]
-source = "github"
-github = "LiteLoaderQQNT/LiteLoaderQQNT"
-use_latest_release = true
-
 [LiteLoaderQQNT-lite_tools]
 source = "github"
 github = "xiyuesaves/LiteLoaderQQNT-lite_tools"
