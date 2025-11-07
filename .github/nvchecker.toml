@@ -13,11 +13,6 @@ source = "github"
 github = "daeuniverse/dae"
 use_latest_release = true
 
-[transitio]
-source = "github"
-github = "PRO-2684/transitio"
-use_latest_release = true
-
 [maple-font]
 source = "github"
 github = "subframe7536/maple-font"
