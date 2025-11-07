@@ -2,7 +2,7 @@
 
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
-pkgver=1.12.9 # renovate: datasource=custom.nvchecker depName=sing-box-reF1nd
+pkgver=1.12.12 # renovate: datasource=custom.nvchecker depName=sing-box-reF1nd
 pkgrel=1
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
