@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: 导入 PKGBUILD
         uses: actions/checkout@v5
-        with:
-          submodules: true
 
       - name: 生成数组
         id: generate-matrix
