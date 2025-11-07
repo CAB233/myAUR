@@ -13,7 +13,6 @@ on:
       - main
     paths:
       - "**/PKGBUILD"
-      - "!Archived/**"
 
 jobs:
   metadata:
