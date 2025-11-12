@@ -1,0 +1,32 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=jsonnet
+pkgver=0.21.0
+pkgrel=1
+pkgdesc="The data templating language"
+arch=('x86_64')
+url="https://github.com/google/jsonnet"
+license=('Apache-2.0')
+depends=('glibc')
+makedepends=('cmake' 'gtest' 'nlohmann-json')
+source=("jsonnet-${pkgver}.tar.gz::https://github.com/google/jsonnet/releases/download/v${pkgver}/jsonnet-v${pkgver}.tar.gz")
+sha256sums=('f3b0bb65445568382ed7a5a985d1c950dad69415949bd7ee24938c5872da8685')
+
+build() {
+    cd jsonnet-v${pkgver}
+    cmake -B build -S . \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DUSE_SYSTEM_GTEST=ON \
+        -DUSE_SYSTEM_JSON=ON \
+        -DBUILD_SHARED_BINARIES=ON \
+        -DBUILD_STATIC_LIBS=OFF
+    cmake --build build
+}
+
+package() {
+    cd jsonnet-v${pkgver}
+    DESTDIR="${pkgdir}" cmake --install build
+    install -Dm644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

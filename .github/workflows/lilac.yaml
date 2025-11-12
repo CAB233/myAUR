@@ -1,0 +1,258 @@
+name: lilac
+on:
+  workflow_dispatch:
+    inputs:
+      lilac_args:
+        default: ""
+        description: "手动构建的包 (空格分割)"
+        type: string
+  schedule:
+    - cron: "4 20 */2 * *"
+# TODO: Set your Actions secrets and variables
+# Secrets:
+# - SSH_KEY: SSH private key for git push
+# - GPG_KEY: GPG private key for signing packages
+# - RCLONE_CONFIG: rclone configuration for remote storage
+# Variables:
+# - REPO_NAME: Name of the Arch Linux repository
+# - GIT_AUTHOR_NAME: Author name for git commits
+# - GIT_AUTHOR_EMAIL: Author email for git commits
+# - RCLONE_REMOTE: Remote storage name in rclone config, e.g., 'remote:' or 'remote:mybucket/'
+env:
+  GITREPO: ${{ github.repositoryUrl }}
+  REPO_NAME: ${{ vars.REPO_NAME }}
+  GIT_AUTHOR_NAME: ${{ vars.GIT_AUTHOR_NAME }}
+  GIT_AUTHOR_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
+  RCLONE_REMOTE: ${{ vars.RCLONE_REMOTE }}
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  lilac:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      packages: read
+      contents: write
+      attestations: write
+    steps:
+      - name: 准备文件结构
+        run: |
+          # git repository contains PKGBUILDs
+          mkdir -pv lilac/gitrepo
+
+          # local temporary directory to store built packages
+          mkdir -pv lilac/repo
+
+          # remote directory:
+          # - lilac: .lilac persist files
+          # - x86_64: packages and pacman database
+          mkdir -pv lilac/remote
+
+          # config files
+          # - ssh_key: SSH private key
+          # - gpg_key: GPG private key
+          # - rclone.conf: rclone config
+          # - lilac.toml: lilac config
+          mkdir -pv lilac/config
+
+      - name: 拉取仓库
+        uses: actions/checkout@v5
+        with:
+          path: lilac/gitrepo
+          fetch-depth: 0
+
+      - name: 设置配置文件
+        run: |
+          umask 077
+          echo "${{ secrets.SSH_KEY }}" > lilac/config/ssh_key
+          echo "${{ secrets.GPG_KEY }}" > lilac/config/gpg_key
+          echo '${{ secrets.RCLONE_CONFIG }}' > lilac/config/rclone.conf
+          echo "[keys]" >> lilac/config/nvchecker_keyfile.toml
+          echo 'github = "${{ secrets.GITHUB_TOKEN }}"' >> lilac/config/nvchecker_keyfile.toml
+          cp -a lilac/gitrepo/lilac.toml lilac/config/lilac.toml
+
+          sed -i "s|<REPO_NAME>|${{ env.REPO_NAME }}|g" lilac/config/lilac.toml
+          sed -i "s|<GITHUB_TOKEN>|${{ secrets.GITHUB_TOKEN }}|g" lilac/config/lilac.toml
+          sed -i "s|<GITHUB_TOKEN>|${{ secrets.GITHUB_TOKEN }}|g" lilac/config/nvchecker_keyfile.toml
+
+      - name: 为 DOCKER_IMAGE 转换小写 github.repository
+        id: lowercase
+        run: echo "DOCKER_IMAGE=ghcr.io/${GITHUB_REPOSITORY@L}" >> ${GITHUB_OUTPUT}
+
+      - name: 登陆 GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 配置 Docker 环境
+        run: |
+          # https://ubuntu.com/blog/ubuntu-23-10-restricted-unprivileged-user-namespaces
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+          # https://docs.docker.com/reference/cli/dockerd/#configure-cgroup-driver
+          docker info
+          docker pull ${{ steps.lowercase.outputs.DOCKER_IMAGE }}
+
+      - name: 启动 Docker 容器
+        run: |
+          docker run --rm -d \
+            --name lilac \
+            --privileged \
+            --cap-add SYS_ADMIN \
+            --security-opt seccomp=unconfined \
+            --cgroup-parent=docker.slice \
+            --cgroupns private \
+            --tmpfs /tmp \
+            --tmpfs /run \
+            --tmpfs /run/lock \
+            -v $(pwd)/lilac:/home/lilac/lilac \
+            ${{ steps.lowercase.outputs.DOCKER_IMAGE }}
+
+      - name: 等待 systemd 就绪并启用 linger
+        run: |
+          timeout=30
+          while ! docker exec lilac busctl --system list >/dev/null 2>&1; do
+            echo "Waiting for systemd to be ready..."
+            sleep 1
+            timeout=$((timeout - 1))
+            if [ $timeout -le 0 ]; then
+              echo "systemd 等待超时"
+              exit 1
+            fi
+          done
+          echo "systemd 已就绪"
+          docker exec lilac loginctl enable-linger lilac
+
+      - name: 等待 cgroup.subtree_control 就绪
+        run: |
+          echo "等待 'memory' 出现在 /sys/fs/cgroup/user.slice/cgroup.subtree_control ..."
+          timeout=30
+          while ! docker exec lilac test -f /sys/fs/cgroup/user.slice/cgroup.subtree_control || \
+                ! docker exec lilac cat /sys/fs/cgroup/user.slice/cgroup.subtree_control | grep -q 'memory'; do
+            if docker exec lilac test -f /sys/fs/cgroup/user.slice/cgroup.subtree_control; then
+              output=$(docker exec lilac cat /sys/fs/cgroup/user.slice/cgroup.subtree_control)
+              echo "当前 subtree_control: '$output'"
+              echo "没有找到 'memory', 一秒后重试 ..."
+            else
+              echo "没有找到 subtree_control, 一秒后重试 ..."
+            fi
+            sleep 1
+            timeout=$((timeout - 1))
+            if [ $timeout -le 0 ]; then
+              echo "等待 'memory' 超时"
+              exit 1
+            fi
+          done
+          echo "'memory' 已就绪"
+
+      - name: 输出 cgroup 配置
+        run: |
+          echo "宿主 cgroup 配置："
+          findmnt -R /sys/fs/cgroup/
+          echo "cat /sys/fs/cgroup/user.slice/cgroup.subtree_control"
+          cat /sys/fs/cgroup/user.slice/cgroup.subtree_control
+          echo ""
+          echo "容器 cgroup 配置："
+          docker exec lilac findmnt -R /sys/fs/cgroup/
+          echo "cat /sys/fs/cgroup/user.slice/cgroup.subtree_control"
+          docker exec lilac cat /sys/fs/cgroup/user.slice/cgroup.subtree_control
+          echo "cat /proc/self/cgroup"
+          docker exec lilac cat /proc/self/cgroup
+
+      - name: 初始系统环境
+        run: |
+          docker exec lilac /init.sh
+
+      - name: 设置用户
+        run: |
+          docker exec lilac sudo -iu lilac \
+            git config --global user.name "${{ env.GIT_AUTHOR_NAME }}"
+          docker exec lilac sudo -iu lilac \
+            git config --global user.email "${{ env.GIT_AUTHOR_EMAIL }}"
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/gpg --batch --import lilac/config/gpg_key
+
+      - name: 挂载远程存储
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone mount --daemon --allow-other ${{ env.RCLONE_REMOTE }} lilac/remote
+
+      - name: 下载 lilac 持久性文件
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone sync -v --exclude-from /rclone-exclude.txt ${{ env.RCLONE_REMOTE }}/lilac .lilac
+
+      - name: 运行 lilac
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/lilac ${{ inputs.lilac_args }}
+
+      - name: 输出 lilac 日志
+        run: |
+          echo "Summary log:"
+          docker exec lilac cat /home/lilac/.lilac/build.log
+          echo ""
+          echo "Detailed log:"
+          docker exec lilac /group-log.sh
+
+      - name: 输出构建日志到 Summary
+        run: |
+          echo "## Build log" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          docker exec lilac cat /home/lilac/.lilac/build.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: 上传 lilac 持久性文件
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone sync -v --exclude-from /rclone-exclude.txt .lilac ${{ env.RCLONE_REMOTE }}/lilac
+
+      - name: 统计已构建的包数量
+        id: count
+        run: |
+          echo "pkgs_count=$(find lilac/repo -type f -name *.pkg.tar.zst | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: 证明构建产物
+        if: ${{ steps.count.outputs.pkgs_count != 0 }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "lilac/repo/*.pkg.tar.zst"
+
+      - name: 下载 pacman 数据库
+        if: ${{ steps.count.outputs.pkgs_count != 0 }}
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone copy -v --copy-links ${{ env.RCLONE_REMOTE }}/repo/x86_64/${{ env.REPO_NAME }}.db lilac/repo || true
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone copy -v --copy-links ${{ env.RCLONE_REMOTE }}/repo/x86_64/${{ env.REPO_NAME }}.db.tar.gz lilac/repo || true
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone copy -v --copy-links ${{ env.RCLONE_REMOTE }}/repo/x86_64/${{ env.REPO_NAME }}.files lilac/repo || true
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone copy -v --copy-links ${{ env.RCLONE_REMOTE }}/repo/x86_64/${{ env.REPO_NAME }}.files.tar.gz lilac/repo || true
+
+      - name: 向数据库添加包信息
+        if: ${{ steps.count.outputs.pkgs_count != 0 }}
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/repo-add lilac/repo/${{ env.REPO_NAME }}.db.tar.gz lilac/repo/*.pkg.tar.zst
+          rm -f lilac/repo/${{ env.REPO_NAME }}.db.tar.gz.old
+          rm -f lilac/repo/${{ env.REPO_NAME }}.files.tar.gz.old
+
+      - name: 上传产物和数据库
+        if: ${{ steps.count.outputs.pkgs_count != 0 }}
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone copy -v --copy-links lilac/repo/ ${{ env.RCLONE_REMOTE }}/repo/x86_64
+
+      - name: 清理构建环境
+        run: |
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/fusermount3 -u lilac/remote
+          docker exec lilac sudo -iu lilac \
+            /usr/bin/rclone mount --daemon --allow-other ${{ env.RCLONE_REMOTE }} lilac/remote
+          docker exec lilac sudo -iu lilac \
+            /repocleaner.py

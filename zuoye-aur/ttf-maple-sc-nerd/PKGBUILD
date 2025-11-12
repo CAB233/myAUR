@@ -1,0 +1,18 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgbase=nerd-fonts
+pkgname="ttf-maple-sc-nerd"
+pkgver=7.8
+pkgrel=1
+pkgdesc="Open source monospace & nerd font with round corner and ligatures"
+arch=('any')
+url="https://github.com/subframe7536/maple-font"
+license=("OFL-1.1")
+makedepends=('unzip')
+source=("MapleMono-NF-CN-unhinted-${pkgver}.zip::${url}/releases/download/v${pkgver}/MapleMono-NF-CN-unhinted.zip")
+sha256sums=('c531c2f499480c42c6c085acabff19554c332a3c03d9af8471e32c422f23f23a')
+
+package() {
+    install -Dm644 "${srcdir}/"*.ttf -t "${pkgdir}/usr/share/fonts/TTF/"
+    install -Dm644 "${srcdir}/LICENSE.txt" -t "${pkgdir}/usr/share/licenses/$pkgname/"
+}
