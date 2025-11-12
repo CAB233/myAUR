@@ -2,7 +2,7 @@
 
 pkgname=sing-box
 pkgver=1.12.12 # renovate: datasource=custom.nvchecker depName=sing-box
-pkgrel=1
+pkgrel=2
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
@@ -27,7 +27,7 @@ build() {
         'with_quic'
         #'with_grpc'
         'with_dhcp'
-        #'with_wireguard'
+        'with_wireguard'
         'with_utls'
         #'with_acme'
         'with_clash_api'
