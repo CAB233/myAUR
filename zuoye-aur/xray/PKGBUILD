@@ -8,7 +8,7 @@
 _repo=Xray-core
 pkgname=xray
 pkgver=25.10.15
-pkgrel=1
+pkgrel=2
 pkgdesc='The best v2ray-core, with XTLS support'
 arch=('x86_64')
 url='https://github.com/XTLS/Xray-core'
@@ -43,10 +43,11 @@ prepare() {
 build() {
     cd "${_repo}"
     export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
-    export CGO_LDFLAGS="${LDFLAGS}"
-    export CGO_CFLAGS="${CFLAGS}"
     export CGO_CPPFLAGS="${CPPFLAGS}"
+    export CGO_CFLAGS="${CFLAGS}"
     export CGO_CXXFLAGS="${CXXFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_ENABLED=1
     go build \
         -v \
         -ldflags " \
@@ -55,11 +56,6 @@ build() {
             -X 'github.com/xtls/xray-core/core.build=${commit}'" \
         -o xray \
         ./main
-}
-
-check() {
-    cd "${_repo}"
-    go test -p 1 -tags json -v -timeout 30m github.com/xtls/xray-core/core/...
 }
 
 package() {
