@@ -11,11 +11,10 @@ source=(
     "better"
     "btrfs-snapshot.hook"
 )
-
-sha256sums=('9272bc69eaeeac9b6c281960530470c55cf6248e1ebe226076531f556ede4919'
+sha256sums=('00352c4cea0b1f3b77c8c51c0e1ce4b2a8e911174aa21a9e78ebd894a7f08410'
             'ce13c251630a96cbf072fc93313d01dc231c80f5fff33e2881adf73f2d5ece64')
 
 package() {
-    install -Dm755 "${srcdir}/better" "${pkgdir}/usr/bin/better"
-    install -Dm644 "${srcdir}/btrfs-snapshot.hook" "${pkgdir}/usr/share/libalpm/hooks/btrfs-snapshot.hook"
+    install -Dvm755 "${srcdir}/better" "${pkgdir}/usr/bin/better"
+    install -Dvm644 "${srcdir}/btrfs-snapshot.hook" "${pkgdir}/usr/share/libalpm/hooks/btrfs-snapshot.hook"
 }
