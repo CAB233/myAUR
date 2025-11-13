@@ -10,7 +10,6 @@ on:
     - cron: "4 20 */2 * *"
 # TODO: Set your Actions secrets and variables
 # Secrets:
-# - SSH_KEY: SSH private key for git push
 # - GPG_KEY: GPG private key for signing packages
 # - RCLONE_CONFIG: rclone configuration for remote storage
 # Variables:
@@ -19,7 +18,6 @@ on:
 # - GIT_AUTHOR_EMAIL: Author email for git commits
 # - RCLONE_REMOTE: Remote storage name in rclone config, e.g., 'remote:' or 'remote:mybucket/'
 env:
-  GITREPO: ${{ github.repositoryUrl }}
   REPO_NAME: ${{ vars.REPO_NAME }}
   GIT_AUTHOR_NAME: ${{ vars.GIT_AUTHOR_NAME }}
   GIT_AUTHOR_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
@@ -50,7 +48,6 @@ jobs:
           mkdir -pv lilac/remote
 
           # config files
-          # - ssh_key: SSH private key
           # - gpg_key: GPG private key
           # - rclone.conf: rclone config
           # - lilac.toml: lilac config
@@ -65,7 +62,6 @@ jobs:
       - name: 设置配置文件
         run: |
           umask 077
-          echo "${{ secrets.SSH_KEY }}" > lilac/config/ssh_key
           echo "${{ secrets.GPG_KEY }}" > lilac/config/gpg_key
           echo '${{ secrets.RCLONE_CONFIG }}' > lilac/config/rclone.conf
           echo "[keys]" >> lilac/config/nvchecker_keyfile.toml
@@ -112,7 +108,7 @@ jobs:
             -v $(pwd)/lilac:/home/lilac/lilac \
             ${{ steps.lowercase.outputs.DOCKER_IMAGE }}
 
-      - name: 等待 systemd 就绪并启用 linger
+      - name: 等待 Systemd 就绪
         run: |
           timeout=30
           while ! docker exec lilac busctl --system list >/dev/null 2>&1; do
