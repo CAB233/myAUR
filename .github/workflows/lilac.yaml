@@ -7,7 +7,7 @@ on:
         description: "手动构建的包 (空格分割)"
         type: string
   schedule:
-    - cron: "4 20 */2 * *"
+    - cron: "4 */2 * * *"
 # TODO: Set your Actions secrets and variables
 # Secrets:
 # - GPG_KEY: GPG private key for signing packages
