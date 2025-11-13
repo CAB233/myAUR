@@ -229,13 +229,14 @@ jobs:
           docker exec lilac sudo -iu lilac \
             /usr/bin/rclone copy -v --copy-links ${{ env.RCLONE_REMOTE }}/repo/x86_64/${{ env.REPO_NAME }}.files.tar.gz lilac/repo || true
 
-      - name: 向数据库添加包信息
+      - name: 处理仓库数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
         run: |
           docker exec lilac sudo -iu lilac \
-            /usr/bin/repo-add lilac/repo/${{ env.REPO_NAME }}.db.tar.gz lilac/repo/*.pkg.tar.zst
-          rm -f lilac/repo/${{ env.REPO_NAME }}.db.tar.gz.old
-          rm -f lilac/repo/${{ env.REPO_NAME }}.files.tar.gz.old
+            /usr/bin/repo-add --sign lilac/repo/${{ env.REPO_NAME }}.db.tar.gz lilac/repo/*.pkg.tar.zst
+          find lilac/repo -type l -delete -print
+          rename -- .tar.gz '' lilac/repo/${{ env.REPO_NAME }}*.tar.gz
+          rename -- .tar.gz.sig '.sig' lilac/repo/${{ env.REPO_NAME }}*.tar.gz.sig
 
       - name: 上传产物和数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
