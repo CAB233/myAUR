@@ -216,11 +216,10 @@ jobs:
         run: |
           echo "pkgs_count=$(find lilac/repo -type f -name *.pkg.tar.zst | wc -l)" >> $GITHUB_OUTPUT
 
-      - name: 证明构建产物
+      - name: 移除 debug 包
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: "lilac/repo/*.pkg.tar.zst"
+        run: |
+          find lilac/repo -type f -name "*debug*.pkg.tar.zst" -delete -print
 
       - name: 下载 pacman 数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
