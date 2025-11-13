@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=阿里云盘(odomu版)
+Exec=alixby %U
+Terminal=false
+Type=Application
+Icon=alixby
+StartupWMClass=alixby
+Comment=阿里云盘(odomu版)
+Categories=Network;

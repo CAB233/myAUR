@@ -1,0 +1,6 @@
+maintainers:
+- github: CAB233
+
+update_on:
+- source: manual
+  manual: 3.24.72914
