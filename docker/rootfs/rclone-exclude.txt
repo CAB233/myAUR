@@ -5,4 +5,4 @@ build-log.json
 log/
 pacmandb/
 gnupg/
-x86_64
+repo/
