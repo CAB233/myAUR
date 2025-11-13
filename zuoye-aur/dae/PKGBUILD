@@ -10,8 +10,7 @@ url="https://github.com/daeuniverse/dae"
 license=('AGPL-3.0-or-later')
 depends=(
     'glibc'
-    'v2ray-geoip-ly'
-    'v2ray-geosite-ly'
+    'v2ray-rules-dat'
 )
 makedepends=(
     'clang'
