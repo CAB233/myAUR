@@ -215,7 +215,7 @@ jobs:
       - name: 移除 debug 包
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
         run: |
-          find lilac/repo -type f -name "*debug*.pkg.tar.zst" -delete -print
+          find lilac/repo -type f -name "*debug*.pkg.tar.zst*" -delete -print
 
       - name: 下载 pacman 数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
