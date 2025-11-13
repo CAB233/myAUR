@@ -171,8 +171,10 @@ jobs:
       - name: 添加自身仓库
         if: ${{ !inputs.skip_add_repo }}
         run: |
-          docker exec lilac echo "[zuoye-aur]" >> /etc/pacman.conf
-          docker exec lilac echo 'Server = https://repo.zuoye.win/archlinux/repo/x86_64' >> /etc/pacman.conf
+          docker exec lilac \
+            sh -c 'echo "[zuoye-aur]" >> /etc/pacman.conf'
+          docker exec lilac \
+            sh -c 'echo "Server = https://repo.zuoye.win/archlinux/repo/x86_64" >> /etc/pacman.conf'
 
       - name: 设置用户
         run: |
