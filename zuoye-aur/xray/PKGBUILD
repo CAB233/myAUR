@@ -8,7 +8,7 @@
 _repo=Xray-core
 pkgname=xray
 pkgver=25.10.15
-pkgrel=1
+pkgrel=2
 pkgdesc='The best v2ray-core, with XTLS support'
 arch=('x86_64')
 url='https://github.com/XTLS/Xray-core'
@@ -67,4 +67,6 @@ package() {
     install -Dm 644 "${srcdir}"/xray.tmpfiles "${pkgdir}"/usr/lib/tmpfiles.d/xray.conf
     install -Dm 644 "${srcdir}"/xray.service -t "${pkgdir}"/usr/lib/systemd/system/
     install -Dm 644 "${srcdir}"/xray@.service -t "${pkgdir}"/usr/lib/systemd/system/
+    install -d "${pkgdir}/usr/share/xray"
+    ln -sv ../v2ray-rules-dat/{geoip.dat,geosite.dat} "${pkgdir}/usr/share/xray"
 }
