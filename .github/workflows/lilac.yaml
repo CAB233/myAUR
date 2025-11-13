@@ -184,7 +184,7 @@ jobs:
       - name: 下载 lilac 持久性文件
         run: |
           docker exec lilac sudo -iu lilac \
-            /usr/bin/rclone sync -v --exclude-from /rclone-exclude.txt ${{ env.RCLONE_REMOTE }}/lilac .lilac
+            /usr/bin/rclone sync -v --exclude-from /rclone-exclude.txt ${{ env.RCLONE_REMOTE }}/.lilac .lilac
 
       - name: 运行 lilac
         run: |
@@ -209,7 +209,7 @@ jobs:
       - name: 上传 lilac 持久性文件
         run: |
           docker exec lilac sudo -iu lilac \
-            /usr/bin/rclone sync -v --exclude-from /rclone-exclude.txt .lilac ${{ env.RCLONE_REMOTE }}/lilac
+            /usr/bin/rclone sync -v --exclude-from /rclone-exclude.txt .lilac ${{ env.RCLONE_REMOTE }}/.lilac
 
       - name: 统计已构建的包数量
         id: count
