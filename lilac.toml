@@ -1,0 +1,116 @@
+[envvars]
+TZ = "Asia/Shanghai"
+TERM = "xterm"
+# this doesn't help with Python itself; please set externally if desirable
+# LANG = "zh_CN.UTF-8"
+
+[repository]
+name = "<REPO_NAME>"
+# The email address where undirected nvchecker error reports should go.
+email = "repo@example.com"
+# this can point into a directory inside the git repo.
+repodir = "/home/lilac/lilac/gitrepo/<REPO_NAME>"
+# The path where built packages and signatures are copied to
+# comment out if there's no need to copy built packages
+destdir = "/home/lilac/lilac/repo"
+depsdir = "/home/lilac/lilac/remote/repo/x86_64"
+
+[lilac]
+# this is the name in the mail header and subject
+name = "lilac"
+# where lilac sends mails from
+email = "lilac@example.com"
+# for internal error reports
+master = "Your Name <youremail@example.com>"
+# Set and unsubscribe_address to receive unsubscribe requests
+# unsubscribe_address = "unsubscribe@example.com"
+# Set to yes to automatically rebuild packages which failed to build last time
+rebuild_failed_pkgs = false
+git_push = true
+# Set a prefix for commit messages
+# commit_msg_prefix = ''
+send_email = false
+# Optional: template for log file URL. Used in package error emails
+# logurl = "https://example.com/${pkgbase}/${datetime}.html"
+# for searching github; this is NOT for nvchecker, which should be configured via ~/.lilac/nvchecker_keyfile.toml
+github_token = "<GITHUB_TOKEN>"
+
+# keep build logs; you need to manually run the script "scripts/dbsetup.sql" once
+# requires SQLAlchemy and a corresponding driver
+# dburl = "postgresql:///"
+# the schema to use; by default lilac uses the schema "lilac"
+# schema = "lilac"
+max_concurrency = 1
+# whether to disable local worker (and use remote only)
+# disable_local_worker = false
+
+# build packages over ssh
+[[remoteworker]]
+# this is also used to name the git remote
+name = "remotebuilder"
+# ssh host string; ControlMaster is advised to be enabled in ~/.ssh/config
+host = "builder.example.org"
+# the same as local "repodir" but in remote host
+repodir = "/path/to/gitrepo"
+max_concurrency = 2
+enabled = false
+
+# run some commands before each run
+# prerun = [
+#   "sudo update_something",
+# ]
+
+# run some commands after each run
+# postrun = [
+#   "do_something",
+# ]
+
+[nvchecker]
+# set proxy for nvchecker
+# proxy = "http://localhost:8000"
+
+[smtp]
+# You can configure a SMTP account here; it defaults to localhost:53
+#host = ""
+#port = 0
+#use_ssl = false
+#username = ""
+#password = ""
+# Set to true to allow ANSI characters in content
+#use_ansi = false
+
+[bindmounts]
+# bind mounts in the devtools environment, e.g. for caching
+# source directories will be created if not yet
+"~/.cache/archbuild-bind-cache" = "/build/.cache"
+"~/.cache/archbuild-bind-cache/ghcup" = "/build/.ghcup"
+"~/.cache/pip" = "/build/.cache/pip"
+"~/.cargo" = "/build/.cargo"
+
+[misc]
+# run some commands before each run
+# prerun = [
+#   ["sudo", "rsync-packages-pool"],
+# ]
+
+# run some commands after each run
+# postrun = [
+#   ["upload-packages"],
+# ]
+
+# run some commands after each package built
+# env: PKGBASE, RESULT=successful, failed, skipped, staged, VERSION, PACKAGE_FILES
+# postbuild = [
+#   [...]
+# ]
+
+# mount these paths as tmpfs in the chroot
+tmpfs = [
+  # bazel's cache causes failures frequently
+  # "/build/.cache/bazel"
+]
+
+# pacman.conf to use for repository databases
+pacman_conf = "/etc/pacman.conf"
+
+# vim: se ft=toml:

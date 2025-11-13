@@ -1,0 +1,88 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=openlist
+_pkgname=OpenList
+pkgver=4.1.7
+pkgrel=1
+pkgdesc='A new AList Fork to Anti Trust Crisis'
+arch=('x86_64')
+url='https://github.com/OpenListTeam/OpenList'
+license=('AGPL-3.0')
+depends=(
+    'glibc'
+)
+optdepends=(
+    'aria2: offline downloads support'
+    'ffmpeg: thumbnails support'
+)
+makedepends=(
+    'git'
+    'go'
+    'nodejs'
+    'pnpm'
+)
+source=(
+    "git+${url}#tag=v${pkgver}"
+    "git+https://github.com/OpenListTeam/OpenList-Frontend.git#tag=v${pkgver}"
+    "${pkgname}.service"
+    "${pkgname}.sysusers"
+    "${pkgname}.tmpfiles")
+sha256sums=('7423c8e79e5061cc17f49b354472ef469d67cadf30c5143593a16363dbc7ba29'
+            '0352c4b34639c840987764404648e2163f9dbd19f8718cb99c516925f5fce0f0'
+            'bcc213bcd50abcd5d7abe5f6dbc143e3d9f8ec06713b2eabae468867764a1af9'
+            '740c0befb0112a7a85788e99b682c2245fc52edc01bc4de6f8b411dba2f50e50'
+            '6c5c46e62177ab91efb0d4c4340f89177f385b058b988ce9e537a7507f44fec3')
+backup=("etc/${pkgname}/config.json")
+
+prepare() {
+    cd "${srcdir}/${_pkgname}-Frontend"
+    pnpm install
+    pnpm build
+}
+
+build() {
+    local ldflags=(
+        "-s"
+        "-w"
+        "-linkmode=external"
+        "-X 'github.com/OpenListTeam/OpenList/v4/internal/conf.BuiltAt=$(date +'%F %T %z')'"
+        "-X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GoVersion=$(go version | sed 's/go version //')'"
+        "-X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@openlist.team>'"
+        "-X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GitCommit=$(git log --pretty=format:"%h" -1)'"
+        "-X 'github.com/OpenListTeam/OpenList/v4/internal/conf.Version=${pkgver}'"
+        "-X 'github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=${pkgver}'"
+    )
+    export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+    export CGO_CPPFLAGS="${CPPFLAGS}"
+    export CGO_CFLAGS="${CFLAGS}"
+    export CGO_CXXFLAGS="${CXXFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_ENABLED=1
+
+    rm -rv "${srcdir}/${_pkgname}/public/dist"
+    cp -rv "${srcdir}/${_pkgname}-Frontend/dist" "${srcdir}/${_pkgname}/public/dist"
+    cd "${srcdir}/${_pkgname}"
+    go build \
+        -v \
+        -tags=jsoniter \
+        -ldflags "${ldflags[*]}" \
+        -o openlist \
+        ./
+}
+
+package() {
+    cd "${srcdir}/${_pkgname}"
+    install -Dvm644 LICENSE -t "${pkgdir}/usr/share/licenses/${_pkgname}"
+    install -Dvm755 "${pkgname}" -t "${pkgdir}/usr/bin"
+
+    install -Dvm644 "${srcdir}/${pkgname}.service" -t "${pkgdir}/usr/lib/systemd/system/"
+    install -Dvm644 "${srcdir}/${pkgname}.sysusers" "${pkgdir}/usr/lib/sysusers.d/${pkgname}.conf"
+    install -Dvm644 "${srcdir}/${pkgname}.tmpfiles" "${pkgdir}/usr/lib/tmpfiles.d/${pkgname}.conf"
+
+    mkdir -pv "${pkgdir}/usr/share/bash-completion/completions/"
+    "${pkgdir}/usr/bin/${pkgname}" completion bash > "${pkgdir}/usr/share/bash-completion/completions/${pkgname}"
+    mkdir -pv "${pkgdir}/usr/share/zsh/site-functions/"
+    "${pkgdir}/usr/bin/${pkgname}" completion zsh > "${pkgdir}/usr/share/zsh/site-functions/_${pkgname}"
+    mkdir -pv "${pkgdir}/usr/share/fish/vendor_completions.d/"
+    "${pkgdir}/usr/bin/${pkgname}" completion fish > "${pkgdir}/usr/share/fish/vendor_completions.d/${pkgname}.fish"
+}

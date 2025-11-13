@@ -1,0 +1,19 @@
+# Maintainer: Rocket Aaron <i at rocka dot me>
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname="v2ray-rules-dat"
+pkgver=202511062213
+pkgrel=1
+pkgdesc="V2Ray 路由规则文件加强版，可代替 V2Ray 官方 geoip.dat 和 geosite.dat"
+arch=('any')
+url="https://github.com/Loyalsoldier/v2ray-rules-dat"
+license=("GPL-3.0")
+source=("https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
+        "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat")
+sha512sums=('be86be5f766f3c95d210290df90e4630fc5a5fe906ca13543481e026272756d97380b739b6d84beabd84610856521560c798c658b64f08cb004bd865b343d0b6'
+            '8c46ac6f95af8c5433facc42660d28eb235dc109cf764134bc136f8cfaf3c16b9286aed92e1ef21be4f6e8d47148db11245fc3d0bf2ccd05e061af5daace7859')
+
+package() {
+    install -Dvm644 geosite.dat -t "${pkgdir}/usr/share/v2ray-rules-dat/"
+    install -Dvm644 geoip.dat -t "${pkgdir}/usr/share/v2ray-rules-dat/"
+}
