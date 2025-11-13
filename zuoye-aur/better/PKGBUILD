@@ -1,0 +1,20 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname="better"
+pkgver=1
+pkgrel=1
+pkgdesc="为 system-boot 创建 Btrfs 快照入口"
+arch=('any')
+license=('custom')
+depends=("systemd")
+source=(
+    "better"
+    "btrfs-snapshot.hook"
+)
+sha256sums=('00352c4cea0b1f3b77c8c51c0e1ce4b2a8e911174aa21a9e78ebd894a7f08410'
+            'ce13c251630a96cbf072fc93313d01dc231c80f5fff33e2881adf73f2d5ece64')
+
+package() {
+    install -Dvm755 "${srcdir}/better" "${pkgdir}/usr/bin/better"
+    install -Dvm644 "${srcdir}/btrfs-snapshot.hook" "${pkgdir}/usr/share/libalpm/hooks/btrfs-snapshot.hook"
+}

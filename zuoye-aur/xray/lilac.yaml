@@ -1,0 +1,11 @@
+maintainers:
+- github: CAB233
+
+repo_depends:
+  - v2ray-rules-dat
+
+update_on:
+  - source: github
+    github: XTLS/Xray-core
+    use_latest_release: true
+    prefix: v
