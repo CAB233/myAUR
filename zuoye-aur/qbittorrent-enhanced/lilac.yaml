@@ -9,3 +9,8 @@ update_on:
     github: c0re100/qBittorrent-Enhanced-Edition
     use_latest_release: true
     prefix: release-
+  - source: alpm
+    alpm: qt6-base
+    from_pattern: ^(\d+\.\d+\.\d+)\..*
+    to_pattern: \1
+    strip_release: true
