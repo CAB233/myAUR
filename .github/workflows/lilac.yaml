@@ -45,7 +45,7 @@ jobs:
       - name: 扩大 swap 空间
         uses: pierotofy/set-swap-space@master
         with:
-          - swap-size-gb: 30
+          swap-size-gb: 30
 
       - name: 准备文件结构
         run: |
