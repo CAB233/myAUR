@@ -39,6 +39,14 @@ jobs:
       contents: write
       attestations: write
     steps:
+      - name: 腾出构建空间
+        uses: jlumbroso/free-disk-space@main
+
+      - name: 扩大 swap 空间
+        uses: pierotofy/set-swap-space@master
+        with:
+          - swap-size-gb: 30
+
       - name: 准备文件结构
         run: |
           # git repository contains PKGBUILDs
