@@ -1,0 +1,50 @@
+# Maintainer: DeltaCopy <7x0bb03yq@mozmail.com>
+
+pkgname="darkly"
+_gitname="Darkly"
+pkgver=0.5.25
+pkgrel=1
+pkgdesc="Fork of Lightly (A modern style for Qt applications)"
+url="https://github.com/Bali10050/darkly"
+arch=('x86_64' 'aarch64')
+license=("GPL-2.0-or-later")
+depends=(
+    'glibc'
+    'gcc-libs'
+    'hicolor-icon-theme'
+    'kdecoration'
+    'kcoreaddons'
+    'kcmutils'
+    'kcolorscheme'
+    'kconfig'
+    'kguiaddons'
+    'ki18n'
+    'kiconthemes'
+    'kwidgetsaddons'
+    'kwindowsystem'
+    'frameworkintegration'
+    'qt6-base'
+    'qt6-declarative'
+)
+makedepends=(
+    'cmake'
+    'extra-cmake-modules'
+    'ninja'
+)
+source=("${pkgname}-${pkgver}::${url}/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('c8ab4e8b8bb749e5fdf1d95852d4bdedddca1a161280ee7fa0c4a1d8700a1103')
+options=(!emptydirs)
+
+build() (
+    cmake -G Ninja -B build -S "$_gitname-${pkgver}" \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_QT5=OFF \
+        -DBUILD_QT6=ON \
+        -DBUILD_TESTING=OFF
+    cmake --build build
+)
+
+package() (
+    DESTDIR="$pkgdir" cmake --install build
+)
