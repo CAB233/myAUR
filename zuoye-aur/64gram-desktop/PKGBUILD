@@ -1,0 +1,101 @@
+# Maintainer: Alesar1
+# Contributor: solopasha <daron439 at gmail dot com>
+# Contributor: KspLite <ksplite@outlook.com>
+# Contributor: Daniil Kovalev <daniil@kovalev.website>
+pkgname=64gram-desktop
+_pkgname=64Gram
+pkgver=1.1.85
+pkgrel=1
+pkgdesc='Unofficial desktop version of Telegram messaging app'
+arch=('x86_64')
+url="https://github.com/TDesktop-x64/tdesktop"
+license=('GPL-3.0-or-later WITH OpenSSL-exception')
+depends=(
+    'abseil-cpp'
+    'ada'
+    'ffmpeg'
+    'glib2'
+    'hicolor-icon-theme'
+    'hunspell'
+    'kcoreaddons'
+    'libavif'
+    'libdispatch'
+    'libheif'
+    'libjxl'
+    'libxcomposite'
+    'libxdamage'
+    'libxrandr'
+    'libxtst'
+    'lz4'
+    'minizip'
+    'openal'
+    'openh264'
+    'openssl'
+    'pipewire'
+    'protobuf'
+    'qt6-imageformats'
+    'qt6-svg'
+    'qt6-wayland'
+    'rnnoise'
+    'xxhash'
+)
+makedepends=(
+    'boost'
+    'cmake'
+    'dos2unix'
+    'git'
+    'glib2-devel'
+    'gobject-introspection'
+    'gperf'
+    'libtg_owt'
+    'microsoft-gsl'
+    'ninja'
+    'python'
+    'range-v3'
+    'tl-expected'
+)
+optdepends=(
+    'geoclue: geoinformation support'
+    'geocode-glib-2: geocoding support'
+    'webkit2gtk-4.1: embedded browser features provided by webkit2gtk-4.1'
+    'webkitgtk-6.0: embedded browser features provided by webkitgtk-6.0 (Wayland only)'
+    'xdg-desktop-portal: desktop integration'
+)
+_td_commit=6d74326c5ce53aeb52496f157f0080d9b8515970
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/TDesktop-x64/tdesktop/releases/download/v${pkgver}/${_pkgname}-${pkgver}-full.tar.gz"
+    "io.github.tdesktop_x64.TDesktop.desktop"
+)
+options=(!debug)
+
+sha512sums=('58a0c554c211eb987b417752688d75e9e12a61ff1cd393d272f193166b2609b7f49265c03002ac77a1fea76ded4fd1720e91ce9bd64190a000d8f8a7df4d1516'
+            'ea027bc2d40c74507adf32380444207210a8c31cdba57f3f468d23d8e9c7376647cc8c713f188660f9b1dacd9041227aafd5a27c7889f47ea3985712b6b74b8b')
+
+prepare() {
+    LANG=C.UTF-8 bsdtar -xf ${_pkgname}-${pkgver}-full.tar.gz
+    cd $_pkgname-$pkgver-full
+    find "${srcdir}"/ -type f -exec dos2unix {} \;
+}
+
+build() {
+    CXXFLAGS+=' -ffat-lto-objects'
+
+    cmake -G Ninja -B build -S $_pkgname-$pkgver-full \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_INSTALL_PREFIX="/usr" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -Dtde2e_DIR="$PWD/td/install/lib/cmake/tde2e" \
+        -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c \
+        -DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON
+    cmake --build build
+}
+
+package() {
+    DESTDIR="${pkgdir}" cmake --install build
+    mv -v "${pkgdir}/usr/bin/telegram-desktop" "${pkgdir}/usr/bin/64gram-desktop"
+    install -Dvm644 "$srcdir/io.github.tdesktop_x64.TDesktop.desktop" -t "${pkgdir}/usr/share/applications"
+    find "${pkgdir}" -type f -name "telegram.png" -exec rename telegram.png 64gram.png {} \;
+    mv "${pkgdir}/usr/share/icons/hicolor/symbolic/apps/telegram-symbolic.svg" "${pkgdir}/usr/share/icons/hicolor/symbolic/apps/64gram-symbolic.svg"
+    mkdir -p "${pkgdir}/usr/share/64Gram/externalupdater.d"
+    echo "/usr/bin/64gram-desktop" >"${pkgdir}/usr/share/64Gram/externalupdater.d/telegram-desktop.conf"
+}
