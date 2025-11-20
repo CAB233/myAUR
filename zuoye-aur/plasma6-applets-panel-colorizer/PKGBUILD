@@ -7,8 +7,17 @@ pkgdesc="Latte-Dock and WM status bar customization features for the KDE Plasma 
 arch=('any')
 url="https://github.com/luisbocanegra/plasma-panel-colorizer"
 license=('GPL-3.0-or-later')
-depends=('libplasma' 'python' 'python-dbus')
-makedepends=('gcc' 'extra-cmake-modules' 'gettext')
+depends=(
+  'libplasma'
+  'python'
+  'python-dbus'
+)
+makedepends=(
+  'gcc'
+  'extra-cmake-modules'
+  'gettext'
+  'ninja'
+)
 optdepends=('spectacle: take preset preview support')
 source=("${_gitname}-${pkgver}.tar.gz::$url/archive/v${pkgver}/${_gitname}-${pkgver}.tar.gz")
 sha256sums=('9c1b20d6c263f040d3b33c0a9b35c28e00e64c154028cf8cd8582e72e9506932')
@@ -16,7 +25,11 @@ sha256sums=('9c1b20d6c263f040d3b33c0a9b35c28e00e64c154028cf8cd8582e72e9506932')
 build() {
   cd "${srcdir}/${_gitname}-$pkgver"
   python ./kpac i18n --no-merge
-  cmake -B build -S . -DINSTALL_PLASMOID=ON -DBUILD_PLUGIN=ON
+  cmake -G Ninja -B build -S . \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DINSTALL_PLASMOID=ON \
+    -DBUILD_PLUGIN=ON
   cmake --build build
 }
 
