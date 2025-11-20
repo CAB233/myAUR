@@ -99,9 +99,9 @@ enabled = false
 
 # run some commands after each package built
 # env: PKGBASE, RESULT=successful, failed, skipped, staged, VERSION, PACKAGE_FILES
-# postbuild = [
-#   [...]
-# ]
+postbuild = [
+  ["/notify.sh"]
+]
 
 # mount these paths as tmpfs in the chroot
 tmpfs = [

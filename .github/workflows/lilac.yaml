@@ -17,6 +17,8 @@ on:
 # Secrets:
 # - GPG_KEY: GPG private key for signing packages
 # - RCLONE_CONFIG: rclone configuration for remote storage
+# - SERVERCHAN_UID: ServerChan UID
+# - SERVERCHAN_SENDKEY: ServerChan sendkey
 # Variables:
 # - REPO_NAME: Name of the Arch Linux repository
 # - GIT_AUTHOR_NAME: Author name for git commits
