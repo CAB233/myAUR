@@ -100,7 +100,7 @@ enabled = false
 # run some commands after each package built
 # env: PKGBASE, RESULT=successful, failed, skipped, staged, VERSION, PACKAGE_FILES
 postbuild = [
-  ["/notify.sh"]
+  ["SERVERCHAN_UID=\"<SERVERCHAN_UID>\"", "SERVERCHAN_SENDKEY=\"<SERVERCHAN_SENDKEY>\"", "/notify.sh"]
 ]
 
 # mount these paths as tmpfs in the chroot

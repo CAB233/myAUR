@@ -29,8 +29,6 @@ env:
   GIT_AUTHOR_NAME: ${{ vars.GIT_AUTHOR_NAME }}
   GIT_AUTHOR_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
   RCLONE_REMOTE: ${{ vars.RCLONE_REMOTE }}
-  SERVERCHAN_UID: ${{ secrets.SERVERCHAN_UID }}
-  SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -86,6 +84,8 @@ jobs:
           cp -a lilac/gitrepo/lilac.toml lilac/config/lilac.toml
 
           sed -i "s|<REPO_NAME>|${{ env.REPO_NAME }}|g" lilac/config/lilac.toml
+          sed -i "s|<SERVERCHAN_UID>|${{ secrets.SERVERCHAN_UID }}|g" lilac/config/lilac.toml
+          sed -i "s|<SERVERCHAN_SENDKEY>|${{ secrets.SERVERCHAN_SENDKEY }}|g" lilac/config/lilac.toml
           sed -i "s|<GITHUB_TOKEN>|${{ secrets.GITHUB_TOKEN }}|g" lilac/config/lilac.toml
           sed -i "s|<GITHUB_TOKEN>|${{ secrets.GITHUB_TOKEN }}|g" lilac/config/nvchecker_keyfile.toml
 
