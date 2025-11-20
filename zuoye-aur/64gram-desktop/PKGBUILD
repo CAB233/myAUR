@@ -64,15 +64,17 @@ optdepends=(
 _td_commit=6d74326c5ce53aeb52496f157f0080d9b8515970
 source=(
     "${pkgname}-${pkgver}.tar.gz::https://github.com/TDesktop-x64/tdesktop/releases/download/v${pkgver}/${_pkgname}-${pkgver}-full.tar.gz"
+    "git+https://github.com/tdlib/td.git#tag=${_td_commit}"
     "io.github.tdesktop_x64.TDesktop.desktop"
 )
 options=(!debug)
 
 sha512sums=('58a0c554c211eb987b417752688d75e9e12a61ff1cd393d272f193166b2609b7f49265c03002ac77a1fea76ded4fd1720e91ce9bd64190a000d8f8a7df4d1516'
+            '6dc6e684a0bf35bb83f6fa6579a0da82d604190b222f2cd2de9b8ef5b93f5f18ac9a8733e2c5cf2a64ed9933b346ea31e26a4bcc0039956280ec2deef9649457'
             'ea027bc2d40c74507adf32380444207210a8c31cdba57f3f468d23d8e9c7376647cc8c713f188660f9b1dacd9041227aafd5a27c7889f47ea3985712b6b74b8b')
 
 prepare() {
-    LANG=C.UTF-8 bsdtar -xf ${_pkgname}-${pkgver}-full.tar.gz
+    LANG=C.UTF-8 bsdtar -xf "${pkgname}-${pkgver}.tar.gz"
     cd $_pkgname-$pkgver-full
     find "${srcdir}"/ -type f -exec dos2unix {} \;
 }
@@ -80,13 +82,20 @@ prepare() {
 build() {
     CXXFLAGS+=' -ffat-lto-objects'
 
+    cmake -G Ninja -B td/build -S td \
+        -DCMAKE_BUILD_TYPE=None \
+        -DCMAKE_INSTALL_PREFIX="$PWD/td/install" \
+        -DTD_E2E_ONLY=ON
+    cmake --build td/build
+    cmake --install td/build
+
     cmake -G Ninja -B build -S $_pkgname-$pkgver-full \
         -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_INSTALL_PREFIX="/usr" \
         -DCMAKE_BUILD_TYPE=Release \
         -Dtde2e_DIR="$PWD/td/install/lib/cmake/tde2e" \
-        -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c \
-        -DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON
+        -DTDESKTOP_API_ID=611335 \
+        -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c
     cmake --build build
 }
 
