@@ -4,8 +4,7 @@ FROM archlinux:base
 COPY rootfs/ /
 RUN chmod +x /group-log.sh && \
     chmod +x /repocleaner.py && \
-    chmod +x /init.sh && \
-    chmod +x /notify.sh
+    chmod +x /init.sh
 
 # Configure user for lilac
 # https://lilac.readthedocs.io/en/latest/setup.html#user-and-data
@@ -28,7 +27,6 @@ RUN --mount=type=cache,target=/var/cache/pacman/pkg \
     pacman -S --noconfirm --needed devtools python-psycopg2 && \
     pacman -S --noconfirm --needed nvchecker pyalpm python-awesomeversion python-lxml python-packaging python-jq python-toml python-aiohttp python-httpx git && \
     pacman -S --noconfirm --needed rclone fuse3 && \
-    pacman -S --noconfirm --needed curl && \
     echo "lilac ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/lilac-build && \
     chmod 440 /etc/sudoers.d/lilac-build && \
     cd /pkgs/pid_children-git && sudo -u lilac makepkg --syncdeps --install --noconfirm --rmdeps --clean && \

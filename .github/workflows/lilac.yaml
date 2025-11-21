@@ -17,8 +17,9 @@ on:
 # Secrets:
 # - GPG_KEY: GPG private key for signing packages
 # - RCLONE_CONFIG: rclone configuration for remote storage
-# - SERVERCHAN_UID: ServerChan UID
-# - SERVERCHAN_SENDKEY: ServerChan sendkey
+# - SMTP_HOST: SMTP host for notifications
+# - SMTP_USERNAME: SMTP username for notifications
+# - SMTP_PASSWORD: SMTP password for notifications
 # Variables:
 # - REPO_NAME: Name of the Arch Linux repository
 # - GIT_AUTHOR_NAME: Author name for git commits
@@ -76,8 +77,9 @@ jobs:
           cp -a lilac/gitrepo/lilac.toml lilac/config/lilac.toml
 
           sed -i "s|<REPO_NAME>|${{ env.REPO_NAME }}|g" lilac/config/lilac.toml
-          sed -i "s|<SERVERCHAN_UID>|${{ secrets.SERVERCHAN_UID }}|g" lilac/config/lilac.toml
-          sed -i "s|<SERVERCHAN_SENDKEY>|${{ secrets.SERVERCHAN_SENDKEY }}|g" lilac/config/lilac.toml
+          sed -i "s|<SMTP_HOST>|${{ secrets.SMTP_HOST }}|g" lilac/config/lilac.toml
+          sed -i "s|<SMTP_USERNAME>|${{ secrets.SMTP_USERNAME }}|g" lilac/config/lilac.toml
+          sed -i "s|<SMTP_PASSWORD>|${{ secrets.SMTP_PASSWORD }}|g" lilac/config/lilac.toml
           sed -i "s|<GITHUB_TOKEN>|${{ secrets.GITHUB_TOKEN }}|g" lilac/config/lilac.toml
           sed -i "s|<GITHUB_TOKEN>|${{ secrets.GITHUB_TOKEN }}|g" lilac/config/nvchecker_keyfile.toml
 
