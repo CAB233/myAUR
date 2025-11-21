@@ -5,7 +5,4 @@ pre_build_script: vcs_update
 post_build_script: git_pkgbuild_commit()
 
 update_on:
-  - source: github
-    github: CertainLach/jrsonnet
-    use_latest_release: true
-    prefix: v
+  - source: vcs
