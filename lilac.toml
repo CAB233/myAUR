@@ -71,7 +71,7 @@ enabled = false
 [smtp]
 # You can configure a SMTP account here; it defaults to localhost:53
 host = "<SMTP_HOST>"
-port = 587
+port = 465
 use_ssl = true
 username = "<SMTP_USERNAME>"
 password = "<SMTP_PASSWORD>"
