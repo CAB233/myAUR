@@ -7,7 +7,7 @@ TERM = "xterm"
 [repository]
 name = "<REPO_NAME>"
 # The email address where undirected nvchecker error reports should go.
-email = "repo@example.com"
+email = "<SMTP_USERNAME>"
 # this can point into a directory inside the git repo.
 repodir = "/home/lilac/lilac/gitrepo/<REPO_NAME>"
 # The path where built packages and signatures are copied to
@@ -18,9 +18,9 @@ destdir = "/home/lilac/lilac/repo"
 # this is the name in the mail header and subject
 name = "lilac"
 # where lilac sends mails from
-email = "lilac@zuoye.win"
+email = "<SMTP_USERNAME>"
 # for internal error reports
-master = "Admin <zuoye-aur-admin@zuoye.win>"
+master = "<SMTP_USERNAME>"
 # Set and unsubscribe_address to receive unsubscribe requests
 # unsubscribe_address = "unsubscribe@example.com"
 # Set to yes to automatically rebuild packages which failed to build last time
