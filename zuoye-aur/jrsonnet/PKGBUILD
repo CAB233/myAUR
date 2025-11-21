@@ -1,0 +1,35 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=jrsonnet-git
+_pkgname=jrsonnet
+pkgver=0.5.0.pre97.test.r1.ga03224f
+pkgrel=1
+pkgdesc="Rust implementation of Jsonnet language"
+arch=('x86_64')
+url="https://github.com/CertainLach/jrsonnet"
+license=('MIT')
+depends=(
+    'gcc-libs'
+    'glibc'
+)
+makedepends=(
+    'git'
+    'rust'
+)
+source=("git+${url}.git")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "${_pkgname}"
+    git describe --long --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+    cd "${_pkgname}"
+    cargo build --release --locked
+}
+
+package() {
+    install -Dvm755 "${srcdir}/${_pkgname}/target/release/${_pkgname}" -t "${pkgdir}/usr/bin/"
+    install -Dvm644 "${srcdir}/${_pkgname}/LICENSE" -t "${pkgdir}/usr/share/licenses/${_pkgname}"
+}
