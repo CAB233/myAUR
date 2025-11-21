@@ -20,7 +20,7 @@ name = "lilac"
 # where lilac sends mails from
 email = "<SMTP_USERNAME>"
 # for internal error reports
-master = "<SMTP_USERNAME>"
+master = "Admin <zuoye-aur-admin@zuoye.win>"
 # Set and unsubscribe_address to receive unsubscribe requests
 # unsubscribe_address = "unsubscribe@example.com"
 # Set to yes to automatically rebuild packages which failed to build last time
