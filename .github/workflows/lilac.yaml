@@ -12,7 +12,7 @@ on:
         required: false
         default: false
   schedule:
-    - cron: "4 */8 * * *"
+    - cron: "4 */6 * * *"
 # TODO: Set your Actions secrets and variables
 # Secrets:
 # - GPG_KEY: GPG private key for signing packages
