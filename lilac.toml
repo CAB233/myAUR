@@ -18,9 +18,9 @@ destdir = "/home/lilac/lilac/repo"
 # this is the name in the mail header and subject
 name = "lilac"
 # where lilac sends mails from
-email = "<SMTP_USERNAME>"
+email = "lilac@example.com"
 # for internal error reports
-master = "Admin <zuoye-aur-admin@zuoye.win>"
+master = "Your Name <youremail@example.com>"
 # Set and unsubscribe_address to receive unsubscribe requests
 # unsubscribe_address = "unsubscribe@example.com"
 # Set to yes to automatically rebuild packages which failed to build last time
@@ -28,7 +28,7 @@ rebuild_failed_pkgs = false
 git_push = true
 # Set a prefix for commit messages
 # commit_msg_prefix = ''
-send_email = true
+send_email = false
 # Optional: template for log file URL. Used in package error emails
 # logurl = "https://example.com/${pkgbase}/${datetime}.html"
 # for searching github; this is NOT for nvchecker, which should be configured via ~/.lilac/nvchecker_keyfile.toml
@@ -70,11 +70,11 @@ enabled = false
 
 [smtp]
 # You can configure a SMTP account here; it defaults to localhost:53
-host = "<SMTP_HOST>"
-port = 465
-use_ssl = true
-username = "<SMTP_USERNAME>"
-password = "<SMTP_PASSWORD>"
+#host = ""
+#port = 0
+#use_ssl = false
+#username = ""
+#password = ""
 # Set to true to allow ANSI characters in content
 #use_ansi = false
 
@@ -99,9 +99,9 @@ password = "<SMTP_PASSWORD>"
 
 # run some commands after each package built
 # env: PKGBASE, RESULT=successful, failed, skipped, staged, VERSION, PACKAGE_FILES
-# postbuild = [
-#   []
-# ]
+postbuild = [
+  ["env", "SERVERCHAN_UID=\"<SERVERCHAN_UID>\"", "SERVERCHAN_SENDKEY=\"<SERVERCHAN_SENDKEY>\"", "/notify.sh"]
+]
 
 # mount these paths as tmpfs in the chroot
 tmpfs = [
