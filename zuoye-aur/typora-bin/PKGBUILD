@@ -1,0 +1,112 @@
+# Maintainer: Jonas Bögle <aur@iwr.sh>
+# Contributor: Jonathan Duck <duckbrain30@gmail.com>
+
+pkgname=typora-bin
+_pkgname=typora
+pkgver=1.9.3
+pkgrel=1
+pkgdesc="A minimal markdown editor and reader, but with some hooks"
+arch=('x86_64')
+license=('custom:"Copyright (c) 2015 Abner Lee All Rights Reserved."' 'MIT')
+url="https://typora.io/"
+conflicts=('typora' 'typora-free' 'typora-electron')
+depends=(
+    'alsa-lib'
+    'at-spi2-core'
+    'cairo'
+    'dbus'
+    'expat'
+    'gcc-libs'
+    'glib2'
+    'glibc'
+    'gtk3'
+    'hicolor-icon-theme'
+    'libcups'
+    'libdrm'
+    'libx11'
+    'libxcb'
+    'libxcomposite'
+    'libxdamage'
+    'libxext'
+    'libxfixes'
+    'libxkbcommon'
+    'libxrandr'
+    'mesa'
+    'nss'
+    'nspr'
+    'pango'
+)
+makedepends=(
+    'rust'
+    'git'
+)
+optdepends=(
+	'noto-fonts-emoji: Or some other emoji font to see emojis'
+	'pandoc: Import/export for extra file formats')
+
+source=("https://download.typora.io/linux/typora_${pkgver}_amd64.deb"
+		"git+https://github.com/DiamondHunters/NodeInject.git"
+        "main.rs"
+        "Cargo.lock"
+        "Cargo.toml"
+		"hook.js"
+        "typora.sh"
+)
+sha256sums=('deb47f0af1458d13e4cf6ee69b55ade61c204549cb2fb9692c5280da6a082f1f'
+            'SKIP'
+            '0964ca277fe67e4d75583acf9b87276669b33b3961282ea6e710126179be7191'
+            '2e2ee561a2a6e6d7d7bbf82b19260c4dd9fd22a34bf4eb9d1d176bb39ae14cb7'
+            '5bf111bc845f2484f7dc2a19df963b36f7400d866f4d29e9ba0357d9b63b5792'
+            '50f42c8c5dfa4fe1e98e177fb1a7286f0e65caf8fc8495994391e11871e9cf3a'
+            '1a4bbd271b28ebb96632d20ca9c44974b4aee3f31c9b6d99496fa208a0dcfc3e')
+
+prepare() {
+    mkdir -pv "${srcdir}/license-gen/src"
+    mv -v "${srcdir}/Cargo.lock" "${srcdir}/license-gen/"
+    mv -v "${srcdir}/Cargo.toml" "${srcdir}/license-gen/"
+    mv -v "${srcdir}/main.rs" "${srcdir}/license-gen/src/"
+}
+
+build() {
+    # Build keygen
+    cd "${srcdir}/license-gen"
+    cargo build --release
+
+    # Build NodeInject
+    cd "${srcdir}/NodeInject"
+    cp "${srcdir}/hook.js" "${srcdir}/NodeInject/src/hooklog.js"
+    cargo build --release
+}
+
+package() {
+    install -d "${pkgdir}/usr/lib/${_pkgname}"
+    bsdtar -xf data.tar.xz -C "${pkgdir}"
+
+    # remove lintian overrides
+    rm -rf "${pkgdir}/usr/share/lintian"
+    # replace bin link with custom launch script
+    rm -rf "${pkgdir}/usr/bin/${_pkgname}"
+    install -Dvm755 "${srcdir}/${_pkgname}.sh" "${pkgdir}/usr/bin/${_pkgname}"
+
+    # move license to correct path
+    install -Dm644 "${pkgdir}/usr/share/doc/${_pkgname}/copyright" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
+    rm "${pkgdir}/usr/share/doc/${_pkgname}/copyright"
+    rmdir --ignore-fail-on-non-empty "${pkgdir}/usr/share/doc/${_pkgname}" "${pkgdir}/usr/share/doc"
+
+    # remove change log from application comment
+    sed -i '/Change Log/d' "${pkgdir}/usr/share/applications/${_pkgname}.desktop"
+    cp -r "${pkgdir}/usr/share/${_pkgname}/"* "${pkgdir}/usr/lib/${_pkgname}"
+    rm -rf "${pkgdir}/usr/share/${_pkgname}"
+
+    # patch typora
+    install -Dvm755 "${srcdir}/NodeInject/target/release/node_inject" "${pkgdir}/usr/lib/${_pkgname}/node_inject"
+    cd "${pkgdir}/usr/lib/${_pkgname}" && ./node_inject
+    rm -rf "${pkgdir}/usr/lib/${_pkgname}/node"
+    install -Dvm755 "${srcdir}/license-gen/target/release/license-gen" "${pkgdir}/usr/bin/typora-license-gen"
+
+    # fix permissions
+    chmod 644 "${pkgdir}/usr/share/applications/${_pkgname}.desktop"
+    #chmod 644 "${pkgdir}/usr/lib/${_pkgname}/resources/packages/node-spellchecker/vendor/hunspell_dictionaries/en_US.dic"
+    #chmod 644 "${pkgdir}/usr/lib/${_pkgname}/resources/packages/node-spellchecker/vendor/hunspell_dictionaries/en_US.aff"
+    find "${pkgdir}" -type d -exec chmod 755 {} \;
+}
